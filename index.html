@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>爆品影片腳本產生器</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #F7F5F0; --surface: #FFFFFF; --surface2: #F0EDE6;
+    --border: #E2DDD4; --border2: #CCC8BE;
+    --text: #1A1814; --text2: #6B6660; --text3: #9E9A94;
+    --accent: #C4501A; --accent-light: #FAF0EB;
+    --accent2: #2D6A4F; --accent2-light: #EBF4EF;
+    --blue: #1A4A8A; --blue-light: #EBF1FA;
+    --gold: #8A6A1A; --gold-light: #FAF4EB;
+    --radius: 10px; --radius-lg: 16px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+  }
+  body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+
+  .topbar { width: 100%; background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .topbar-left { display: flex; align-items: center; gap: 10px; }
+  .logo-mark { width: 32px; height: 32px; border-radius: 8px; background: var(--text); display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: white; }
+  .topbar-title { font-size: 15px; font-weight: 500; }
+  .topbar-sub { font-size: 12px; color: var(--text3); }
+  .date-badge { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text2); background: var(--surface2); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); }
+
+  .main { display: grid; grid-template-columns: 400px 1fr; width: 100%; max-width: 1100px; min-height: calc(100vh - 61px); }
+
+  .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 20px 18px; overflow-y: auto; height: calc(100vh - 61px); position: sticky; top: 61px; }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
+
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
+  .sidebar-section { margin-bottom: 18px; }
+
+  input, select, textarea {
+    width: 100%; font-family: 'Noto Sans TC', sans-serif; font-size: 13px;
+    padding: 8px 11px; border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--bg); color: var(--text); outline: none;
+    transition: border-color 0.15s, background 0.15s; line-height: 1.5;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--text); background: white; }
+  input::placeholder, textarea::placeholder { color: var(--text3); font-size: 12px; }
+  textarea { resize: vertical; min-height: 48px; line-height: 1.6; }
+  select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6660' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
+  input.filled-green { border-color: var(--accent2) !important; background: var(--accent2-light) !important; }
+
+  /* 商品卡 */
+  .prod-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px; margin-bottom: 10px; box-shadow: var(--shadow); transition: border-color 0.2s; }
+  .prod-card.done { border-left: 3px solid var(--accent2); border-color: var(--accent2); }
+  .prod-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .prod-num { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; background: var(--text); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .prod-head-right { display: flex; gap: 6px; align-items: center; }
+  .strat-sel { font-size: 11px; padding: 3px 22px 3px 7px; border-radius: 20px; }
+  .clear-btn { font-size: 11px; padding: 3px 9px; border: 1px solid var(--border); border-radius: 20px; background: transparent; color: var(--text3); cursor: pointer; }
+  .clear-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-light); }
+
+  /* URL 列 */
+  .url-row { display: flex; gap: 6px; margin-bottom: 8px; }
+  .url-row input { flex: 1; font-size: 12px; }
+  .grab-btn { padding: 8px 14px; background: var(--text); color: white; border: none; border-radius: var(--radius); font-size: 12px; cursor: pointer; white-space: nowrap; font-family: 'Noto Sans TC', sans-serif; transition: opacity 0.15s; flex-shrink: 0; }
+  .grab-btn:hover { opacity: 0.82; }
+  .grab-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .grab-btn.loading { background: var(--text2); }
+
+  /* 狀態列 */
+  .status-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; font-size: 11px; min-height: 20px; }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .status-dot.green { background: var(--accent2); }
+  .status-dot.amber { background: #BA7517; }
+  .status-dot.red { background: #A32D2D; }
+  .status-txt { color: var(--text2); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  .field-mb { margin-bottom: 8px; }
+
+  /* 產出按鈕 */
+  .gen-btn { width: 100%; padding: 12px; background: var(--text); color: white; border: none; border-radius: var(--radius); font-family: 'Noto Sans TC', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity 0.15s; margin-top: 6px; }
+  .gen-btn:hover { opacity: 0.85; }
+  .gen-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .gen-sub { text-align: center; font-size: 11px; color: var(--text3); margin-top: 6px; }
+
+  /* 右欄 */
+  .output-col { padding: 24px; overflow-y: auto; height: calc(100vh - 61px); }
+  .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 400px; text-align: center; gap: 12px; }
+  .empty-icon { width: 56px; height: 56px; border-radius: 16px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+  .empty-title { font-size: 16px; font-weight: 500; color: var(--text2); }
+  .empty-sub { font-size: 13px; color: var(--text3); line-height: 1.7; max-width: 260px; }
+
+  /* 使用說明欄 */
+  .how-to { background: var(--blue-light); border: 1px solid #B0C8F0; border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 16px; }
+  .how-title { font-size: 12px; font-weight: 500; color: var(--blue); margin-bottom: 8px; }
+  .how-steps { font-size: 12px; color: var(--blue); line-height: 2; }
+  .how-steps span { display: block; }
+
+  /* 腳本卡 */
+  .output-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .output-title { font-size: 18px; font-weight: 500; }
+  .output-meta { font-size: 12px; color: var(--text3); }
+  .script-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 20px; box-shadow: var(--shadow); overflow: hidden; }
+  .sc-head { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px; }
+  .sc-num { font-family: 'DM Mono', monospace; font-size: 12px; background: var(--text); color: white; width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .sc-info { flex: 1; }
+  .sc-name { font-size: 15px; font-weight: 500; line-height: 1.4; }
+  .sc-tags { display: flex; gap: 6px; margin-top: 5px; flex-wrap: wrap; }
+  .tag { font-size: 11px; padding: 2px 8px; border-radius: 20px; border: 1px solid; }
+  .tag-hot { background: var(--accent-light); color: var(--accent); border-color: #F0C8B0; }
+  .tag-feel { background: var(--gold-light); color: var(--gold); border-color: #F0DFB0; }
+  .tag-func { background: var(--accent2-light); color: var(--accent2); border-color: #B0D8C0; }
+  .tag-info { background: var(--blue-light); color: var(--blue); border-color: #B0C8F0; }
+  .copy-btn { font-size: 11px; padding: 5px 12px; border: 1px solid var(--border2); border-radius: 20px; background: white; color: var(--text2); cursor: pointer; white-space: nowrap; font-family: 'Noto Sans TC', sans-serif; }
+  .copy-btn:hover { background: var(--surface2); }
+  .sc-body { padding: 14px 18px; }
+  .hook-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 5px; }
+  .hook-box { background: var(--bg); border-left: 3px solid var(--accent); padding: 9px 13px; border-radius: 0 8px 8px 0; margin-bottom: 14px; font-size: 15px; font-weight: 500; line-height: 1.6; font-style: italic; }
+  .tl-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 8px; }
+  .timeline { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
+  .tl-row { display: grid; grid-template-columns: 65px 1fr; gap: 10px; align-items: start; }
+  .tl-time { font-family: 'DM Mono', monospace; font-size: 10px; color: white; background: var(--text2); padding: 3px 5px; border-radius: 5px; text-align: center; margin-top: 2px; white-space: nowrap; }
+  .tl-cam { color: var(--text2); font-size: 12px; margin-bottom: 2px; }
+  .tl-txt { color: var(--text); font-size: 13px; line-height: 1.6; }
+  .sc-footer { background: var(--surface2); border-top: 1px solid var(--border); padding: 12px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .meta-k { font-size: 10px; color: var(--text3); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 3px; }
+  .meta-v { font-size: 12px; color: var(--text); line-height: 1.5; }
+  .title-box { grid-column: 1/-1; background: white; border: 1px dashed var(--border2); border-radius: 8px; padding: 8px 12px; margin-top: 2px; }
+  .title-txt { font-size: 13px; font-weight: 500; margin-top: 3px; }
+
+  .loading-state { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 300px; gap: 14px; }
+  .spinner { width: 30px; height: 30px; border: 2px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-txt { font-size: 13px; color: var(--text2); }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--text); color: white; padding: 10px 20px; border-radius: 20px; font-size: 13px; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
+  .toast.show { opacity: 1; }
+
+  @media (max-width: 760px) {
+    .main { grid-template-columns: 1fr; }
+    .sidebar { height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border); }
+    .output-col { height: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-mark">爆</div>
+    <div>
+      <div class="topbar-title">爆品影片腳本產生器</div>
+      <div class="topbar-sub">貼入淘寶連結 → 點抓取 → 秒出腳本</div>
+    </div>
+  </div>
+  <div class="date-badge" id="today-date"></div>
+</div>
+
+<div class="main">
+
+  <!-- ── 左欄 ── -->
+  <div class="sidebar">
+
+    <div class="sidebar-section">
+      <div class="section-label">基本設定</div>
+      <div class="field-mb">
+        <input type="text" id="shop-name" value="日本文具本鋪" placeholder="店鋪名稱" />
+      </div>
+      <div class="field-mb">
+        <select id="platform">
+          <option value="taobao">淘寶逛逛</option>
+          <option value="douyin">抖音</option>
+          <option value="kuaishou">快手</option>
+          <option value="xiaohongshu">小紅書</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="section-label">今日選品 — 貼URL點「抓取」</div>
+
+      <!-- 商品 1 -->
+      <div class="prod-card" id="card-0">
+        <div class="prod-card-head">
+          <div class="prod-num">1</div>
+          <div class="prod-head-right">
+            <select class="strat-sel" id="strat-0">
+              <option value="auto">AI自動</option>
+              <option value="emotion">情緒共鳴型</option>
+              <option value="function">功能展示型</option>
+              <option value="impulse">衝動消費型</option>
+            </select>
+            <button class="clear-btn" onclick="clearCard(0)">清除</button>
+          </div>
+        </div>
+        <div class="url-row">
+          <input type="text" id="url-0" placeholder="貼入淘寶商品連結" />
+          <button class="grab-btn" id="gbtn-0" onclick="grabProduct(0)">抓取</button>
+        </div>
+        <div class="status-row" id="status-0"></div>
+        <div class="field-mb"><input type="text" id="name-0" placeholder="商品名稱（抓取後自動填入，可修改）" /></div>
+        <div class="two-col">
+          <input type="text" id="price-0" placeholder="售價" />
+          <input type="text" id="kw-0" placeholder="核心賣點" />
+        </div>
+        <textarea id="desc-0" rows="2" placeholder="補充說明（可留空）"></textarea>
+      </div>
+
+      <!-- 商品 2 -->
+      <div class="prod-card" id="card-1">
+        <div class="prod-card-head">
+          <div class="prod-num">2</div>
+          <div class="prod-head-right">
+            <select class="strat-sel" id="strat-1">
+              <option value="auto">AI自動</option>
+              <option value="emotion">情緒共鳴型</option>
+              <option value="function">功能展示型</option>
+              <option value="impulse">衝動消費型</option>
+            </select>
+            <button class="clear-btn" onclick="clearCard(1)">清除</button>
+          </div>
+        </div>
+        <div class="url-row">
+          <input type="text" id="url-1" placeholder="貼入淘寶商品連結" />
+          <button class="grab-btn" id="gbtn-1" onclick="grabProduct(1)">抓取</button>
+        </div>
+        <div class="status-row" id="status-1"></div>
+        <div class="field-mb"><input type="text" id="name-1" placeholder="商品名稱（抓取後自動填入，可修改）" /></div>
+        <div class="two-col">
+          <input type="text" id="price-1" placeholder="售價" />
+          <input type="text" id="kw-1" placeholder="核心賣點" />
+        </div>
+        <textarea id="desc-1" rows="2" placeholder="補充說明（可留空）"></textarea>
+      </div>
+
+      <!-- 商品 3 -->
+      <div class="prod-card" id="card-2">
+        <div class="prod-card-head">
+          <div class="prod-num">3</div>
+          <div class="prod-head-right">
+            <select class="strat-sel" id="strat-2">
+              <option value="auto">AI自動</option>
+              <option value="emotion">情緒共鳴型</option>
+              <option value="function">功能展示型</option>
+              <option value="impulse">衝動消費型</option>
+            </select>
+            <button class="clear-btn" onclick="clearCard(2)">清除</button>
+          </div>
+        </div>
+        <div class="url-row">
+          <input type="text" id="url-2" placeholder="貼入淘寶商品連結" />
+          <button class="grab-btn" id="gbtn-2" onclick="grabProduct(2)">抓取</button>
+        </div>
+        <div class="status-row" id="status-2"></div>
+        <div class="field-mb"><input type="text" id="name-2" placeholder="商品名稱（抓取後自動填入，可修改）" /></div>
+        <div class="two-col">
+          <input type="text" id="price-2" placeholder="售價" />
+          <input type="text" id="kw-2" placeholder="核心賣點" />
+        </div>
+        <textarea id="desc-2" rows="2" placeholder="補充說明（可留空）"></textarea>
+      </div>
+    </div>
+
+    <button class="gen-btn" id="gen-btn" onclick="generateScripts()">▶ 產出今日影片腳本</button>
+    <div class="gen-sub">由 Claude AI 驅動 · 約10–20秒</div>
+  </div>
+
+  <!-- ── 右欄 ── -->
+  <div class="output-col" id="output-col">
+    <div class="empty-state">
+      <div class="how-to">
+        <div class="how-title">📋 使用流程（3步驟）</div>
+        <div class="how-steps">
+          <span>① 打開淘寶商品頁，複製網址</span>
+          <span>② 貼入左側URL欄，點「抓取」→ 自動填入商品資料</span>
+          <span>③ 確認資料後點「產出今日影片腳本」</span>
+        </div>
+      </div>
+      <div class="empty-icon">📋</div>
+      <div class="empty-title">腳本待產出</div>
+      <div class="empty-sub">貼入淘寶商品連結，點抓取，AI自動讀取商品資訊填入欄位。</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const d = new Date();
+document.getElementById('today-date').textContent =
+  d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0');
+
+function showToast(msg, dur=2800) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+function setStatus(i, type, msg) {
+  const row = document.getElementById('status-' + i);
+  const colors = { green: '#2D6A4F', amber: '#BA7517', red: '#A32D2D', gray: '#9E9A94' };
+  row.innerHTML = msg ? `<div class="status-dot ${type}" style="background:${colors[type]}"></div><span class="status-txt">${msg}</span>` : '';
+}
+
+function clearCard(i) {
+  ['url-','name-','price-','kw-'].forEach(p => {
+    const el = document.getElementById(p+i);
+    el.value = ''; el.classList.remove('filled-green');
+  });
+  document.getElementById('desc-'+i).value = '';
+  document.getElementById('card-'+i).classList.remove('done');
+  setStatus(i, '', '');
+}
+
+function fillCard(i, data) {
+  if (data.name)    { const el=document.getElementById('name-'+i); el.value=data.name; el.classList.add('filled-green'); }
+  if (data.price)   { const el=document.getElementById('price-'+i); el.value=data.price; el.classList.add('filled-green'); }
+  if (data.keyword) { const el=document.getElementById('kw-'+i); el.value=data.keyword; el.classList.add('filled-green'); }
+  if (data.desc)    document.getElementById('desc-'+i).value = data.desc;
+  document.getElementById('card-'+i).classList.add('done');
+}
+
+// ── 核心：從URL解析商品資料 ──
+// 淘寶商品URL格式：https://item.taobao.com/item.htm?id=XXXXXXXXXX
+// 商品名稱通常編碼在URL的title參數或路徑中
+function parseUrlInfo(url) {
+  let itemId = '', name = '', price = '';
+  try {
+    const u = new URL(url);
+    // 抓商品ID
+    itemId = u.searchParams.get('id') || '';
+    // 嘗試從URL各參數抓商品名
+    name = u.searchParams.get('title') || u.searchParams.get('name') || '';
+    price = u.searchParams.get('price') || '';
+    // 解碼
+    if (name) name = decodeURIComponent(name).trim().substring(0,80);
+    if (price) price = price.replace(/[^0-9.]/g,'');
+  } catch(e) {}
+  return { itemId, name, price };
+}
+
+async function grabProduct(i) {
+  const urlEl = document.getElementById('url-'+i);
+  const btn   = document.getElementById('gbtn-'+i);
+  const url   = urlEl.value.trim();
+
+  if (!url) { showToast('請先貼入淘寶商品連結'); return; }
+
+  // 先從URL本身解析基本資料
+  const urlInfo = parseUrlInfo(url);
+  let itemId = urlInfo.itemId;
+
+  // 解析 URL 裡是否有商品名關鍵字
+  let urlKeywords = '';
+  try {
+    const decoded = decodeURIComponent(url);
+    const kwMatch = decoded.match(/[/?&]([^&?]{6,}?)(?:[?&]|$)/);
+    if (kwMatch) urlKeywords = kwMatch[1].replace(/[-_+]/g,' ').substring(0,60);
+  } catch(e) {}
+
+  btn.disabled = true; btn.classList.add('loading'); btn.textContent = '抓取中...';
+  setStatus(i, 'amber', '正在分析商品連結...');
+
+  try {
+    const prompt = `你是淘寶日本文具選品專家，擅長從商品URL推斷商品資訊。
+
+商品URL：${url}
+${itemId ? '商品ID：' + itemId : ''}
+${urlKeywords ? 'URL關鍵字片段：' + urlKeywords : ''}
+
+請根據URL結構、商品ID、以及任何URL中的文字線索，推斷這是什麼日本文具商品。
+
+特別注意：
+- 如果URL中含有品牌名（如zebra、pilot、pentel、muji、kokuyo、hobonichi等），請識別
+- 如果URL含有型號或系列名，請識別
+- 售價請根據商品類型給出合理的淘寶市場估價範圍
+- 賣點要具體，不要泛泛而談
+
+嚴格只輸出JSON，不要任何其他文字：
+{
+  "name": "推斷的商品名稱（盡量具體，如「ZEBRA斑馬 SARASA鋼珠筆 0.5mm」）",
+  "price": "估算售價（如「25-45元」，無法判斷填「請手動填寫」）",
+  "keyword": "核心賣點（2-3個，用；分隔）",
+  "desc": "補充說明",
+  "confidence": "high/medium/low",
+  "note": "給用戶的提示（需要確認什麼）"
+}`;
+
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 400,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    if (!res.ok) throw new Error(`API錯誤 ${res.status}`);
+    const data = await res.json();
+    const raw = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+    const clean = raw.replace(/```json|```/g,'').trim();
+
+    let parsed;
+    try { parsed = JSON.parse(clean); }
+    catch { const m=clean.match(/\{[\s\S]*\}/); if(m) parsed=JSON.parse(m[0]); else throw new Error('JSON解析失敗'); }
+
+    fillCard(i, { name: parsed.name, price: parsed.price, keyword: parsed.keyword, desc: parsed.desc });
+
+    const conf = parsed.confidence;
+    if (conf === 'high') {
+      setStatus(i, 'green', '✓ 資料已填入，信心度高');
+    } else if (conf === 'medium') {
+      setStatus(i, 'amber', `⚠ 已填入，請確認商品名稱是否正確`);
+    } else {
+      setStatus(i, 'amber', `⚠ URL資訊有限，請手動確認並補充商品名稱`);
+    }
+
+  } catch(e) {
+    // API連線失敗——若欄位已有資料（從URL解析），改顯示警告而非錯誤
+    const existingName = document.getElementById('name-'+i).value.trim();
+    if (existingName) {
+      setStatus(i, 'amber', '⚠ 賣點未自動填入，請手動補充核心賣點欄位');
+    } else {
+      setStatus(i, 'amber', '⚠ 無法自動抓取，請手動填寫商品名稱與賣點');
+    }
+  }
+
+  btn.disabled = false; btn.classList.remove('loading'); btn.textContent = '抓取';
+}
+
+// ── 產出腳本 ──
+const platformLabel = { taobao:'淘寶逛逛', douyin:'抖音', kuaishou:'快手', xiaohongshu:'小紅書' };
+const stratLabel    = { auto:'AI自動', emotion:'情緒共鳴型', function:'功能展示型', impulse:'衝動消費型' };
+const tagClass      = { '情緒共鳴型':'tag-feel', '功能展示型':'tag-func', '衝動消費型':'tag-hot' };
+let scriptsData = [];
+
+async function generateScripts() {
+  const btn = document.getElementById('gen-btn');
+  const col = document.getElementById('output-col');
+  const shopName = document.getElementById('shop-name').value.trim() || '日本文具本鋪';
+  const platform = document.getElementById('platform').value;
+
+  const products = [];
+  for (let i=0; i<3; i++) {
+    const name = document.getElementById('name-'+i).value.trim();
+    if (!name) continue;
+    products.push({
+      index: i+1, name,
+      price:   document.getElementById('price-'+i).value.trim(),
+      keyword: document.getElementById('kw-'+i).value.trim(),
+      desc:    document.getElementById('desc-'+i).value.trim(),
+      strategy:document.getElementById('strat-'+i).value
+    });
+  }
+  if (!products.length) { showToast('請至少填入一個商品名稱'); return; }
+
+  btn.disabled = true; btn.textContent = '⏳ 腳本生成中...';
+  col.innerHTML = `<div class="loading-state"><div class="spinner"></div><div class="loading-txt">AI 分析爆品邏輯中，約10–20秒...</div></div>`;
+
+  const stratHint = products.map(p => p.strategy!=='auto' ? `商品${p.index}指定「${stratLabel[p.strategy]}」` : '').filter(Boolean).join('；') || 'AI自動判斷';
+
+  const prompt = `你是淘寶日本文具品類頂級操盤手，專門設計30秒爆款短影片腳本。
+
+店鋪：${shopName}
+平台：${platformLabel[platform]}
+策略：${stratHint}
+
+今日選品：
+${products.map(p=>`商品${p.index}：${p.name}`+(p.price?`，售價${p.price}`:'')+( p.keyword?`，賣點：${p.keyword}`:'')+(p.desc?`，補充：${p.desc}`:'')).join('\n')}
+
+嚴格只輸出JSON，無任何額外文字：
+{"scripts":[{"product":"商品名精簡版（15字內）","strategy":"情緒共鳴型或功能展示型或衝動消費型","hook":"開場鉤子（12字內，讓人停止滑動）","timeline":[{"time":"0–3s","action":"畫面動作","script":"台詞或字幕"},{"time":"3–8s","action":"畫面動作","script":"台詞或字幕"},{"time":"8–18s","action":"畫面動作","script":"台詞或字幕"},{"time":"18–25s","action":"畫面動作","script":"台詞或字幕"},{"time":"25–30s","action":"畫面動作","script":"台詞或字幕"}],"shoot_tips":"拍攝關鍵提示，兩點用；分隔","cta":"結尾行動呼籲（8字內）","title_suggestion":"影片標題（含搜索關鍵詞，25字內）"}]}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, messages:[{role:'user',content:prompt}] })
+    });
+    const data = await res.json();
+    const raw = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+    const clean = raw.replace(/```json|```/g,'').trim();
+    let parsed;
+    try { parsed = JSON.parse(clean); }
+    catch { const m=clean.match(/\{[\s\S]*\}/); if(m) parsed=JSON.parse(m[0]); else throw new Error('解析失敗'); }
+    scriptsData = parsed.scripts;
+    renderScripts(parsed.scripts, shopName, platform, products.length);
+  } catch(e) {
+    col.innerHTML = `<div style="padding:2rem;color:#A32D2D;font-size:14px;">❌ 生成失敗，請重試。<br><small style="color:#9E9A94">${e.message}</small></div>`;
+  }
+  btn.disabled = false; btn.textContent = '▶ 產出今日影片腳本';
+}
+
+function renderScripts(scripts, shopName, platform, count) {
+  const col = document.getElementById('output-col');
+  const now = new Date();
+  const ds = now.getFullYear()+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+String(now.getDate()).padStart(2,'0');
+  let html = `<div class="output-header"><div><div class="output-title">今日腳本 · ${count}支</div><div class="output-meta">${shopName} · ${platformLabel[platform]} · ${ds}</div></div><button class="copy-btn" onclick="copyAll()">複製全部</button></div>`;
+  scripts.forEach((s,i) => {
+    const tc = tagClass[s.strategy] || 'tag-hot';
+    html += `<div class="script-card">
+      <div class="sc-head">
+        <div class="sc-num">${i+1}</div>
+        <div class="sc-info">
+          <div class="sc-name">${s.product}</div>
+          <div class="sc-tags"><span class="tag ${tc}">${s.strategy}</span><span class="tag tag-info">30秒</span><span class="tag tag-info">${platformLabel[platform]}</span></div>
+        </div>
+        <button class="copy-btn" onclick="copyOne(${i})">複製</button>
+      </div>
+      <div class="sc-body">
+        <div class="hook-label">開場鉤子</div>
+        <div class="hook-box">「${s.hook}」</div>
+        <div class="tl-label">分鏡腳本</div>
+        <div class="timeline">
+          ${s.timeline.map(t=>`<div class="tl-row"><div class="tl-time">${t.time}</div><div><div class="tl-cam">📷 ${t.action}</div><div class="tl-txt">💬 ${t.script}</div></div></div>`).join('')}
+        </div>
+      </div>
+      <div class="sc-footer">
+        <div><div class="meta-k">拍攝提示</div><div class="meta-v">${s.shoot_tips.split(/[；;]/).map((t,j)=>`${j+1}. ${t.trim()}`).join('<br>')}</div></div>
+        <div><div class="meta-k">結尾 CTA</div><div class="meta-v">${s.cta}</div></div>
+        <div class="title-box"><div class="meta-k">建議標題</div><div class="title-txt">${s.title_suggestion}</div></div>
+      </div>
+    </div>`;
+  });
+  col.innerHTML = html;
+}
+
+function copyOne(idx) {
+  const s = scriptsData[idx]; if (!s) return;
+  const txt = [`【商品${idx+1}】${s.product}（${s.strategy}）`,'',`開場鉤子：「${s.hook}」`,'','分鏡腳本：',...s.timeline.map(t=>`${t.time}｜${t.action}｜${t.script}`),'',`拍攝提示：${s.shoot_tips}`,`CTA：${s.cta}`,`建議標題：${s.title_suggestion}`].join('\n');
+  navigator.clipboard.writeText(txt).then(() => showToast('✓ 腳本已複製'));
+}
+function copyAll() {
+  const txt = scriptsData.map((s,i)=>[`━━━━━━━━━━━━━━━━`,`【商品${i+1}】${s.product}（${s.strategy}）`,'',`開場鉤子：「${s.hook}」`,'','分鏡腳本：',...s.timeline.map(t=>`${t.time}｜${t.action}｜${t.script}`),'',`拍攝提示：${s.shoot_tips}`,`CTA：${s.cta}`,`建議標題：${s.title_suggestion}`].join('\n')).join('\n\n');
+  navigator.clipboard.writeText(txt).then(() => showToast('✓ 全部腳本已複製'));
+}
+</script>
+</body>
+</html>
