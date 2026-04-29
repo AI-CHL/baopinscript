@@ -156,6 +156,19 @@
   <div class="date-badge" id="today-date"></div>
 </div>
 
+<!-- API Key 設定列 -->
+<div id="api-bar" style="width:100%;background:#FFF8EB;border-bottom:1px solid #F0DFB0;padding:8px 24px;display:flex;align-items:center;gap:10px;">
+  <span style="font-size:12px;color:#854F0B;font-weight:500;white-space:nowrap;">🔑 Anthropic API Key</span>
+  <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." 
+    style="flex:1;max-width:420px;font-family:monospace;font-size:12px;padding:5px 10px;border:1px solid #F0DFB0;border-radius:6px;background:white;color:#1A1814;outline:none;"
+    oninput="saveKey(this.value)" />
+  <span id="key-status" style="font-size:11px;color:#854F0B;"></span>
+  <a href="https://console.anthropic.com/settings/keys" target="_blank" 
+    style="font-size:11px;color:#185FA5;white-space:nowrap;">取得 API Key →</a>
+  <button onclick="document.getElementById('api-bar').style.display='none'" 
+    style="font-size:14px;background:none;border:none;color:#854F0B;cursor:pointer;padding:0 4px;line-height:1;">×</button>
+</div>
+
 <div class="main">
 
   <!-- ── 左欄 ── -->
@@ -287,6 +300,27 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// API Key 管理
+function saveKey(val) {
+  val = val.trim();
+  if (val) {
+    sessionStorage.setItem('tb_apikey', val);
+    document.getElementById('key-status').textContent = '✓ 已儲存（本次分頁有效）';
+    document.getElementById('key-status').style.color = '#2D6A4F';
+  }
+}
+function getKey() {
+  return sessionStorage.getItem('tb_apikey') || document.getElementById('api-key-input').value.trim();
+}
+// 讀取已儲存的 key
+const _savedKey = sessionStorage.getItem('tb_apikey');
+if (_savedKey) {
+  document.getElementById('api-key-input').value = _savedKey;
+  document.getElementById('key-status').textContent = '✓ 已儲存（本次分頁有效）';
+  document.getElementById('key-status').style.color = '#2D6A4F';
+  document.getElementById('api-bar').style.display = 'none'; // 已有key就收起
+}
+
 const d = new Date();
 document.getElementById('today-date').textContent =
   d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0');
@@ -387,9 +421,16 @@ ${urlKeywords ? 'URL關鍵字片段：' + urlKeywords : ''}
   "note": "給用戶的提示（需要確認什麼）"
 }`;
 
+    const apiKey = getKey();
+    if (!apiKey) { 
+      setStatus(i, 'amber', '⚠ 請先在頂部輸入 Anthropic API Key');
+      btn.disabled=false; btn.classList.remove('loading'); btn.textContent='抓取';
+      document.getElementById('api-bar').style.display='flex';
+      return;
+    }
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 400,
@@ -474,8 +515,15 @@ ${products.map(p=>`商品${p.index}：${p.name}`+(p.price?`，售價${p.price}`:
 {"scripts":[{"product":"商品名精簡版（15字內）","strategy":"情緒共鳴型或功能展示型或衝動消費型","hook":"開場鉤子（12字內，讓人停止滑動）","timeline":[{"time":"0–3s","action":"畫面動作","script":"台詞或字幕"},{"time":"3–8s","action":"畫面動作","script":"台詞或字幕"},{"time":"8–18s","action":"畫面動作","script":"台詞或字幕"},{"time":"18–25s","action":"畫面動作","script":"台詞或字幕"},{"time":"25–30s","action":"畫面動作","script":"台詞或字幕"}],"shoot_tips":"拍攝關鍵提示，兩點用；分隔","cta":"結尾行動呼籲（8字內）","title_suggestion":"影片標題（含搜索關鍵詞，25字內）"}]}`;
 
   try {
+    const apiKey = getKey();
+    if (!apiKey) {
+      col.innerHTML='<div style="padding:2rem;font-size:14px;color:#854F0B;">請先在頂部黃色欄位輸入 Anthropic API Key</div>';
+      btn.disabled=false; btn.textContent='▶ 產出今日影片腳本';
+      document.getElementById('api-bar').style.display='flex';
+      return;
+    }
     const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
       body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, messages:[{role:'user',content:prompt}] })
     });
     const data = await res.json();
