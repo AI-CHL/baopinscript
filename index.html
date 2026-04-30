@@ -42,19 +42,15 @@
   .strat-sel { font-size: 11px; padding: 3px 22px 3px 7px; border-radius: 20px; }
   .clear-btn { font-size: 11px; padding: 3px 9px; border: 1px solid var(--border); border-radius: 20px; background: transparent; color: var(--text3); cursor: pointer; }
   .clear-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-light); }
-  .field-mb { margin-bottom: 8px; }
   .gen-btn { width: 100%; padding: 13px; background: var(--text); color: white; border: none; border-radius: var(--radius); font-family: 'Noto Sans TC', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: opacity 0.15s; margin-top: 6px; }
   .gen-btn:hover { opacity: 0.85; }
   .gen-btn:disabled { opacity: 0.35; cursor: not-allowed; }
   .gen-sub { text-align: center; font-size: 11px; color: var(--text3); margin-top: 6px; }
   .output-col { padding: 24px; overflow-y: auto; height: calc(100vh - 61px); }
   .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 400px; text-align: center; gap: 12px; }
-  .empty-icon { width: 56px; height: 56px; border-radius: 16px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+  .empty-icon { font-size: 36px; }
   .empty-title { font-size: 16px; font-weight: 500; color: var(--text2); }
   .empty-sub { font-size: 13px; color: var(--text3); line-height: 1.8; max-width: 260px; }
-  .how-to { background: var(--blue-light); border: 1px solid #B0C8F0; border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 16px; width: 100%; max-width: 320px; text-align: left; }
-  .how-title { font-size: 12px; font-weight: 500; color: var(--blue); margin-bottom: 8px; }
-  .how-steps { font-size: 12px; color: var(--blue); line-height: 2.2; }
   .output-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
   .output-title { font-size: 18px; font-weight: 500; }
   .output-meta { font-size: 12px; color: var(--text3); }
@@ -107,98 +103,65 @@
   </div>
   <div class="date-badge" id="today-date"></div>
 </div>
-<div id="key-bar" style="width:100%;background:#FFF8EB;border-bottom:1px solid #F0DFB0;padding:7px 20px;display:flex;align-items:center;gap:10px;font-size:12px;">
-  <span style="color:#854F0B;font-weight:500;white-space:nowrap;">🔑 API Key</span>
-  <input type="password" id="key-input" placeholder="貼入 Anthropic API Key（sk-ant-api03-...）"
-    style="flex:1;max-width:440px;font-family:monospace;font-size:12px;padding:5px 10px;border:1px solid #F0DFB0;border-radius:6px;background:white;outline:none;color:#1A1814;"
-    oninput="onKeyInput(this.value)" />
-  <span id="key-status" style="color:#854F0B;white-space:nowrap;"></span>
-  <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:#185FA5;white-space:nowrap;font-size:11px;">取得 Key →</a>
-  <button onclick="document.getElementById('key-bar').style.display='none'" style="background:none;border:none;color:#854F0B;cursor:pointer;font-size:16px;line-height:1;padding:0 2px;">×</button>
-</div>
 
 <div class="main">
   <div class="sidebar">
     <div class="sidebar-section">
-      <div class="section-label">基本設定</div>
-      <div class="field-mb">
-        <select id="platform">
-          <option value="taobao">淘寶逛逛</option>
-          <option value="douyin">抖音</option>
-          <option value="kuaishou">快手</option>
-          <option value="xiaohongshu">小紅書</option>
-        </select>
-      </div>
+      <div class="section-label">發布平台</div>
+      <select id="platform">
+        <option value="taobao">淘寶逛逛</option>
+        <option value="douyin">抖音</option>
+        <option value="kuaishou">快手</option>
+        <option value="xiaohongshu">小紅書</option>
+      </select>
     </div>
 
     <div class="sidebar-section">
       <div class="section-label">今日選品 — 貼入商品標題</div>
 
-      <div class="prod-card" id="card-0">
+      <div class="prod-card">
         <div class="prod-card-head">
           <div class="prod-num">1</div>
           <div class="prod-head-right">
-            <select class="strat-sel" id="strat-0">
-              <option value="auto">AI自動</option>
-              <option value="emotion">情緒共鳴型</option>
-              <option value="function">功能展示型</option>
-              <option value="impulse">衝動消費型</option>
-            </select>
-            <button class="clear-btn" onclick="clearCard(0)">清除</button>
+            <select class="strat-sel" id="strat-0"><option value="auto">AI自動</option><option value="emotion">情緒共鳴型</option><option value="function">功能展示型</option><option value="impulse">衝動消費型</option></select>
+            <button class="clear-btn" onclick="document.getElementById('title-0').value=''">清除</button>
           </div>
         </div>
-        <textarea id="title-0" rows="3" placeholder="貼入淘寶商品標題，例：ZEBRA斑馬SARASA系列0.5mm彩色鋼珠筆限定款日本進口書寫流暢"></textarea>
+        <textarea id="title-0" rows="3" placeholder="貼入淘寶商品標題，例：ZEBRA斑馬SARASA系列0.5mm彩色鋼珠筆限定款日本進口"></textarea>
       </div>
 
-      <div class="prod-card" id="card-1">
+      <div class="prod-card">
         <div class="prod-card-head">
           <div class="prod-num">2</div>
           <div class="prod-head-right">
-            <select class="strat-sel" id="strat-1">
-              <option value="auto">AI自動</option>
-              <option value="emotion">情緒共鳴型</option>
-              <option value="function">功能展示型</option>
-              <option value="impulse">衝動消費型</option>
-            </select>
-            <button class="clear-btn" onclick="clearCard(1)">清除</button>
+            <select class="strat-sel" id="strat-1"><option value="auto">AI自動</option><option value="emotion">情緒共鳴型</option><option value="function">功能展示型</option><option value="impulse">衝動消費型</option></select>
+            <button class="clear-btn" onclick="document.getElementById('title-1').value=''">清除</button>
           </div>
         </div>
         <textarea id="title-1" rows="3" placeholder="貼入淘寶商品標題"></textarea>
       </div>
 
-      <div class="prod-card" id="card-2">
+      <div class="prod-card">
         <div class="prod-card-head">
           <div class="prod-num">3</div>
           <div class="prod-head-right">
-            <select class="strat-sel" id="strat-2">
-              <option value="auto">AI自動</option>
-              <option value="emotion">情緒共鳴型</option>
-              <option value="function">功能展示型</option>
-              <option value="impulse">衝動消費型</option>
-            </select>
-            <button class="clear-btn" onclick="clearCard(2)">清除</button>
+            <select class="strat-sel" id="strat-2"><option value="auto">AI自動</option><option value="emotion">情緒共鳴型</option><option value="function">功能展示型</option><option value="impulse">衝動消費型</option></select>
+            <button class="clear-btn" onclick="document.getElementById('title-2').value=''">清除</button>
           </div>
         </div>
         <textarea id="title-2" rows="3" placeholder="貼入淘寶商品標題"></textarea>
       </div>
     </div>
 
-    <button class="gen-btn" id="gen-btn" onclick="generateScripts()">▶ 一鍵產出賣點＋腳本</button>
+    <button class="gen-btn" id="gen-btn" onclick="generate()">▶ 一鍵產出賣點＋腳本</button>
     <div class="gen-sub">AI自動分析賣點 · 產出30秒影片腳本</div>
   </div>
 
   <div class="output-col" id="output-col">
     <div class="empty-state">
-      <div class="how-to">
-        <div class="how-title">📋 使用流程（2步驟）</div>
-        <div class="how-steps">
-          <span>① 去淘寶複製商品標題貼入左側</span>
-          <span>② 點「一鍵產出賣點＋腳本」</span>
-        </div>
-      </div>
       <div class="empty-icon">🎬</div>
-      <div class="empty-title">貼入標題即可開始</div>
-      <div class="empty-sub">不需要填售價，AI 自動從標題分析品牌、功能、賣點，直接產出 30 秒腳本。</div>
+      <div class="empty-title">貼入商品標題即可開始</div>
+      <div class="empty-sub">從淘寶複製商品標題，貼入左側，點按鈕，AI自動產出賣點和30秒腳本。</div>
     </div>
   </div>
 </div>
@@ -206,31 +169,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// API Key 管理
-function onKeyInput(val) {
-  val = val.trim();
-  if (val.startsWith('sk-')) {
-    sessionStorage.setItem('bao_key', val);
-    document.getElementById('key-status').textContent = '✓ 已儲存';
-    document.getElementById('key-status').style.color = '#2D6A4F';
-    setTimeout(function(){ document.getElementById('key-bar').style.display='none'; }, 800);
-  }
-}
-function getApiKey() {
-  return sessionStorage.getItem('bao_key') || document.getElementById('key-input').value.trim();
-}
-// 已有 key 就隱藏欄位
-(function(){
-  var k = sessionStorage.getItem('bao_key');
-  if (k) {
-    document.getElementById('key-bar').style.display = 'none';
-    document.getElementById('key-input').value = k;
-  }
-})();
-
-// 產出前先檢查 key
-var _origGenerate = null;
-
+var WEBHOOK = 'https://chlstore.app.n8n.cloud/webhook/extract-product';
 var PLATFORM_LABEL = { taobao:'淘寶逛逛', douyin:'抖音', kuaishou:'快手', xiaohongshu:'小紅書' };
 var STRAT_LABEL = { auto:'AI自動', emotion:'情緒共鳴型', function:'功能展示型', impulse:'衝動消費型' };
 var TAG_CLASS = { '情緒共鳴型':'tag-feel', '功能展示型':'tag-func', '衝動消費型':'tag-hot' };
@@ -246,11 +185,7 @@ function showToast(msg) {
   setTimeout(function(){ t.classList.remove('show'); }, 2800);
 }
 
-function clearCard(i) {
-  document.getElementById('title-'+i).value = '';
-}
-
-async function generateScripts() {
+async function generate() {
   var btn = document.getElementById('gen-btn');
   var col = document.getElementById('output-col');
   var platform = document.getElementById('platform').value;
@@ -259,61 +194,46 @@ async function generateScripts() {
   for (var i = 0; i < 3; i++) {
     var title = document.getElementById('title-'+i).value.trim();
     if (!title) continue;
-    products.push({
-      index: i+1,
-      title: title,
-      strategy: document.getElementById('strat-'+i).value
-    });
+    products.push({ index: i+1, title: title, strategy: document.getElementById('strat-'+i).value });
   }
-
   if (!products.length) { showToast('請至少貼入一個商品標題'); return; }
 
-  var apiKey = getApiKey();
-  if (!apiKey || !apiKey.startsWith('sk-')) {
-    document.getElementById('key-bar').style.display = 'flex';
-    document.getElementById('key-input').focus();
-    showToast('請先在頂部填入 Anthropic API Key');
-    return;
-  }
-
   btn.disabled = true; btn.textContent = '⏳ 生成中...';
-  col.innerHTML = '<div class="loading-state"><div class="spinner"></div><div class="loading-txt">AI 分析商品賣點，產出影片腳本中...</div></div>';
+  col.innerHTML = '<div class="loading-state"><div class="spinner"></div><div class="loading-txt">AI 分析賣點，產出腳本中...</div></div>';
 
   var stratHint = products.map(function(p){
     return p.strategy !== 'auto' ? '商品'+p.index+'指定「'+STRAT_LABEL[p.strategy]+'」' : '';
   }).filter(Boolean).join('；') || 'AI自動判斷';
 
-  var prompt = '你是淘寶日本文具品類頂級操盤手。\n\n根據以下商品標題，為每個商品：\n1. 提煉3個核心賣點\n2. 設計一支30秒爆款短影片腳本\n\n平台：' + PLATFORM_LABEL[platform] + '\n策略：' + stratHint + '\n\n商品標題：\n' +
-    products.map(function(p){ return '商品'+p.index+'：'+p.title; }).join('\n') +
-    '\n\n嚴格只輸出JSON，不要任何額外文字：\n{"scripts":[{"index":1,"product":"商品簡稱（15字內）","keywords":["賣點1","賣點2","賣點3"],"strategy":"情緒共鳴型或功能展示型或衝動消費型","hook":"開場鉤子（12字內，讓人停止滑動）","timeline":[{"time":"0–3s","action":"畫面動作","script":"台詞或字幕"},{"time":"3–8s","action":"畫面動作","script":"台詞或字幕"},{"time":"8–18s","action":"畫面動作","script":"台詞或字幕"},{"time":"18–25s","action":"畫面動作","script":"台詞或字幕"},{"time":"25–30s","action":"畫面動作","script":"台詞或字幕"}],"shoot_tips":"拍攝提示兩點用；分隔","cta":"結尾CTA（8字內）","title_suggestion":"影片標題（含搜索關鍵詞，25字內）"}]}';
+  var titlesText = '平台：' + PLATFORM_LABEL[platform] + '\n策略：' + stratHint + '\n\n' +
+    products.map(function(p){ return '商品'+p.index+'：'+p.title; }).join('\n');
 
   try {
-    var res = await fetch('https://api.anthropic.com/v1/messages', {
+    var res = await fetch(WEBHOOK, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': getApiKey(),
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 2000,
-        messages: [{ role: 'user', content: prompt }]
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ titles: titlesText })
     });
-
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     var data = await res.json();
-    if (data.error) throw new Error(data.error.message);
-    var raw = (data.content||[]).filter(function(b){ return b.type==='text'; }).map(function(b){ return b.text; }).join('');
-    var clean = raw.replace(/```json|```/g,'').trim();
-    var parsed;
-    try { parsed = JSON.parse(clean); }
-    catch(e) { var m = clean.match(/\{[\s\S]*\}/); if(m) parsed = JSON.parse(m[0]); else throw new Error('JSON解析失敗'); }
-    scriptsData = parsed.scripts;
-    renderScripts(parsed.scripts, platform, products.length);
+
+    var scripts;
+    if (data.scripts) {
+      scripts = data.scripts;
+    } else if (data.output && data.output.scripts) {
+      scripts = data.output.scripts;
+    } else {
+      // 嘗試解析字串
+      var raw = typeof data === 'string' ? data : JSON.stringify(data);
+      var clean = raw.replace(/```json|```/g,'').trim();
+      var parsed = JSON.parse(clean);
+      scripts = parsed.scripts || parsed;
+    }
+
+    scriptsData = scripts;
+    renderScripts(scripts, platform, products.length);
   } catch(e) {
-    col.innerHTML = '<div style="padding:2rem;color:#A32D2D;font-size:14px;">❌ 生成失敗：' + e.message + '<br><small style="color:#9E9A94">請確認 API Key 有效</small></div>';
+    col.innerHTML = '<div style="padding:2rem;color:#A32D2D;font-size:14px;">❌ 生成失敗：' + e.message + '</div>';
   }
 
   btn.disabled = false; btn.textContent = '▶ 一鍵產出賣點＋腳本';
@@ -330,14 +250,14 @@ function renderScripts(scripts, platform, count) {
     var kws = (s.keywords||[]).map(function(k){ return '<span class="kw-badge">'+k+'</span>'; }).join('');
     html += '<div class="script-card">' +
       '<div class="sc-head"><div class="sc-num">'+(i+1)+'</div><div class="sc-info"><div class="sc-name">'+s.product+'</div><div class="sc-tags"><span class="tag '+tc+'">'+s.strategy+'</span><span class="tag tag-info">30秒</span><span class="tag tag-info">'+PLATFORM_LABEL[platform]+'</span></div></div><button class="copy-btn" onclick="copyOne('+i+')">複製</button></div>' +
-      '<div class="sc-body">' +
-      '<div style="margin-bottom:10px">'+kws+'</div>' +
+      '<div class="sc-body"><div style="margin-bottom:10px">'+kws+'</div>' +
       '<div class="hook-label">開場鉤子</div><div class="hook-box">「'+s.hook+'」</div>' +
       '<div class="tl-label">分鏡腳本</div><div class="timeline">' +
       s.timeline.map(function(t){ return '<div class="tl-row"><div class="tl-time">'+t.time+'</div><div><div class="tl-cam">📷 '+t.action+'</div><div class="tl-txt">💬 '+t.script+'</div></div></div>'; }).join('') +
       '</div></div>' +
-      '<div class="sc-footer"><div><div class="meta-k">拍攝提示</div><div class="meta-v">'+s.shoot_tips.split(/[；;]/).map(function(t,j){ return (j+1)+'. '+t.trim(); }).join('<br>')+'</div></div><div><div class="meta-k">結尾 CTA</div><div class="meta-v">'+s.cta+'</div></div><div class="title-box"><div class="meta-k">建議標題</div><div class="title-txt">'+s.title_suggestion+'</div></div></div>' +
-      '</div>';
+      '<div class="sc-footer"><div><div class="meta-k">拍攝提示</div><div class="meta-v">'+s.shoot_tips.split(/[；;]/).map(function(t,j){ return (j+1)+'. '+t.trim(); }).join('<br>')+'</div></div>' +
+      '<div><div class="meta-k">結尾 CTA</div><div class="meta-v">'+s.cta+'</div></div>' +
+      '<div class="title-box"><div class="meta-k">建議標題</div><div class="title-txt">'+s.title_suggestion+'</div></div></div></div>';
   });
   col.innerHTML = html;
 }
