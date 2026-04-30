@@ -107,6 +107,15 @@
   </div>
   <div class="date-badge" id="today-date"></div>
 </div>
+<div id="key-bar" style="width:100%;background:#FFF8EB;border-bottom:1px solid #F0DFB0;padding:7px 20px;display:flex;align-items:center;gap:10px;font-size:12px;">
+  <span style="color:#854F0B;font-weight:500;white-space:nowrap;">🔑 API Key</span>
+  <input type="password" id="key-input" placeholder="貼入 Anthropic API Key（sk-ant-api03-...）"
+    style="flex:1;max-width:440px;font-family:monospace;font-size:12px;padding:5px 10px;border:1px solid #F0DFB0;border-radius:6px;background:white;outline:none;color:#1A1814;"
+    oninput="onKeyInput(this.value)" />
+  <span id="key-status" style="color:#854F0B;white-space:nowrap;"></span>
+  <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:#185FA5;white-space:nowrap;font-size:11px;">取得 Key →</a>
+  <button onclick="document.getElementById('key-bar').style.display='none'" style="background:none;border:none;color:#854F0B;cursor:pointer;font-size:16px;line-height:1;padding:0 2px;">×</button>
+</div>
 
 <div class="main">
   <div class="sidebar">
@@ -197,6 +206,31 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// API Key 管理
+function onKeyInput(val) {
+  val = val.trim();
+  if (val.startsWith('sk-')) {
+    sessionStorage.setItem('bao_key', val);
+    document.getElementById('key-status').textContent = '✓ 已儲存';
+    document.getElementById('key-status').style.color = '#2D6A4F';
+    setTimeout(function(){ document.getElementById('key-bar').style.display='none'; }, 800);
+  }
+}
+function getApiKey() {
+  return sessionStorage.getItem('bao_key') || document.getElementById('key-input').value.trim();
+}
+// 已有 key 就隱藏欄位
+(function(){
+  var k = sessionStorage.getItem('bao_key');
+  if (k) {
+    document.getElementById('key-bar').style.display = 'none';
+    document.getElementById('key-input').value = k;
+  }
+})();
+
+// 產出前先檢查 key
+var _origGenerate = null;
+
 var PLATFORM_LABEL = { taobao:'淘寶逛逛', douyin:'抖音', kuaishou:'快手', xiaohongshu:'小紅書' };
 var STRAT_LABEL = { auto:'AI自動', emotion:'情緒共鳴型', function:'功能展示型', impulse:'衝動消費型' };
 var TAG_CLASS = { '情緒共鳴型':'tag-feel', '功能展示型':'tag-func', '衝動消費型':'tag-hot' };
@@ -234,6 +268,14 @@ async function generateScripts() {
 
   if (!products.length) { showToast('請至少貼入一個商品標題'); return; }
 
+  var apiKey = getApiKey();
+  if (!apiKey || !apiKey.startsWith('sk-')) {
+    document.getElementById('key-bar').style.display = 'flex';
+    document.getElementById('key-input').focus();
+    showToast('請先在頂部填入 Anthropic API Key');
+    return;
+  }
+
   btn.disabled = true; btn.textContent = '⏳ 生成中...';
   col.innerHTML = '<div class="loading-state"><div class="spinner"></div><div class="loading-txt">AI 分析商品賣點，產出影片腳本中...</div></div>';
 
@@ -250,7 +292,7 @@ async function generateScripts() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': 'PLACEHOLDER_KEY',
+        'x-api-key': getApiKey(),
         'anthropic-version': '2023-06-01',
         'anthropic-dangerous-direct-browser-access': 'true'
       },
