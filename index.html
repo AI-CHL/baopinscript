@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>爆品影片腳本產生器</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -20,98 +21,130 @@
   }
   body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
 
-  /* 登入頁 */
+  /* 登入 */
   .login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; width: 100%; }
   .login-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 40px 36px; width: 100%; max-width: 360px; box-shadow: var(--shadow); text-align: center; }
   .login-logo { width: 48px; height: 48px; border-radius: 12px; background: var(--text); display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 500; color: white; margin: 0 auto 16px; }
   .login-title { font-size: 18px; font-weight: 500; margin-bottom: 6px; }
   .login-sub { font-size: 13px; color: var(--text3); margin-bottom: 28px; }
-  .login-box input { font-size: 14px; padding: 10px 14px; text-align: center; letter-spacing: 0.1em; margin-bottom: 12px; border-radius: var(--radius); }
-  .login-btn { width: 100%; padding: 11px; background: var(--text); color: white; border: none; border-radius: var(--radius); font-family: 'Noto Sans TC', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity 0.15s; }
+  .login-box input[type=password] { font-size: 14px; padding: 10px 14px; text-align: center; letter-spacing: 0.1em; margin-bottom: 12px; }
+  .login-btn { width: 100%; padding: 11px; background: var(--text); color: white; border: none; border-radius: var(--radius); font-family: 'Noto Sans TC', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; }
   .login-btn:hover { opacity: 0.85; }
   .login-err { font-size: 12px; color: #A32D2D; margin-top: 10px; min-height: 18px; }
 
-  /* 主介面 */
+  /* App */
   .app { display: none; flex-direction: column; width: 100%; min-height: 100vh; }
   .app.show { display: flex; }
-  .topbar { width: 100%; background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .topbar { width: 100%; background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
   .topbar-left { display: flex; align-items: center; gap: 10px; }
-  .logo-mark { width: 32px; height: 32px; border-radius: 8px; background: var(--text); display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: white; }
-  .topbar-title { font-size: 15px; font-weight: 500; }
-  .topbar-sub { font-size: 12px; color: var(--text3); }
-  .topbar-right { display: flex; align-items: center; gap: 10px; }
-  .date-badge { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text2); background: var(--surface2); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); }
-  .logout-btn { font-size: 11px; padding: 4px 10px; border: 1px solid var(--border2); border-radius: 20px; background: transparent; color: var(--text3); cursor: pointer; }
+  .logo-mark { width: 30px; height: 30px; border-radius: 7px; background: var(--text); display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; color: white; }
+  .topbar-title { font-size: 14px; font-weight: 500; }
+  .topbar-sub { font-size: 11px; color: var(--text3); }
+  .topbar-right { display: flex; align-items: center; gap: 8px; }
+  .date-badge { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text2); background: var(--surface2); padding: 3px 9px; border-radius: 20px; border: 1px solid var(--border); }
+  .logout-btn { font-size: 11px; padding: 3px 9px; border: 1px solid var(--border2); border-radius: 20px; background: transparent; color: var(--text3); cursor: pointer; }
   .logout-btn:hover { color: var(--accent); border-color: var(--accent); }
-  .main { display: grid; grid-template-columns: 380px 1fr; width: 100%; flex: 1; }
-  .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 20px 18px; overflow-y: auto; height: calc(100vh - 61px); position: sticky; top: 61px; }
-  .sidebar::-webkit-scrollbar { width: 4px; }
+
+  .main { display: grid; grid-template-columns: 340px 1fr; width: 100%; flex: 1; }
+  .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 16px 14px; overflow-y: auto; height: calc(100vh - 53px); position: sticky; top: 53px; }
+  .sidebar::-webkit-scrollbar { width: 3px; }
   .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
-  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
-  .sidebar-section { margin-bottom: 18px; }
-  input, select, textarea { width: 100%; font-family: 'Noto Sans TC', sans-serif; font-size: 13px; padding: 8px 11px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); color: var(--text); outline: none; transition: border-color 0.15s, background 0.15s; line-height: 1.5; }
+  .section-label { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); margin-bottom: 8px; }
+  .sidebar-section { margin-bottom: 16px; }
+  input, select, textarea { width: 100%; font-family: 'Noto Sans TC', sans-serif; font-size: 13px; padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); color: var(--text); outline: none; transition: border-color 0.15s, background 0.15s; line-height: 1.5; }
   input:focus, select:focus, textarea:focus { border-color: var(--text); background: white; }
   input::placeholder, textarea::placeholder { color: var(--text3); font-size: 12px; }
   select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6660' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
-  .prod-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px; margin-bottom: 10px; box-shadow: var(--shadow); }
-  .prod-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .prod-num { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; background: var(--text); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-  .prod-head-right { display: flex; gap: 6px; align-items: center; }
-  .strat-sel { font-size: 11px; padding: 3px 22px 3px 7px; border-radius: 20px; }
-  .clear-btn { font-size: 11px; padding: 3px 9px; border: 1px solid var(--border); border-radius: 20px; background: transparent; color: var(--text3); cursor: pointer; }
-  .clear-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-light); }
-  .gen-btn { width: 100%; padding: 13px; background: var(--text); color: white; border: none; border-radius: var(--radius); font-family: 'Noto Sans TC', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: opacity 0.15s; margin-top: 6px; }
+  .prod-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 12px; margin-bottom: 8px; box-shadow: var(--shadow); }
+  .prod-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .prod-num { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; background: var(--text); color: white; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .prod-head-right { display: flex; gap: 5px; align-items: center; }
+  .strat-sel { font-size: 10px; padding: 2px 20px 2px 6px; border-radius: 20px; }
+  .clear-btn { font-size: 10px; padding: 2px 7px; border: 1px solid var(--border); border-radius: 20px; background: transparent; color: var(--text3); cursor: pointer; }
+  .clear-btn:hover { color: var(--accent); border-color: var(--accent); }
+  .gen-btn { width: 100%; padding: 12px; background: var(--text); color: white; border: none; border-radius: var(--radius); font-family: 'Noto Sans TC', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity 0.15s; margin-top: 4px; }
   .gen-btn:hover { opacity: 0.85; }
   .gen-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-  .gen-sub { text-align: center; font-size: 11px; color: var(--text3); margin-top: 6px; }
-  .output-col { padding: 24px; overflow-y: auto; height: calc(100vh - 61px); }
-  .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 400px; text-align: center; gap: 12px; }
-  .empty-icon { font-size: 36px; }
-  .empty-title { font-size: 16px; font-weight: 500; color: var(--text2); }
-  .empty-sub { font-size: 13px; color: var(--text3); line-height: 1.8; max-width: 260px; }
-  .output-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
-  .output-title { font-size: 18px; font-weight: 500; }
-  .output-meta { font-size: 12px; color: var(--text3); }
-  .script-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 20px; box-shadow: var(--shadow); overflow: hidden; }
-  .sc-head { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px; }
-  .sc-num { font-family: 'DM Mono', monospace; font-size: 12px; background: var(--text); color: white; width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .gen-sub { text-align: center; font-size: 11px; color: var(--text3); margin-top: 5px; }
+
+  /* 右欄 */
+  .output-col { padding: 20px; overflow-y: auto; height: calc(100vh - 53px); }
+  .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 400px; text-align: center; gap: 10px; }
+  .empty-icon { font-size: 32px; }
+  .empty-title { font-size: 15px; font-weight: 500; color: var(--text2); }
+  .empty-sub { font-size: 12px; color: var(--text3); line-height: 1.8; max-width: 240px; }
+  .output-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .output-title { font-size: 17px; font-weight: 500; }
+  .output-meta { font-size: 11px; color: var(--text3); }
+
+  /* 腳本卡 */
+  .script-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 24px; box-shadow: var(--shadow); overflow: hidden; }
+  .sc-head { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 10px; }
+  .sc-num { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--text); color: white; width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
   .sc-info { flex: 1; }
-  .sc-name { font-size: 15px; font-weight: 500; line-height: 1.4; }
-  .sc-tags { display: flex; gap: 6px; margin-top: 5px; flex-wrap: wrap; }
-  .tag { font-size: 11px; padding: 2px 8px; border-radius: 20px; border: 1px solid; }
+  .sc-name { font-size: 14px; font-weight: 500; line-height: 1.4; }
+  .sc-tags { display: flex; gap: 5px; margin-top: 4px; flex-wrap: wrap; }
+  .tag { font-size: 10px; padding: 2px 7px; border-radius: 20px; border: 1px solid; }
   .tag-hot { background: var(--accent-light); color: var(--accent); border-color: #F0C8B0; }
   .tag-feel { background: var(--gold-light); color: var(--gold); border-color: #F0DFB0; }
   .tag-func { background: var(--accent2-light); color: var(--accent2); border-color: #B0D8C0; }
   .tag-info { background: var(--blue-light); color: var(--blue); border-color: #B0C8F0; }
-  .copy-btn { font-size: 11px; padding: 5px 12px; border: 1px solid var(--border2); border-radius: 20px; background: white; color: var(--text2); cursor: pointer; white-space: nowrap; font-family: 'Noto Sans TC', sans-serif; }
-  .copy-btn:hover { background: var(--surface2); }
-  .sc-body { padding: 14px 18px; }
+  .sc-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .action-btn { font-size: 11px; padding: 4px 10px; border: 1px solid var(--border2); border-radius: 20px; background: white; color: var(--text2); cursor: pointer; white-space: nowrap; font-family: 'Noto Sans TC', sans-serif; }
+  .action-btn:hover { background: var(--surface2); }
+  .action-btn.primary { background: var(--text); color: white; border-color: var(--text); }
+  .action-btn.primary:hover { opacity: 0.85; }
+
+  .sc-body { padding: 14px 16px; }
+  .kw-row { margin-bottom: 10px; }
   .kw-badge { display: inline-block; background: var(--accent2-light); color: var(--accent2); border: 1px solid #B0D8C0; border-radius: 20px; font-size: 11px; padding: 2px 10px; margin: 2px; }
-  .hook-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 5px; margin-top: 12px; }
-  .hook-box { background: var(--bg); border-left: 3px solid var(--accent); padding: 9px 13px; border-radius: 0 8px 8px 0; margin-bottom: 14px; font-size: 15px; font-weight: 500; line-height: 1.6; font-style: italic; }
-  .tl-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 8px; }
-  .timeline { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
-  .tl-row { display: grid; grid-template-columns: 65px 1fr; gap: 10px; align-items: start; }
-  .tl-time { font-family: 'DM Mono', monospace; font-size: 10px; color: white; background: var(--text2); padding: 3px 5px; border-radius: 5px; text-align: center; margin-top: 2px; white-space: nowrap; }
-  .tl-cam { color: var(--text2); font-size: 12px; margin-bottom: 2px; }
-  .tl-txt { color: var(--text); font-size: 13px; line-height: 1.6; }
-  .sc-footer { background: var(--surface2); border-top: 1px solid var(--border); padding: 12px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .meta-k { font-size: 10px; color: var(--text3); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 3px; }
-  .meta-v { font-size: 12px; color: var(--text); line-height: 1.5; }
-  .title-box { grid-column: 1/-1; background: white; border: 1px dashed var(--border2); border-radius: 8px; padding: 8px 12px; margin-top: 2px; }
-  .title-txt { font-size: 13px; font-weight: 500; margin-top: 3px; }
+  .hook-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; margin-top: 10px; }
+  .hook-box { background: var(--bg); border-left: 3px solid var(--accent); padding: 8px 12px; border-radius: 0 8px 8px 0; margin-bottom: 12px; font-size: 14px; font-weight: 500; line-height: 1.6; font-style: italic; }
+  .tl-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
+
+  /* 分鏡上傳區 */
+  .scene-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .scene-row { display: grid; grid-template-columns: 60px 90px 1fr; gap: 10px; align-items: start; background: var(--bg); border-radius: var(--radius); padding: 10px; border: 1px solid var(--border); }
+  .scene-time { font-family: 'DM Mono', monospace; font-size: 10px; color: white; background: var(--text2); padding: 3px 5px; border-radius: 5px; text-align: center; white-space: nowrap; margin-top: 2px; }
+  .scene-upload { width: 90px; height: 70px; border: 1.5px dashed var(--border2); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.15s, background 0.15s; overflow: hidden; position: relative; flex-shrink: 0; }
+  .scene-upload:hover { border-color: var(--accent2); background: var(--accent2-light); }
+  .scene-upload.has-img { border-style: solid; border-color: var(--accent2); }
+  .scene-upload img { width: 100%; height: 100%; object-fit: cover; }
+  .scene-upload input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .scene-upload-label { font-size: 10px; color: var(--text3); text-align: center; line-height: 1.4; pointer-events: none; }
+  .scene-upload-icon { font-size: 18px; margin-bottom: 2px; }
+  .scene-info { flex: 1; }
+  .scene-action { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+  .scene-script { font-size: 12px; color: var(--text); line-height: 1.5; margin-bottom: 6px; }
+  .scene-prompt-box { background: white; border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; }
+  .scene-prompt-label { font-size: 9px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px; }
+  .scene-prompt-text { font-size: 11px; color: var(--text2); line-height: 1.5; }
+
+  .sc-footer { background: var(--surface2); border-top: 1px solid var(--border); padding: 10px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .meta-k { font-size: 9px; color: var(--text3); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
+  .meta-v { font-size: 11px; color: var(--text); line-height: 1.5; }
+  .title-box { grid-column: 1/-1; background: white; border: 1px dashed var(--border2); border-radius: 7px; padding: 7px 10px; margin-top: 2px; }
+  .title-txt { font-size: 12px; font-weight: 500; margin-top: 2px; }
+
+  /* 匯出區 */
+  .export-bar { background: var(--accent2-light); border: 1px solid #B0D8C0; border-radius: var(--radius); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .export-info { font-size: 12px; color: var(--accent2); }
+  .export-info strong { font-weight: 500; }
+  .export-btn { font-size: 12px; padding: 6px 16px; background: var(--accent2); color: white; border: none; border-radius: 6px; cursor: pointer; font-family: 'Noto Sans TC', sans-serif; font-weight: 500; }
+  .export-btn:hover { opacity: 0.85; }
+
   .loading-state { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 300px; gap: 14px; }
-  .spinner { width: 30px; height: 30px; border: 2px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  .spinner { width: 28px; height: 28px; border: 2px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-txt { font-size: 13px; color: var(--text2); }
-  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--text); color: white; padding: 10px 20px; border-radius: 20px; font-size: 13px; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--text); color: white; padding: 9px 18px; border-radius: 20px; font-size: 12px; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
   .toast.show { opacity: 1; }
   @media (max-width: 760px) { .main { grid-template-columns: 1fr; } .sidebar { height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border); } .output-col { height: auto; } }
 </style>
 </head>
 <body>
 
-<!-- 登入頁 -->
+<!-- 登入 -->
 <div class="login-screen" id="login-screen">
   <div class="login-box">
     <div class="login-logo">爆</div>
@@ -130,7 +163,7 @@
       <div class="logo-mark">爆</div>
       <div>
         <div class="topbar-title">爆品影片腳本產生器</div>
-        <div class="topbar-sub">貼入商品標題 → 一鍵產出賣點＋腳本</div>
+        <div class="topbar-sub">貼標題 → 產腳本 → 上傳商品圖 → 匯出即夢AI素材包</div>
       </div>
     </div>
     <div class="topbar-right">
@@ -150,10 +183,8 @@
           <option value="xiaohongshu">小紅書</option>
         </select>
       </div>
-
       <div class="sidebar-section">
         <div class="section-label">今日選品 — 貼入商品標題</div>
-
         <div class="prod-card">
           <div class="prod-card-head">
             <div class="prod-num">1</div>
@@ -162,9 +193,8 @@
               <button class="clear-btn" onclick="document.getElementById('title-0').value=''">清除</button>
             </div>
           </div>
-          <textarea id="title-0" rows="3" placeholder="貼入淘寶商品標題，例：ZEBRA斑馬SARASA系列0.5mm彩色鋼珠筆限定款日本進口"></textarea>
+          <textarea id="title-0" rows="3" placeholder="貼入淘寶商品標題"></textarea>
         </div>
-
         <div class="prod-card">
           <div class="prod-card-head">
             <div class="prod-num">2</div>
@@ -175,7 +205,6 @@
           </div>
           <textarea id="title-1" rows="3" placeholder="貼入淘寶商品標題"></textarea>
         </div>
-
         <div class="prod-card">
           <div class="prod-card-head">
             <div class="prod-num">3</div>
@@ -187,7 +216,6 @@
           <textarea id="title-2" rows="3" placeholder="貼入淘寶商品標題"></textarea>
         </div>
       </div>
-
       <button class="gen-btn" id="gen-btn" onclick="generate()">▶ 一鍵產出賣點＋腳本</button>
       <div class="gen-sub">AI自動分析賣點 · 產出30秒影片腳本</div>
     </div>
@@ -196,7 +224,7 @@
       <div class="empty-state">
         <div class="empty-icon">🎬</div>
         <div class="empty-title">貼入商品標題即可開始</div>
-        <div class="empty-sub">從淘寶複製商品標題，貼入左側，點按鈕，AI自動產出賣點和30秒腳本。</div>
+        <div class="empty-sub">產出腳本後，每個分鏡可以上傳商品圖，一鍵匯出即夢AI素材包。</div>
       </div>
     </div>
   </div>
@@ -211,119 +239,192 @@ var PLATFORM_LABEL = { taobao:'淘寶逛逛', douyin:'抖音', kuaishou:'快手'
 var STRAT_LABEL = { auto:'AI自動', emotion:'情緒共鳴型', function:'功能展示型', impulse:'衝動消費型' };
 var TAG_CLASS = { '情緒共鳴型':'tag-feel', '功能展示型':'tag-func', '衝動消費型':'tag-hot' };
 var scriptsData = [];
+var sceneImages = {}; // key: "script-scene", value: {file, dataUrl}
 
-// 日期
 var _d = new Date();
 document.getElementById('today-date').textContent =
-  _d.getFullYear() + '.' + String(_d.getMonth()+1).padStart(2,'0') + '.' + String(_d.getDate()).padStart(2,'0');
+  _d.getFullYear()+'.'+String(_d.getMonth()+1).padStart(2,'0')+'.'+String(_d.getDate()).padStart(2,'0');
 
-// 登入狀態檢查
-if (sessionStorage.getItem('bao_auth') === '1') {
-  document.getElementById('login-screen').style.display = 'none';
+if (sessionStorage.getItem('bao_auth')==='1') {
+  document.getElementById('login-screen').style.display='none';
   document.getElementById('app').classList.add('show');
 }
-
 function login() {
-  var val = document.getElementById('pwd-input').value;
-  if (val === PWD) {
-    sessionStorage.setItem('bao_auth', '1');
-    document.getElementById('login-screen').style.display = 'none';
+  var v = document.getElementById('pwd-input').value;
+  if (v===PWD) {
+    sessionStorage.setItem('bao_auth','1');
+    document.getElementById('login-screen').style.display='none';
     document.getElementById('app').classList.add('show');
   } else {
-    document.getElementById('login-err').textContent = '密碼錯誤，請再試一次';
-    document.getElementById('pwd-input').value = '';
+    document.getElementById('login-err').textContent='密碼錯誤';
+    document.getElementById('pwd-input').value='';
     document.getElementById('pwd-input').focus();
   }
 }
-
 function logout() {
   sessionStorage.removeItem('bao_auth');
   document.getElementById('app').classList.remove('show');
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('pwd-input').value = '';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('pwd-input').value='';
 }
-
 function showToast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show'); }, 2800);
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); },2800);
 }
 
 async function generate() {
-  var btn = document.getElementById('gen-btn');
-  var col = document.getElementById('output-col');
-  var platform = document.getElementById('platform').value;
-
-  var products = [];
-  for (var i = 0; i < 3; i++) {
-    var title = document.getElementById('title-'+i).value.trim();
+  var btn=document.getElementById('gen-btn');
+  var col=document.getElementById('output-col');
+  var platform=document.getElementById('platform').value;
+  var products=[];
+  for (var i=0;i<3;i++) {
+    var title=document.getElementById('title-'+i).value.trim();
     if (!title) continue;
-    products.push({ index: i+1, title: title, strategy: document.getElementById('strat-'+i).value });
+    products.push({index:i+1,title:title,strategy:document.getElementById('strat-'+i).value});
   }
   if (!products.length) { showToast('請至少貼入一個商品標題'); return; }
-
-  btn.disabled = true; btn.textContent = '⏳ 生成中...';
-  col.innerHTML = '<div class="loading-state"><div class="spinner"></div><div class="loading-txt">AI 分析賣點，產出腳本中...</div></div>';
-
-  var stratHint = products.map(function(p){
-    return p.strategy !== 'auto' ? '商品'+p.index+'指定「'+STRAT_LABEL[p.strategy]+'」' : '';
-  }).filter(Boolean).join('；') || 'AI自動判斷';
-
-  var titlesText = '平台：' + PLATFORM_LABEL[platform] + '\n策略：' + stratHint + '\n\n' +
-    products.map(function(p){ return '商品'+p.index+'：'+p.title; }).join('\n');
-
+  btn.disabled=true; btn.textContent='⏳ 生成中...';
+  col.innerHTML='<div class="loading-state"><div class="spinner"></div><div class="loading-txt">AI 分析賣點，產出腳本中...</div></div>';
+  var stratHint=products.map(function(p){ return p.strategy!=='auto'?'商品'+p.index+'指定「'+STRAT_LABEL[p.strategy]+'」':''; }).filter(Boolean).join('；')||'AI自動判斷';
+  var titlesText='平台：'+PLATFORM_LABEL[platform]+'\n策略：'+stratHint+'\n\n'+products.map(function(p){ return '商品'+p.index+'：'+p.title; }).join('\n');
   try {
-    var res = await fetch(WEBHOOK, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ titles: titlesText })
-    });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    var data = await res.json();
-
+    var res=await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({titles:titlesText})});
+    if (!res.ok) throw new Error('HTTP '+res.status);
+    var data=await res.json();
     var scripts;
-    if (data.scripts) { scripts = data.scripts; }
-    else if (data.output && data.output.scripts) { scripts = data.output.scripts; }
-    else {
-      var raw = typeof data === 'string' ? data : JSON.stringify(data);
-      var parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
-      scripts = parsed.scripts || parsed;
-    }
-
-    scriptsData = scripts;
-    renderScripts(scripts, platform, products.length);
+    if (data.scripts) scripts=data.scripts;
+    else if (data.output&&data.output.scripts) scripts=data.output.scripts;
+    else { var raw=typeof data==='string'?data:JSON.stringify(data); var parsed=JSON.parse(raw.replace(/```json|```/g,'').trim()); scripts=parsed.scripts||parsed; }
+    scriptsData=scripts;
+    sceneImages={};
+    renderScripts(scripts,platform,products.length);
   } catch(e) {
-    col.innerHTML = '<div style="padding:2rem;color:#A32D2D;font-size:14px;">❌ 生成失敗：' + e.message + '</div>';
+    col.innerHTML='<div style="padding:2rem;color:#A32D2D;font-size:14px;">❌ 生成失敗：'+e.message+'</div>';
   }
-  btn.disabled = false; btn.textContent = '▶ 一鍵產出賣點＋腳本';
+  btn.disabled=false; btn.textContent='▶ 一鍵產出賣點＋腳本';
+}
+
+function handleImageUpload(input, si, ti) {
+  var file=input.files[0]; if (!file) return;
+  var reader=new FileReader();
+  reader.onload=function(e) {
+    var key=si+'-'+ti;
+    sceneImages[key]={file:file, dataUrl:e.target.result};
+    var uploadDiv=input.parentElement;
+    uploadDiv.innerHTML='<img src="'+e.target.result+'" /><input type="file" accept="image/*" onchange="handleImageUpload(this,'+si+','+ti+')">';
+    uploadDiv.classList.add('has-img');
+  };
+  reader.readAsDataURL(file);
 }
 
 function renderScripts(scripts, platform, count) {
-  var col = document.getElementById('output-col');
-  var now = new Date();
-  var ds = now.getFullYear()+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+String(now.getDate()).padStart(2,'0');
-  var html = '<div class="output-header"><div><div class="output-title">今日腳本 · '+count+'支</div><div class="output-meta">'+PLATFORM_LABEL[platform]+' · '+ds+'</div></div><button class="copy-btn" onclick="copyAll()">複製全部</button></div>';
-  scripts.forEach(function(s, i) {
-    var tc = TAG_CLASS[s.strategy] || 'tag-hot';
-    var kws = (s.keywords||[]).map(function(k){ return '<span class="kw-badge">'+k+'</span>'; }).join('');
-    html += '<div class="script-card"><div class="sc-head"><div class="sc-num">'+(i+1)+'</div><div class="sc-info"><div class="sc-name">'+s.product+'</div><div class="sc-tags"><span class="tag '+tc+'">'+s.strategy+'</span><span class="tag tag-info">30秒</span><span class="tag tag-info">'+PLATFORM_LABEL[platform]+'</span></div></div><button class="copy-btn" onclick="copyOne('+i+')">複製</button></div><div class="sc-body"><div style="margin-bottom:10px">'+kws+'</div><div class="hook-label">開場鉤子</div><div class="hook-box">「'+s.hook+'」</div><div class="tl-label">分鏡腳本</div><div class="timeline">'+s.timeline.map(function(t){ return '<div class="tl-row"><div class="tl-time">'+t.time+'</div><div><div class="tl-cam">📷 '+t.action+'</div><div class="tl-txt">💬 '+t.script+'</div></div></div>'; }).join('')+'</div></div><div class="sc-footer"><div><div class="meta-k">拍攝提示</div><div class="meta-v">'+s.shoot_tips.split(/[；;]/).map(function(t,j){ return (j+1)+'. '+t.trim(); }).join('<br>')+'</div></div><div><div class="meta-k">結尾 CTA</div><div class="meta-v">'+s.cta+'</div></div><div class="title-box"><div class="meta-k">建議標題</div><div class="title-txt">'+s.title_suggestion+'</div></div></div></div>';
+  var col=document.getElementById('output-col');
+  var now=new Date();
+  var ds=now.getFullYear()+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+String(now.getDate()).padStart(2,'0');
+  var html='<div class="output-header"><div><div class="output-title">今日腳本 · '+count+'支</div><div class="output-meta">'+PLATFORM_LABEL[platform]+' · '+ds+'</div></div></div>';
+
+  html+='<div class="export-bar"><div class="export-info">📦 <strong>上傳各分鏡商品圖後</strong>，一鍵匯出即夢AI素材包（圖片＋場景描述）</div><button class="export-btn" onclick="exportAll()">匯出素材包</button></div>';
+
+  scripts.forEach(function(s,si) {
+    var tc=TAG_CLASS[s.strategy]||'tag-hot';
+    var kws=(s.keywords||[]).map(function(k){ return '<span class="kw-badge">'+k+'</span>'; }).join('');
+
+    var scenesHtml=s.timeline.map(function(t,ti) {
+      var key=si+'-'+ti;
+      // 生成即夢AI prompt
+      var prompt='商品特寫影片，'+t.action+'，畫面中顯示文字「'+t.script+'」，日系文具風格，乾淨白色背景，自然光線，高質感產品攝影';
+      return '<div class="scene-row">'+
+        '<div><div class="scene-time">'+t.time+'</div></div>'+
+        '<div class="scene-upload" id="upload-'+key+'" onclick="document.getElementById(\'file-'+key+'\').click()">'+
+          '<div class="scene-upload-label"><div class="scene-upload-icon">📷</div>點擊上傳<br>商品圖</div>'+
+          '<input type="file" id="file-'+key+'" accept="image/*" style="display:none" onchange="handleImageUpload(this,'+si+','+ti+')">'+
+        '</div>'+
+        '<div class="scene-info">'+
+          '<div class="scene-action">📷 '+t.action+'</div>'+
+          '<div class="scene-script">💬 '+t.script+'</div>'+
+          '<div class="scene-prompt-box">'+
+            '<div class="scene-prompt-label">即夢AI Prompt</div>'+
+            '<div class="scene-prompt-text" id="prompt-'+key+'">'+prompt+'</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+
+    html+='<div class="script-card">'+
+      '<div class="sc-head"><div class="sc-num">'+(si+1)+'</div><div class="sc-info"><div class="sc-name">'+s.product+'</div><div class="sc-tags"><span class="tag '+tc+'">'+s.strategy+'</span><span class="tag tag-info">30秒</span><span class="tag tag-info">'+PLATFORM_LABEL[platform]+'</span></div></div>'+
+      '<div class="sc-actions"><button class="action-btn" onclick="copyOne('+si+')">複製腳本</button></div></div>'+
+      '<div class="sc-body">'+
+        '<div class="kw-row">'+kws+'</div>'+
+        '<div class="hook-label">開場鉤子</div><div class="hook-box">「'+s.hook+'」</div>'+
+        '<div class="tl-label">分鏡腳本 — 點每個分鏡上傳對應商品圖</div>'+
+        '<div class="scene-list">'+scenesHtml+'</div>'+
+      '</div>'+
+      '<div class="sc-footer">'+
+        '<div><div class="meta-k">拍攝提示</div><div class="meta-v">'+s.shoot_tips.split(/[；;]/).map(function(t,j){ return (j+1)+'. '+t.trim(); }).join('<br>')+'</div></div>'+
+        '<div><div class="meta-k">結尾 CTA</div><div class="meta-v">'+s.cta+'</div></div>'+
+        '<div class="title-box"><div class="meta-k">建議標題</div><div class="title-txt">'+s.title_suggestion+'</div></div>'+
+      '</div>'+
+    '</div>';
   });
-  col.innerHTML = html;
+  col.innerHTML=html;
+}
+
+async function exportAll() {
+  if (!scriptsData.length) { showToast('請先產出腳本'); return; }
+  showToast('正在打包素材...');
+  var zip=new JSZip();
+  var promptLines=['即夢AI 素材包 — 爆品腳本','生成日期：'+new Date().toLocaleDateString('zh-TW'),'','使用說明：每個分鏡對應一張圖片，請在即夢AI上傳圖片後貼入對應的Prompt生成影片片段。','','━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'];
+
+  for (var si=0;si<scriptsData.length;si++) {
+    var s=scriptsData[si];
+    var folder=zip.folder('商品'+(si+1)+'_'+s.product.substring(0,10));
+    promptLines.push('','【商品'+(si+1)+'】'+s.product+'（'+s.strategy+'）');
+    promptLines.push('開場鉤子：「'+s.hook+'」');
+    promptLines.push('建議標題：'+s.title_suggestion);
+    promptLines.push('');
+
+    for (var ti=0;ti<s.timeline.length;ti++) {
+      var t=s.timeline[ti];
+      var key=si+'-'+ti;
+      var promptEl=document.getElementById('prompt-'+key);
+      var prompt=promptEl?promptEl.textContent:'';
+      var imgInfo=sceneImages[key];
+
+      promptLines.push('分鏡'+(ti+1)+' ['+t.time+']');
+      promptLines.push('動作：'+t.action);
+      promptLines.push('字幕：'+t.script);
+      promptLines.push('即夢AI Prompt：'+prompt);
+      if (imgInfo) {
+        promptLines.push('圖片：分鏡'+(ti+1)+'.'+imgInfo.file.name.split('.').pop());
+        var b64=imgInfo.dataUrl.split(',')[1];
+        folder.file('分鏡'+(ti+1)+'.'+imgInfo.file.name.split('.').pop(), b64, {base64:true});
+      } else {
+        promptLines.push('圖片：（未上傳）');
+      }
+      promptLines.push('');
+    }
+    promptLines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    folder.file('prompts.txt', promptLines.slice(promptLines.indexOf('【商品'+(si+1)).join('\n'));
+  }
+
+  zip.file('全部Prompts.txt', promptLines.join('\n'));
+
+  var blob=await zip.generateAsync({type:'blob'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='即夢AI素材包_'+new Date().toLocaleDateString('zh-TW').replace(/\//g,'')+'.zip';
+  a.click();
+  showToast('✓ 素材包已下載');
 }
 
 function copyOne(idx) {
-  var s = scriptsData[idx]; if (!s) return;
-  var kws = (s.keywords||[]).join('；');
-  var lines = ['【商品'+(idx+1)+'】'+s.product+'（'+s.strategy+'）','','核心賣點：'+kws,'','開場鉤子：「'+s.hook+'」','','分鏡腳本：'].concat(s.timeline.map(function(t){ return t.time+'｜'+t.action+'｜'+t.script; })).concat(['','拍攝提示：'+s.shoot_tips,'CTA：'+s.cta,'建議標題：'+s.title_suggestion]);
+  var s=scriptsData[idx]; if (!s) return;
+  var kws=(s.keywords||[]).join('；');
+  var lines=['【商品'+(idx+1)+'】'+s.product+'（'+s.strategy+'）','','核心賣點：'+kws,'','開場鉤子：「'+s.hook+'」','','分鏡腳本：']
+    .concat(s.timeline.map(function(t){ return t.time+'｜'+t.action+'｜'+t.script; }))
+    .concat(['','拍攝提示：'+s.shoot_tips,'CTA：'+s.cta,'建議標題：'+s.title_suggestion]);
   navigator.clipboard.writeText(lines.join('\n')).then(function(){ showToast('✓ 腳本已複製'); });
-}
-
-function copyAll() {
-  var txt = scriptsData.map(function(s,i){
-    var kws = (s.keywords||[]).join('；');
-    return ['━━━━━━━━━━━━━━━━','【商品'+(i+1)+'】'+s.product+'（'+s.strategy+'）','','核心賣點：'+kws,'','開場鉤子：「'+s.hook+'」','','分鏡腳本：'].concat(s.timeline.map(function(t){ return t.time+'｜'+t.action+'｜'+t.script; })).concat(['','拍攝提示：'+s.shoot_tips,'CTA：'+s.cta,'建議標題：'+s.title_suggestion]).join('\n');
-  }).join('\n\n');
-  navigator.clipboard.writeText(txt).then(function(){ showToast('✓ 全部腳本已複製'); });
 }
 </script>
 </body>
