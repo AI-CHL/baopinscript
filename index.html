@@ -405,7 +405,7 @@ async function exportAll() {
       promptLines.push('');
     }
     promptLines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    folder.file('prompts.txt', promptLines.slice(promptLines.indexOf('【商品'+(si+1)).join('\n'));
+    folder.file('prompts.txt', promptLines.join('\n'));
   }
 
   zip.file('全部Prompts.txt', promptLines.join('\n'));
