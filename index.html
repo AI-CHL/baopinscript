@@ -488,7 +488,10 @@ function downloadAll() {
   var blob = new Blob([txt], {type:'text/plain;charset=utf-8'});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = '爆品腳本_'+ds+'.txt';
+  var kw = document.getElementById('search-keyword').value.trim().replace(/\s+/g,'_').substring(0,10);
+  var now2 = new Date();
+  var ds2 = String(now2.getFullYear()).slice(2)+String(now2.getMonth()+1).padStart(2,'0')+String(now2.getDate()).padStart(2,'0');
+  a.download = (kw||'爆品腳本')+'_'+ds2+'.txt';
   a.click();
   showToast('✓ 腳本已下載');
 }
