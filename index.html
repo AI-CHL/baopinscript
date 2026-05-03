@@ -50,18 +50,6 @@ input,select,textarea{width:100%;font-family:'Noto Sans TC',sans-serif;font-size
 input:focus,select:focus,textarea:focus{border-color:var(--text);background:white}
 input::placeholder,textarea::placeholder{color:var(--text3);font-size:12px}
 select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6660' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
-
-
-
-.mode-panel{display:none}
-.mode-panel.show{display:block}
-.prod-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px;margin-bottom:8px;box-shadow:var(--shadow)}
-.prod-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.prod-num{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;background:var(--text);color:white;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.prod-head-right{display:flex;gap:5px;align-items:center}
-.strat-sel{font-size:10px;padding:2px 20px 2px 6px;border-radius:20px}
-.clear-btn{font-size:10px;padding:2px 7px;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--text3);cursor:pointer}
-.clear-btn:hover{color:var(--accent);border-color:var(--accent)}
 .search-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px;margin-bottom:8px;box-shadow:var(--shadow)}
 .search-hint{font-size:11px;color:var(--text3);margin-bottom:8px;line-height:1.6}
 .search-tag{display:inline-block;background:var(--blue-light);color:var(--blue);border:1px solid #B0C8F0;border-radius:20px;font-size:10px;padding:2px 8px;margin:2px;cursor:pointer}
@@ -83,7 +71,6 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .sc-num{font-family:'DM Mono',monospace;font-size:11px;background:var(--text);color:white;width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
 .sc-info{flex:1}
 .sc-name{font-size:14px;font-weight:500;line-height:1.4}
-.sc-meta{font-size:11px;color:var(--text3);margin-top:3px}
 .sc-tags{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap}
 .tag{font-size:10px;padding:2px 7px;border-radius:20px;border:1px solid}
 .tag-hot{background:var(--accent-light);color:var(--accent);border-color:#F0C8B0}
@@ -95,8 +82,6 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .action-btn{font-size:11px;padding:4px 10px;border:1px solid var(--border2);border-radius:20px;background:white;color:var(--text2);cursor:pointer;white-space:nowrap;font-family:'Noto Sans TC',sans-serif}
 .action-btn:hover{background:var(--surface2)}
 .sc-body{padding:14px 16px}
-
-/* 分析摘要 */
 .analysis-strip{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
 .analysis-item{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 10px}
 .analysis-item.full{grid-column:1/-1}
@@ -105,15 +90,12 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .market-box{background:var(--blue-light);border:1px solid #B0C8F0;border-radius:8px;padding:10px 12px;margin-bottom:12px}
 .market-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--blue);margin-bottom:4px}
 .market-value{font-size:12px;color:var(--blue);line-height:1.7}
-
 .kw-row{margin-bottom:10px}
 .kw-badge{display:inline-block;background:var(--accent2-light);color:var(--accent2);border:1px solid #B0D8C0;border-radius:20px;font-size:11px;padding:2px 10px;margin:2px}
 .edit-label{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;margin-top:12px}
 .edit-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:14px;font-weight:500;line-height:1.6;font-style:italic;width:100%;font-family:'Noto Sans TC',sans-serif;color:var(--text);outline:none;resize:none}
 .edit-box:focus{border-color:var(--accent);background:white}
 .tl-label{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;margin-top:12px}
-
-/* 分鏡卡 */
 .scene-list{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
 .scene-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px}
 .scene-card-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
@@ -121,14 +103,12 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .scene-action-edit{flex:1;font-size:12px;color:var(--text2);border:1px solid transparent;border-radius:5px;padding:2px 6px;background:transparent;font-family:'Noto Sans TC',sans-serif}
 .scene-action-edit:focus{border-color:var(--border);background:white;outline:none}
 .scene-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.scene-field{}
 .scene-field-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);margin-bottom:3px}
 .scene-field-edit{font-size:12px;color:var(--text);line-height:1.5;width:100%;border:1px solid transparent;border-radius:5px;padding:2px 6px;background:transparent;font-family:'Noto Sans TC',sans-serif;resize:none}
 .scene-field-edit:focus{border-color:var(--border);background:white;outline:none}
 .scene-material{grid-column:1/-1;background:white;border:1px dashed var(--border2);border-radius:6px;padding:5px 8px;margin-top:4px}
 .scene-material-label{font-size:9px;color:var(--accent2);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px}
 .scene-material-edit{font-size:11px;color:var(--text2);width:100%;border:none;background:transparent;font-family:'Noto Sans TC',sans-serif;resize:none;outline:none}
-
 .sc-footer{background:var(--surface2);border-top:1px solid var(--border);padding:10px 16px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .meta-k{font-size:9px;color:var(--text3);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px}
 .meta-edit{font-size:11px;width:100%;border:1px solid transparent;border-radius:5px;padding:2px 5px;background:transparent;font-family:'Noto Sans TC',sans-serif;color:var(--text);resize:none}
@@ -141,7 +121,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .spinner{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--text);border-radius:50%;animation:spin 0.8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-txt{font-size:13px;color:var(--text2)}
-.loading-steps{font-size:11px;color:var(--text3);text-align:center;line-height:2}
+.loading-steps{font-size:11px;color:var(--text3);text-align:center;line-height:2.2}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text);color:white;padding:9px 18px;border-radius:20px;font-size:12px;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1}
 @media(max-width:760px){.main{grid-template-columns:1fr}.sidebar{height:auto;position:static;border-right:none;border-bottom:1px solid var(--border)}.output-col{height:auto}.scene-grid{grid-template-columns:1fr}}
@@ -202,28 +182,37 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
       </div>
       <div class="sidebar-section">
         <div class="section-label">關鍵字搜尋選品</div>
-
-        <div class="mode-panel show" id="panel-search">
-          <div class="search-card">
-            <div class="search-hint">輸入任何關鍵字，AI 搜尋市場資訊、競品賣點、趨勢，產出有數據支撐的腳本。字數不限。</div>
-            <textarea id="search-keyword" rows="5" placeholder="例如：日本鋼珠筆 學生族 書寫流暢&#10;&#10;可輸入品牌、品類、目標客群、使用場景等"></textarea>
-            <div style="margin-top:8px;font-size:10px;color:var(--text3);margin-bottom:4px">快速範例：</div>
-            <div>
-              <span class="search-tag" onclick="addKeyword('PILOT百樂 可擦筆 學生')">PILOT可擦筆</span>
-              <span class="search-tag" onclick="addKeyword('和紙膠帶 手帳族 日系')">和紙膠帶</span>
-              <span class="search-tag" onclick="addKeyword('日本文具禮盒 送禮 五一')">文具禮盒</span>
-              <span class="search-tag" onclick="addKeyword('ZEBRA斑馬 鋼珠筆 辦公')">ZEBRA鋼珠筆</span>
-            </div>
+        <div class="search-card">
+          <div class="search-hint">輸入任何關鍵字，AI 搜尋市場資訊、競品賣點、趨勢，產出有數據支撐的腳本。字數不限。</div>
+          <textarea id="search-keyword" rows="5" placeholder="例如：日本鋼珠筆 學生族 書寫流暢&#10;&#10;可輸入品牌、品類、目標客群、使用場景等"></textarea>
+          <div style="margin-top:8px;font-size:10px;color:var(--text3);margin-bottom:4px">快速範例：</div>
+          <div>
+            <span class="search-tag" onclick="addKeyword('PILOT百樂 可擦筆 學生')">PILOT可擦筆</span>
+            <span class="search-tag" onclick="addKeyword('和紙膠帶 手帳族 日系')">和紙膠帶</span>
+            <span class="search-tag" onclick="addKeyword('日本文具禮盒 送禮 五一')">文具禮盒</span>
+            <span class="search-tag" onclick="addKeyword('ZEBRA斑馬 鋼珠筆 辦公')">ZEBRA鋼珠筆</span>
           </div>
-          <div class="search-card">
-            <div style="font-size:11px;font-weight:500;margin-bottom:6px">產出幾支腳本</div>
-            <select id="search-count"><option value="1">1支</option><option value="2">2支</option><option value="3" selected>3支</option></select>
-            <div style="margin-top:8px"><div style="font-size:11px;font-weight:500;margin-bottom:6px">腳本策略</div><select id="search-strat"><option value="auto">AI自動判斷</option><option value="emotion">情緒共鳴型</option><option value="function">功能展示型</option><option value="impulse">衝動消費型</option></select></div>
+        </div>
+        <div class="search-card">
+          <div style="font-size:11px;font-weight:500;margin-bottom:6px">產出幾支腳本</div>
+          <select id="search-count">
+            <option value="1">1支</option>
+            <option value="2">2支</option>
+            <option value="3" selected>3支</option>
+          </select>
+          <div style="margin-top:8px">
+            <div style="font-size:11px;font-weight:500;margin-bottom:6px">腳本策略</div>
+            <select id="search-strat">
+              <option value="auto">AI自動判斷</option>
+              <option value="emotion">情緒共鳴型</option>
+              <option value="function">功能展示型</option>
+              <option value="impulse">衝動消費型</option>
+            </select>
           </div>
         </div>
       </div>
       <button class="gen-btn" id="gen-btn" onclick="generate()">▶ 一鍵產出賣點＋腳本</button>
-      <div class="gen-sub" id="gen-sub-text">AI搜尋市場→分析趨勢→產出有依據的腳本</div>
+      <div class="gen-sub">AI搜尋市場→分析趨勢→Claude產腳本→GPT強化</div>
     </div>
 
     <div class="output-col" id="output-col">
@@ -239,104 +228,151 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 <div class="toast" id="toast"></div>
 
 <script>
-var PWD='bao97599046';
-var WEBHOOK='https://chlstore.app.n8n.cloud/webhook/extract-product';
-var PLATFORM_LABEL={taobao:'淘寶逛逛',douyin:'抖音',kuaishou:'快手',xiaohongshu:'小紅書'};
-var STRAT_LABEL={auto:'AI自動',emotion:'情緒共鳴型',function:'功能展示型',impulse:'衝動消費型'};
-var TAG_CLASS={'情緒共鳴型':'tag-feel','功能展示型':'tag-func','衝動消費型':'tag-hot'};
-var scriptsData=[];
+var PWD = 'bao97599046';
+var WEBHOOK = 'https://chlstore.app.n8n.cloud/webhook/extract-product';
+var PLATFORM_LABEL = {taobao:'淘寶逛逛',douyin:'抖音',kuaishou:'快手',xiaohongshu:'小紅書'};
+var STRAT_LABEL = {auto:'AI自動',emotion:'情緒共鳴型',function:'功能展示型',impulse:'衝動消費型'};
+var TAG_CLASS = {'情緒共鳴型':'tag-feel','功能展示型':'tag-func','衝動消費型':'tag-hot'};
+var LANG_LABEL = {'zh-TW':'繁體中文','zh-CN':'簡體中文','en':'English','ja':'日本語'};
+var scriptsData = [];
 
+var _d = new Date();
+document.getElementById('today-date').textContent =
+  _d.getFullYear()+'.'+String(_d.getMonth()+1).padStart(2,'0')+'.'+String(_d.getDate()).padStart(2,'0');
 
-var _d=new Date();
-document.getElementById('today-date').textContent=_d.getFullYear()+'.'+String(_d.getMonth()+1).padStart(2,'0')+'.'+String(_d.getDate()).padStart(2,'0');
-
-if(sessionStorage.getItem('bao_auth')==='1'){document.getElementById('login-screen').style.display='none';document.getElementById('app').classList.add('show');}
-
-function login(){var v=document.getElementById('pwd-input').value;if(v===PWD){sessionStorage.setItem('bao_auth','1');document.getElementById('login-screen').style.display='none';document.getElementById('app').classList.add('show');}else{document.getElementById('login-err').textContent='密碼錯誤';document.getElementById('pwd-input').value='';document.getElementById('pwd-input').focus();}}
-function logout(){sessionStorage.clear();document.getElementById('app').classList.remove('show');document.getElementById('login-screen').style.display='flex';document.getElementById('pwd-input').value='';}
-function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2800);}
-function addKeyword(kw){var el=document.getElementById('search-keyword');el.value=(el.value?el.value+'
-':'')+kw;el.focus();}
-function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
-async function generate(){
-  var btn=document.getElementById('gen-btn');
-  var col=document.getElementById('output-col');
-  var platform=document.getElementById('platform').value;
-  var seconds=parseInt(document.getElementById('video-seconds').value)||15;
-  btn.disabled=true;btn.textContent='⏳ 生成中...';
-  await generateFromSearch(col,platform,seconds);
-  btn.disabled=false;btn.textContent='▶ 一鍵產出賣點＋腳本';
+if (sessionStorage.getItem('bao_auth')==='1') {
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').classList.add('show');
 }
 
-async function generateFromSearch(col,platform,seconds){
-  var keyword=document.getElementById('search-keyword').value.trim();
-  if(!keyword){showToast('請輸入搜尋關鍵字');return;}
-  var count=parseInt(document.getElementById('search-count').value)||3;
-  var strat=document.getElementById('search-strat').value;
-  col.innerHTML='<div class="loading-state"><div class="spinner"></div><div class="loading-txt">🔍 AI 搜尋市場資訊中...</div><div class="loading-steps">① 搜尋競品賣點與市場趨勢<br>② 分析目標受眾痛點<br>③ 找出最強內容切入角度<br>④ 建構'+seconds+'秒腳本（約30-60秒）</div></div>';
-  var langMap2={'zh-TW':'繁體中文','zh-CN':'簡體中文','en':'English','ja':'日本語'};
-  var lang2=document.getElementById('script-lang').value;
-  var searchText='模式：關鍵字搜尋\n平台：'+PLATFORM_LABEL[platform]+'\n影片秒數：'+seconds+'秒\n腳本語言：'+langMap2[lang2]+'\n產出支數：'+count+'支\n策略：'+(strat==='auto'?'AI自動判斷':STRAT_LABEL[strat])+'\n\n搜尋關鍵字：\n'+keyword;
-  try{
-    var res=await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({titles:searchText,seconds:seconds,mode:'search',keyword:keyword,count:count})});
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    var data=await res.json();
-    var scripts=parseScripts(data);
-    scriptsData=scripts;
-    renderScripts(scripts,platform,scripts.length,seconds,'search');
-  }catch(e){col.innerHTML='<div style="padding:2rem;color:#A32D2D;font-size:14px;">❌ 生成失敗：'+e.message+'</div>';}
+function login() {
+  var v = document.getElementById('pwd-input').value;
+  if (v===PWD) {
+    sessionStorage.setItem('bao_auth','1');
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').classList.add('show');
+  } else {
+    document.getElementById('login-err').textContent='密碼錯誤';
+    document.getElementById('pwd-input').value='';
+    document.getElementById('pwd-input').focus();
+  }
 }
 
-function parseScripts(data){
-  if(data.scripts)return data.scripts;
-  if(data.output&&data.output.scripts)return data.output.scripts;
-  var raw=typeof data==='string'?data:JSON.stringify(data);
-  try{var parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());return parsed.scripts||parsed;}catch(e){return[];}
+function logout() {
+  sessionStorage.clear();
+  document.getElementById('app').classList.remove('show');
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('pwd-input').value='';
 }
 
-function renderScripts(scripts,platform,count,seconds,mode){
-  var col=document.getElementById('output-col');
-  var now=new Date();
-  var ds=now.getFullYear()+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+String(now.getDate()).padStart(2,'0');
-  var modeLabel=mode==='search'?'🔍 關鍵字搜尋':'📋 貼標題';
-  var html='<div class="output-header"><div><div class="output-title">今日腳本 · '+count+'支 · '+seconds+'秒</div><div class="output-meta">'+PLATFORM_LABEL[platform]+' · '+modeLabel+' · '+ds+'</div></div><button class="copy-all-btn" onclick="copyAll()">複製全部</button></div>';
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2800);
+}
 
-  scripts.forEach(function(s,si){
-    var tc=TAG_CLASS[s.strategy]||'tag-hot';
-    var kws=(s.keywords||[]).map(function(k){return '<span class="kw-badge">'+escHtml(k)+'</span>';}).join('');
+function addKeyword(kw) {
+  var el = document.getElementById('search-keyword');
+  el.value = (el.value ? el.value+'\n' : '') + kw;
+  el.focus();
+}
 
-    // 分析摘要
-    var analysisHtml='<div class="analysis-strip">';
-    if(s.category||s.script_type){analysisHtml+='<div class="analysis-item"><div class="analysis-label">品類 / 腳本類型</div><div class="analysis-value">'+(s.category||'-')+' · '+(s.script_type||'-')+'</div></div>';}
-    if(s.main_pain_point){analysisHtml+='<div class="analysis-item"><div class="analysis-label">🎯 最大痛點</div><div class="analysis-value">'+escHtml(s.main_pain_point)+'</div></div>';}
-    if(s.best_visual_proof){analysisHtml+='<div class="analysis-item full"><div class="analysis-label">📷 最強畫面證據</div><div class="analysis-value">'+escHtml(s.best_visual_proof)+'</div></div>';}
-    analysisHtml+='</div>';
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
-    // 市場洞察（搜尋模式）
-    var marketHtml='';
-    if(s.market_insight){marketHtml='<div class="market-box"><div class="market-label">📊 市場洞察</div><div class="market-value">'+escHtml(s.market_insight)+'</div></div>';}
+async function generate() {
+  var btn = document.getElementById('gen-btn');
+  var col = document.getElementById('output-col');
+  var platform = document.getElementById('platform').value;
+  var seconds = parseInt(document.getElementById('video-seconds').value)||15;
+  var keyword = document.getElementById('search-keyword').value.trim();
+  var count = parseInt(document.getElementById('search-count').value)||3;
+  var strat = document.getElementById('search-strat').value;
+  var lang = document.getElementById('script-lang').value;
 
-    // 分鏡
-    var tl=s.timeline||s.storyboard||[];
-    var scenesHtml=tl.map(function(t,ti){
+  if (!keyword) { showToast('請輸入搜尋關鍵字'); return; }
+
+  btn.disabled=true; btn.textContent='⏳ 生成中...';
+  col.innerHTML='<div class="loading-state"><div class="spinner"></div><div class="loading-txt">AI 處理中，約需40-80秒...</div><div class="loading-steps">① 搜尋競品賣點與市場趨勢<br>② 分析目標受眾與痛點<br>③ Claude 建構腳本初版<br>④ GPT 強化文案與鉤子</div></div>';
+
+  var searchText = '模式：關鍵字搜尋\n平台：'+PLATFORM_LABEL[platform]+'\n影片秒數：'+seconds+'秒\n腳本語言：'+LANG_LABEL[lang]+'\n產出支數：'+count+'支\n策略：'+(strat==='auto'?'AI自動判斷':STRAT_LABEL[strat])+'\n\n搜尋關鍵字：\n'+keyword;
+
+  try {
+    var res = await fetch(WEBHOOK, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({titles:searchText, seconds:seconds, mode:'search', keyword:keyword, count:count})
+    });
+    if (!res.ok) throw new Error('HTTP '+res.status);
+    var data = await res.json();
+
+    var scripts;
+    if (data.scripts) { scripts = data.scripts; }
+    else if (data.output && data.output.scripts) { scripts = data.output.scripts; }
+    else {
+      var raw = typeof data === 'string' ? data : JSON.stringify(data);
+      try { var parsed = JSON.parse(raw.replace(/```json|```/g,'').trim()); scripts = parsed.scripts || parsed; }
+      catch(e) { scripts = []; }
+    }
+
+    if (!scripts || !scripts.length) throw new Error('腳本資料為空，請重試');
+    scriptsData = scripts;
+    renderScripts(scripts, platform, scripts.length, seconds);
+  } catch(e) {
+    col.innerHTML='<div style="padding:2rem;color:#A32D2D;font-size:14px;">❌ 生成失敗：'+e.message+'</div>';
+  }
+  btn.disabled=false; btn.textContent='▶ 一鍵產出賣點＋腳本';
+}
+
+function renderScripts(scripts, platform, count, seconds) {
+  var col = document.getElementById('output-col');
+  var now = new Date();
+  var ds = now.getFullYear()+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+String(now.getDate()).padStart(2,'0');
+  var html = '<div class="output-header"><div><div class="output-title">今日腳本 · '+count+'支 · '+seconds+'秒</div><div class="output-meta">'+PLATFORM_LABEL[platform]+' · '+ds+'</div></div><button class="copy-all-btn" onclick="copyAll()">複製全部</button></div>';
+
+  scripts.forEach(function(s, si) {
+    var tc = TAG_CLASS[s.strategy]||'tag-hot';
+    var kws = (s.keywords||[]).map(function(k){ return '<span class="kw-badge">'+escHtml(k)+'</span>'; }).join('');
+
+    var analysisHtml = '<div class="analysis-strip">';
+    if (s.category||s.script_type) {
+      analysisHtml += '<div class="analysis-item"><div class="analysis-label">品類 / 腳本類型</div><div class="analysis-value">'+(s.category||'-')+' · '+(s.script_type||'-')+'</div></div>';
+    }
+    if (s.main_pain_point) {
+      analysisHtml += '<div class="analysis-item"><div class="analysis-label">🎯 最大痛點</div><div class="analysis-value">'+escHtml(s.main_pain_point)+'</div></div>';
+    }
+    if (s.best_visual_proof) {
+      analysisHtml += '<div class="analysis-item full"><div class="analysis-label">📷 最強畫面證據</div><div class="analysis-value">'+escHtml(s.best_visual_proof)+'</div></div>';
+    }
+    analysisHtml += '</div>';
+
+    var marketHtml = '';
+    if (s.market_insight) {
+      var mi = Array.isArray(s.market_insight) ? s.market_insight.join(' ') : s.market_insight;
+      marketHtml = '<div class="market-box"><div class="market-label">📊 市場洞察</div><div class="market-value">'+escHtml(mi)+'</div></div>';
+    }
+
+    var tl = s.timeline || s.storyboard || [];
+    var scenesHtml = tl.map(function(t, ti) {
       return '<div class="scene-card">'+
         '<div class="scene-card-head">'+
           '<div class="scene-time">'+(t.time||t.time_range||'')+'</div>'+
           '<input class="scene-action-edit" id="action-'+si+'-'+ti+'" value="'+escHtml(t.action||t.visual||'')+'" placeholder="畫面動作">'+
         '</div>'+
         '<div class="scene-grid">'+
-          '<div class="scene-field"><div class="scene-field-label">旁白</div><textarea class="scene-field-edit" id="vo-'+si+'-'+ti+'" rows="2">'+escHtml(t.voiceover||'')+'</textarea></div>'+
-          '<div class="scene-field"><div class="scene-field-label">字幕</div><textarea class="scene-field-edit" id="sub-'+si+'-'+ti+'" rows="2">'+escHtml(t.script||t.subtitle||'')+'</textarea></div>'+
+          '<div><div class="scene-field-label">旁白</div><textarea class="scene-field-edit" id="vo-'+si+'-'+ti+'" rows="2">'+escHtml(t.voiceover||'')+'</textarea></div>'+
+          '<div><div class="scene-field-label">字幕</div><textarea class="scene-field-edit" id="sub-'+si+'-'+ti+'" rows="2">'+escHtml(t.script||t.subtitle||'')+'</textarea></div>'+
           '<div class="scene-material"><div class="scene-material-label">素材建議</div><textarea class="scene-material-edit" id="mat-'+si+'-'+ti+'" rows="1">'+escHtml(t.material||t.material_suggestion||'')+'</textarea></div>'+
         '</div>'+
       '</div>';
     }).join('');
 
-    html+='<div class="script-card">'+
-      '<div class="sc-head"><div class="sc-num">'+(si+1)+'</div><div class="sc-info"><div class="sc-name">'+escHtml(s.product)+'</div>'+
-      '<div class="sc-tags"><span class="tag '+tc+'">'+escHtml(s.strategy)+'</span><span class="tag tag-info">'+seconds+'秒</span>'+(mode==='search'?'<span class="tag tag-search">AI搜尋</span>':'')+'<span class="tag tag-info">'+PLATFORM_LABEL[platform]+'</span></div></div>'+
-      '<div class="sc-actions"><button class="action-btn" onclick="copyOne('+si+')">複製腳本</button></div></div>'+
+    html += '<div class="script-card">'+
+      '<div class="sc-head"><div class="sc-num">'+(si+1)+'</div><div class="sc-info">'+
+        '<div class="sc-name">'+escHtml(s.product)+'</div>'+
+        '<div class="sc-tags"><span class="tag '+tc+'">'+escHtml(s.strategy)+'</span><span class="tag tag-info">'+seconds+'秒</span><span class="tag tag-search">AI搜尋+強化</span><span class="tag tag-info">'+PLATFORM_LABEL[platform]+'</span></div>'+
+      '</div><div class="sc-actions"><button class="action-btn" onclick="copyOne('+si+')">複製腳本</button></div></div>'+
       '<div class="sc-body">'+
         analysisHtml+marketHtml+
         '<div class="kw-row">'+kws+'</div>'+
@@ -352,57 +388,57 @@ function renderScripts(scripts,platform,count,seconds,mode){
       '</div>'+
     '</div>';
   });
-  col.innerHTML=html;
+  col.innerHTML = html;
 }
 
-function copyOne(idx){
-  var s=scriptsData[idx];if(!s)return;
-  var kws=(s.keywords||[]).join('；');
-  var hook=document.getElementById('hook-'+idx).value;
-  var tl=s.timeline||s.storyboard||[];
-  var lines=['【商品'+(idx+1)+'】'+s.product+'（'+s.strategy+'）'];
-  if(s.main_pain_point)lines.push('最大痛點：'+s.main_pain_point);
-  if(s.best_visual_proof)lines.push('最強畫面：'+s.best_visual_proof);
+function copyOne(idx) {
+  var s = scriptsData[idx]; if (!s) return;
+  var kws = (s.keywords||[]).join('；');
+  var hook = document.getElementById('hook-'+idx).value;
+  var tl = s.timeline||s.storyboard||[];
+  var lines = ['【腳本'+(idx+1)+'】'+s.product+'（'+s.strategy+'）'];
+  if (s.main_pain_point) lines.push('最大痛點：'+s.main_pain_point);
+  if (s.best_visual_proof) lines.push('最強畫面：'+s.best_visual_proof);
   lines.push('','核心賣點：'+kws,'','開場鉤子：「'+hook+'」','','分鏡腳本：');
-  tl.forEach(function(t,ti){
-    var act=document.getElementById('action-'+idx+'-'+ti);
-    var vo=document.getElementById('vo-'+idx+'-'+ti);
-    var sub=document.getElementById('sub-'+idx+'-'+ti);
-    var mat=document.getElementById('mat-'+idx+'-'+ti);
-    lines.push((t.time||t.time_range||'')+'｜'+(act?act.value:'')); 
-    if(vo&&vo.value)lines.push('旁白：'+vo.value);
-    if(sub&&sub.value)lines.push('字幕：'+sub.value);
-    if(mat&&mat.value)lines.push('素材：'+mat.value);
+  tl.forEach(function(t, ti) {
+    var act = document.getElementById('action-'+idx+'-'+ti);
+    var vo = document.getElementById('vo-'+idx+'-'+ti);
+    var sub = document.getElementById('sub-'+idx+'-'+ti);
+    var mat = document.getElementById('mat-'+idx+'-'+ti);
+    lines.push((t.time||t.time_range||'')+'｜'+(act?act.value:''));
+    if (vo&&vo.value) lines.push('旁白：'+vo.value);
+    if (sub&&sub.value) lines.push('字幕：'+sub.value);
+    if (mat&&mat.value) lines.push('素材：'+mat.value);
     lines.push('');
   });
   lines.push('拍攝提示：'+document.getElementById('tips-'+idx).value,'CTA：'+document.getElementById('cta-'+idx).value,'建議標題：'+document.getElementById('titlesug-'+idx).value);
-  navigator.clipboard.writeText(lines.join('\n')).then(function(){showToast('✓ 腳本已複製');});
+  navigator.clipboard.writeText(lines.join('\n')).then(function(){ showToast('✓ 腳本已複製'); });
 }
 
-function copyAll(){
-  var txt=scriptsData.map(function(s,i){
-    var kws=(s.keywords||[]).join('；');
-    var hook=document.getElementById('hook-'+i).value;
-    var tl=s.timeline||s.storyboard||[];
-    var lines=['━━━━━━━━━━━━━━━━','【商品'+(i+1)+'】'+s.product+'（'+s.strategy+'）'];
-    if(s.main_pain_point)lines.push('最大痛點：'+s.main_pain_point);
-    if(s.best_visual_proof)lines.push('最強畫面：'+s.best_visual_proof);
+function copyAll() {
+  var txt = scriptsData.map(function(s, i) {
+    var kws = (s.keywords||[]).join('；');
+    var hook = document.getElementById('hook-'+i).value;
+    var tl = s.timeline||s.storyboard||[];
+    var lines = ['━━━━━━━━━━━━━━━━','【腳本'+(i+1)+'】'+s.product+'（'+s.strategy+'）'];
+    if (s.main_pain_point) lines.push('最大痛點：'+s.main_pain_point);
+    if (s.best_visual_proof) lines.push('最強畫面：'+s.best_visual_proof);
     lines.push('','核心賣點：'+kws,'','開場鉤子：「'+hook+'」','','分鏡腳本：');
-    tl.forEach(function(t,ti){
-      var act=document.getElementById('action-'+i+'-'+ti);
-      var vo=document.getElementById('vo-'+i+'-'+ti);
-      var sub=document.getElementById('sub-'+i+'-'+ti);
-      var mat=document.getElementById('mat-'+i+'-'+ti);
+    tl.forEach(function(t, ti) {
+      var act = document.getElementById('action-'+i+'-'+ti);
+      var vo = document.getElementById('vo-'+i+'-'+ti);
+      var sub = document.getElementById('sub-'+i+'-'+ti);
+      var mat = document.getElementById('mat-'+i+'-'+ti);
       lines.push((t.time||t.time_range||'')+'｜'+(act?act.value:''));
-      if(vo&&vo.value)lines.push('旁白：'+vo.value);
-      if(sub&&sub.value)lines.push('字幕：'+sub.value);
-      if(mat&&mat.value)lines.push('素材：'+mat.value);
+      if (vo&&vo.value) lines.push('旁白：'+vo.value);
+      if (sub&&sub.value) lines.push('字幕：'+sub.value);
+      if (mat&&mat.value) lines.push('素材：'+mat.value);
       lines.push('');
     });
     lines.push('拍攝提示：'+document.getElementById('tips-'+i).value,'CTA：'+document.getElementById('cta-'+i).value,'建議標題：'+document.getElementById('titlesug-'+i).value);
     return lines.join('\n');
   }).join('\n\n');
-  navigator.clipboard.writeText(txt).then(function(){showToast('✓ 全部腳本已複製');});
+  navigator.clipboard.writeText(txt).then(function(){ showToast('✓ 全部腳本已複製'); });
 }
 </script>
 </body>
