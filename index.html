@@ -192,6 +192,15 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
         <div style="font-size:11px;color:var(--text3);margin-top:4px">建議：15秒（抖音）/ 30秒（逛逛）</div>
       </div>
       <div class="sidebar-section">
+        <div class="section-label">腳本語言</div>
+        <select id="script-lang">
+          <option value="zh-TW">繁體中文</option>
+          <option value="zh-CN">簡體中文</option>
+          <option value="en">English</option>
+          <option value="ja">日本語</option>
+        </select>
+      </div>
+      <div class="sidebar-section">
         <div class="section-label">選品輸入方式</div>
         <div class="mode-tabs">
           <button class="mode-tab active" id="tab-title" onclick="switchMode('title')">📋 貼淘寶標題</button>
@@ -284,7 +293,9 @@ async function generateFromTitles(col,platform,seconds){
   if(!products.length){showToast('請至少貼入一個商品標題');return;}
   col.innerHTML='<div class="loading-state"><div class="spinner"></div><div class="loading-txt">AI 分析中...</div><div class="loading-steps">① 判斷品類與受眾<br>② 找出最大痛點<br>③ 找出最強畫面證據<br>④ 建構'+seconds+'秒腳本</div></div>';
   var stratHint=products.map(function(p){return p.strategy!=='auto'?'商品'+p.index+'指定「'+STRAT_LABEL[p.strategy]+'」':'';}).filter(Boolean).join('；')||'AI自動判斷';
-  var titlesText='模式：貼標題\n平台：'+PLATFORM_LABEL[platform]+'\n影片秒數：'+seconds+'秒\n策略：'+stratHint+'\n\n'+products.map(function(p){return '商品'+p.index+'：'+p.title;}).join('\n');
+  var langMap={'zh-TW':'繁體中文','zh-CN':'簡體中文','en':'English','ja':'日本語'};
+  var lang=document.getElementById('script-lang').value;
+  var titlesText='模式：貼標題\n平台：'+PLATFORM_LABEL[platform]+'\n影片秒數：'+seconds+'秒\n腳本語言：'+langMap[lang]+'\n策略：'+stratHint+'\n\n'+products.map(function(p){return '商品'+p.index+'：'+p.title;}).join('\n');
   try{
     var res=await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({titles:titlesText,seconds:seconds,mode:'title'})});
     if(!res.ok)throw new Error('HTTP '+res.status);
@@ -301,7 +312,9 @@ async function generateFromSearch(col,platform,seconds){
   var count=parseInt(document.getElementById('search-count').value)||3;
   var strat=document.getElementById('search-strat').value;
   col.innerHTML='<div class="loading-state"><div class="spinner"></div><div class="loading-txt">🔍 AI 搜尋市場資訊中...</div><div class="loading-steps">① 搜尋競品賣點與市場趨勢<br>② 分析目標受眾痛點<br>③ 找出最強內容切入角度<br>④ 建構'+seconds+'秒腳本（約30-60秒）</div></div>';
-  var searchText='模式：關鍵字搜尋\n平台：'+PLATFORM_LABEL[platform]+'\n影片秒數：'+seconds+'秒\n產出支數：'+count+'支\n策略：'+(strat==='auto'?'AI自動判斷':STRAT_LABEL[strat])+'\n\n搜尋關鍵字：\n'+keyword;
+  var langMap2={'zh-TW':'繁體中文','zh-CN':'簡體中文','en':'English','ja':'日本語'};
+  var lang2=document.getElementById('script-lang').value;
+  var searchText='模式：關鍵字搜尋\n平台：'+PLATFORM_LABEL[platform]+'\n影片秒數：'+seconds+'秒\n腳本語言：'+langMap2[lang2]+'\n產出支數：'+count+'支\n策略：'+(strat==='auto'?'AI自動判斷':STRAT_LABEL[strat])+'\n\n搜尋關鍵字：\n'+keyword;
   try{
     var res=await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({titles:searchText,seconds:seconds,mode:'search',keyword:keyword,count:count})});
     if(!res.ok)throw new Error('HTTP '+res.status);
