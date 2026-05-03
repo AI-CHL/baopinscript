@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -303,7 +302,7 @@ async function generate() {
   if (!keyword) { showToast('請輸入搜尋關鍵字'); return; }
 
   btn.disabled=true; btn.textContent='⏳ 生成中...';
-  col.innerHTML='<div class="loading-state"><div class="spinner"></div><div class="loading-txt">AI 處理中，約需40-80秒...</div><div class="loading-steps">① 搜尋競品賣點與市場趨勢<br>② 分析目標受眾與痛點<br>③ Claude 建構腳本初版<br>④ GPT 強化文案與鉤子</div></div>';
+  col.innerHTML='<div class="loading-state"><div class="spinner"></div><div class="loading-txt">AI 處理中，約需40-80秒...</div></div>';
 
   var searchText = '模式：關鍵字搜尋\n平台：'+PLATFORM_LABEL[platform]+'\n影片秒數：'+seconds+'秒\n腳本語言：'+LANG_LABEL[lang]+'\n產出支數：'+count+'支\n策略：'+(strat==='auto'?'AI自動判斷':STRAT_LABEL[strat])+'\n\n搜尋關鍵字：\n'+keyword;
 
