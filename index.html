@@ -50,9 +50,9 @@ input,select,textarea{width:100%;font-family:'Noto Sans TC',sans-serif;font-size
 input:focus,select:focus,textarea:focus{border-color:var(--text);background:white}
 input::placeholder,textarea::placeholder{color:var(--text3);font-size:12px}
 select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6660' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
-.mode-tabs{display:flex;gap:0;margin-bottom:12px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.mode-tab{flex:1;padding:7px 4px;font-size:11px;font-weight:500;text-align:center;cursor:pointer;border:none;background:transparent;font-family:'Noto Sans TC',sans-serif;color:var(--text2);transition:background 0.15s,color 0.15s}
-.mode-tab.active{background:var(--text);color:white}
+
+
+
 .mode-panel{display:none}
 .mode-panel.show{display:block}
 .prod-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px;margin-bottom:8px;box-shadow:var(--shadow)}
@@ -166,7 +166,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
       <div class="logo-mark">爆</div>
       <div>
         <div class="topbar-title">爆品影片腳本產生器</div>
-        <div class="topbar-sub">貼標題或搜尋關鍵字 → 產出腳本 → 編輯複製</div>
+        <div class="topbar-sub">輸入關鍵字 → AI搜尋市場 → 產出腳本 → 編輯複製</div>
       </div>
     </div>
     <div class="topbar-right">
@@ -201,26 +201,9 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
         </select>
       </div>
       <div class="sidebar-section">
-        <div class="section-label">選品輸入方式</div>
-        <div class="mode-tabs">
-          <button class="mode-tab active" id="tab-title" onclick="switchMode('title')">📋 貼淘寶標題</button>
-          <button class="mode-tab" id="tab-search" onclick="switchMode('search')">🔍 關鍵字搜尋</button>
-        </div>
-        <div class="mode-panel show" id="panel-title">
-          <div class="prod-card">
-            <div class="prod-card-head"><div class="prod-num">1</div><div class="prod-head-right"><select class="strat-sel" id="strat-0"><option value="auto">AI自動</option><option value="emotion">情緒共鳴型</option><option value="function">功能展示型</option><option value="impulse">衝動消費型</option></select><button class="clear-btn" onclick="document.getElementById('title-0').value=''">清除</button></div></div>
-            <textarea id="title-0" rows="3" placeholder="貼入淘寶商品標題"></textarea>
-          </div>
-          <div class="prod-card">
-            <div class="prod-card-head"><div class="prod-num">2</div><div class="prod-head-right"><select class="strat-sel" id="strat-1"><option value="auto">AI自動</option><option value="emotion">情緒共鳴型</option><option value="function">功能展示型</option><option value="impulse">衝動消費型</option></select><button class="clear-btn" onclick="document.getElementById('title-1').value=''">清除</button></div></div>
-            <textarea id="title-1" rows="3" placeholder="貼入淘寶商品標題（可留空）"></textarea>
-          </div>
-          <div class="prod-card">
-            <div class="prod-card-head"><div class="prod-num">3</div><div class="prod-head-right"><select class="strat-sel" id="strat-2"><option value="auto">AI自動</option><option value="emotion">情緒共鳴型</option><option value="function">功能展示型</option><option value="impulse">衝動消費型</option></select><button class="clear-btn" onclick="document.getElementById('title-2').value=''">清除</button></div></div>
-            <textarea id="title-2" rows="3" placeholder="貼入淘寶商品標題（可留空）"></textarea>
-          </div>
-        </div>
-        <div class="mode-panel" id="panel-search">
+        <div class="section-label">關鍵字搜尋選品</div>
+
+        <div class="mode-panel show" id="panel-search">
           <div class="search-card">
             <div class="search-hint">輸入任何關鍵字，AI 搜尋市場資訊、競品賣點、趨勢，產出有數據支撐的腳本。字數不限。</div>
             <textarea id="search-keyword" rows="5" placeholder="例如：日本鋼珠筆 學生族 書寫流暢&#10;&#10;可輸入品牌、品類、目標客群、使用場景等"></textarea>
@@ -240,14 +223,14 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
         </div>
       </div>
       <button class="gen-btn" id="gen-btn" onclick="generate()">▶ 一鍵產出賣點＋腳本</button>
-      <div class="gen-sub" id="gen-sub-text">AI分析品類→受眾→痛點→畫面證據→腳本</div>
+      <div class="gen-sub" id="gen-sub-text">AI搜尋市場→分析趨勢→產出有依據的腳本</div>
     </div>
 
     <div class="output-col" id="output-col">
       <div class="empty-state">
         <div class="empty-icon">🎬</div>
-        <div class="empty-title">選擇輸入方式開始</div>
-        <div class="empty-sub">AI 依序判斷品類、受眾、痛點、最強畫面證據，產出包含旁白、字幕、素材建議的完整腳本。</div>
+        <div class="empty-title">輸入關鍵字開始</div>
+        <div class="empty-sub">輸入品牌、品類、目標客群等關鍵字，AI 搜尋市場資訊，自動產出有數據支撐的完整腳本。</div>
       </div>
     </div>
   </div>
@@ -262,7 +245,7 @@ var PLATFORM_LABEL={taobao:'淘寶逛逛',douyin:'抖音',kuaishou:'快手',xiao
 var STRAT_LABEL={auto:'AI自動',emotion:'情緒共鳴型',function:'功能展示型',impulse:'衝動消費型'};
 var TAG_CLASS={'情緒共鳴型':'tag-feel','功能展示型':'tag-func','衝動消費型':'tag-hot'};
 var scriptsData=[];
-var currentMode='title';
+
 
 var _d=new Date();
 document.getElementById('today-date').textContent=_d.getFullYear()+'.'+String(_d.getMonth()+1).padStart(2,'0')+'.'+String(_d.getDate()).padStart(2,'0');
@@ -272,8 +255,8 @@ if(sessionStorage.getItem('bao_auth')==='1'){document.getElementById('login-scre
 function login(){var v=document.getElementById('pwd-input').value;if(v===PWD){sessionStorage.setItem('bao_auth','1');document.getElementById('login-screen').style.display='none';document.getElementById('app').classList.add('show');}else{document.getElementById('login-err').textContent='密碼錯誤';document.getElementById('pwd-input').value='';document.getElementById('pwd-input').focus();}}
 function logout(){sessionStorage.clear();document.getElementById('app').classList.remove('show');document.getElementById('login-screen').style.display='flex';document.getElementById('pwd-input').value='';}
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2800);}
-function switchMode(mode){currentMode=mode;document.getElementById('tab-title').classList.toggle('active',mode==='title');document.getElementById('tab-search').classList.toggle('active',mode==='search');document.getElementById('panel-title').classList.toggle('show',mode==='title');document.getElementById('panel-search').classList.toggle('show',mode==='search');document.getElementById('gen-sub-text').textContent=mode==='title'?'AI分析品類→受眾→痛點→畫面證據→腳本':'AI搜尋市場→分析趨勢→產出有依據的腳本';}
-function addKeyword(kw){var el=document.getElementById('search-keyword');el.value=(el.value?el.value+'\n':'')+kw;el.focus();}
+function addKeyword(kw){var el=document.getElementById('search-keyword');el.value=(el.value?el.value+'
+':'')+kw;el.focus();}
 function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 async function generate(){
@@ -282,28 +265,8 @@ async function generate(){
   var platform=document.getElementById('platform').value;
   var seconds=parseInt(document.getElementById('video-seconds').value)||15;
   btn.disabled=true;btn.textContent='⏳ 生成中...';
-  if(currentMode==='title'){await generateFromTitles(col,platform,seconds);}
-  else{await generateFromSearch(col,platform,seconds);}
+  await generateFromSearch(col,platform,seconds);
   btn.disabled=false;btn.textContent='▶ 一鍵產出賣點＋腳本';
-}
-
-async function generateFromTitles(col,platform,seconds){
-  var products=[];
-  for(var i=0;i<3;i++){var title=document.getElementById('title-'+i).value.trim();if(!title)continue;products.push({index:i+1,title:title,strategy:document.getElementById('strat-'+i).value});}
-  if(!products.length){showToast('請至少貼入一個商品標題');return;}
-  col.innerHTML='<div class="loading-state"><div class="spinner"></div><div class="loading-txt">AI 分析中...</div><div class="loading-steps">① 判斷品類與受眾<br>② 找出最大痛點<br>③ 找出最強畫面證據<br>④ 建構'+seconds+'秒腳本</div></div>';
-  var stratHint=products.map(function(p){return p.strategy!=='auto'?'商品'+p.index+'指定「'+STRAT_LABEL[p.strategy]+'」':'';}).filter(Boolean).join('；')||'AI自動判斷';
-  var langMap={'zh-TW':'繁體中文','zh-CN':'簡體中文','en':'English','ja':'日本語'};
-  var lang=document.getElementById('script-lang').value;
-  var titlesText='模式：貼標題\n平台：'+PLATFORM_LABEL[platform]+'\n影片秒數：'+seconds+'秒\n腳本語言：'+langMap[lang]+'\n策略：'+stratHint+'\n\n'+products.map(function(p){return '商品'+p.index+'：'+p.title;}).join('\n');
-  try{
-    var res=await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({titles:titlesText,seconds:seconds,mode:'title'})});
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    var data=await res.json();
-    var scripts=parseScripts(data);
-    scriptsData=scripts;
-    renderScripts(scripts,platform,products.length,seconds,'title');
-  }catch(e){col.innerHTML='<div style="padding:2rem;color:#A32D2D;font-size:14px;">❌ 生成失敗：'+e.message+'</div>';}
 }
 
 async function generateFromSearch(col,platform,seconds){
