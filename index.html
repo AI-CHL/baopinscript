@@ -440,6 +440,50 @@ function copyAll() {
   }).join('\n\n');
   navigator.clipboard.writeText(txt).then(function(){ showToast('✓ 全部腳本已複製'); });
 }
+
+function downloadAll() {
+  if (!scriptsData.length) { showToast('請先產出腳本'); return; }
+  var txt = scriptsData.map(function(s, i) {
+    var kws = (s.keywords||[]).join('；');
+    var hook = document.getElementById('hook-'+i).value;
+    var tl = s.timeline||s.storyboard||[];
+    var lines = ['━━━━━━━━━━━━━━━━','【腳本'+(i+1)+'】'+s.product+'（'+s.strategy+'）'];
+    if (s.main_pain_point) lines.push('最大痛點：'+s.main_pain_point);
+    if (s.best_visual_proof) lines.push('最強畫面：'+s.best_visual_proof);
+    lines.push('','核心賣點：'+kws,'','開場鉤子：「'+hook+'」','','分鏡腳本：');
+    tl.forEach(function(t, ti) {
+      var act = document.getElementById('action-'+i+'-'+ti);
+      var vo = document.getElementById('vo-'+i+'-'+ti);
+      var sub = document.getElementById('sub-'+i+'-'+ti);
+      var mat = document.getElementById('mat-'+i+'-'+ti);
+      lines.push((t.time||t.time_range||'')+'｜'+(act?act.value:''));
+      if (vo&&vo.value) lines.push('旁白：'+vo.value);
+      if (sub&&sub.value) lines.push('字幕：'+sub.value);
+      if (mat&&mat.value) lines.push('素材：'+mat.value);
+      lines.push('');
+    });
+    lines.push('拍攝提示：'+document.getElementById('tips-'+i).value,'CTA：'+document.getElementById('cta-'+i).value,'建議標題：'+document.getElementById('titlesug-'+i).value);
+    return lines.join('\n');
+  }).join('\n\n');
+  var now = new Date();
+  var ds = now.getFullYear()+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0');
+  var blob = new Blob([txt], {type:'text/plain;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '爆品腳本_'+ds+'.txt';
+  a.click();
+  showToast('✓ 腳本已下載');
+}
+
+function clearAll() {
+  if (!scriptsData.length) { showToast('目前沒有腳本內容'); return; }
+  if (confirm('確定要清除所有腳本內容？\n此動作無法復原。')) {
+    scriptsData = [];
+    document.getElementById('output-col').innerHTML = '<div class="empty-state"><div class="empty-icon">🎬</div><div class="empty-title">輸入關鍵字開始</div><div class="empty-sub">輸入品牌、品類、目標客群等關鍵字，AI 搜尋市場資訊，自動產出有數據支撐的完整腳本。</div></div>';
+    document.getElementById('search-keyword').value = '';
+    showToast('✓ 已清除');
+  }
+}
 </script>
 </body>
 </html>
