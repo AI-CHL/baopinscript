@@ -188,6 +188,22 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .loading-txt{font-size:13px;color:var(--text2)}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text);color:white;padding:9px 18px;border-radius:20px;font-size:12px;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1}
+.viral-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:16px;box-shadow:var(--shadow);overflow:hidden}
+.viral-section-head{padding:10px 16px;background:var(--text);color:white;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px}
+.viral-section-head.accent{background:var(--accent)}
+.viral-section-head.accent2{background:var(--accent2)}
+.viral-section-head.blue{background:var(--blue)}
+.viral-section-head.purple{background:var(--purple)}
+.viral-section-head.gold{background:var(--gold)}
+.viral-section-head.teal{background:var(--teal)}
+.viral-section-body{padding:14px 16px;font-size:13px;line-height:1.8;color:var(--text);white-space:pre-wrap}
+.viral-copy-btn{margin-left:auto;font-size:10px;padding:2px 10px;border:1px solid rgba(255,255,255,0.4);border-radius:20px;background:transparent;color:white;cursor:pointer;font-family:"Noto Sans TC",sans-serif}
+.viral-copy-btn:hover{background:rgba(255,255,255,0.15)}
+.highlight-box{background:var(--accent-light);border:2px solid var(--accent);border-radius:var(--radius);padding:10px 14px;margin:8px 0;font-size:13px;font-weight:500;color:var(--accent)}
+.platform-block{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-bottom:8px}
+.platform-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);margin-bottom:6px}
+.prompt-block{background:#1A1814;border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.prompt-block-text{font-family:"DM Mono",monospace;font-size:11px;color:#A8E6CF;line-height:1.7;white-space:pre-wrap}
 @media(max-width:760px){.main{grid-template-columns:1fr}.sidebar{height:auto;position:static;border-right:none;border-bottom:1px solid var(--border)}.output-col{height:auto}.scene-grid,.img-card-body,.summary-grid,.ab-item{grid-template-columns:1fr}}
 </style>
 </head>
@@ -216,6 +232,8 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     <div class="mode-switcher">
       <button class="mode-tab active" id="tab-video" onclick="switchMode('video')">🎬 影片腳本</button>
       <button class="mode-tab" id="tab-image" onclick="switchMode('image')">🖼 圖片素材</button>
+      <button class="mode-tab" id="tab-viral" onclick="switchMode('viral')">🔥 平台爆文</button>
+      <button class="mode-tab" id="tab-post" onclick="switchMode('post')">🔥 平台爆文</button>
     </div>
     <div class="topbar-right">
       <div class="date-badge" id="today-date"></div>
@@ -328,7 +346,39 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
         </div>
       </div>
 
-      <button class="gen-btn" id="gen-btn" onclick="generate()">▶ 一鍵產出</button>
+      <!-- 平台爆文設定 -->
+      <div id="post-settings" style="display:none">
+        <div class="sidebar-section">
+          <div class="section-label">發布平台（可多選）</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plat-fb" checked style="width:auto;margin:0"> Facebook</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plat-ig" checked style="width:auto;margin:0"> Instagram</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plat-threads" style="width:auto;margin:0"> Threads</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plat-xhs" checked style="width:auto;margin:0"> 小紅書</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plat-tiktok" style="width:auto;margin:0"> TikTok／抖音</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plat-dcard" style="width:auto;margin:0"> Dcard</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plat-shopee" checked style="width:auto;margin:0"> 蝦皮／淘寶商品文案</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 平台爆文設定 -->
+      <div id="viral-settings" style="display:none">
+        <div class="sidebar-section">
+          <div class="section-label">目標平台（可多選）</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:2px">
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plt-fb" checked style="width:auto;padding:0;margin:0"> Facebook</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plt-ig" checked style="width:auto;padding:0;margin:0"> Instagram</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plt-threads" style="width:auto;padding:0;margin:0"> Threads</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plt-xhs" checked style="width:auto;padding:0;margin:0"> 小紅書</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plt-tiktok" style="width:auto;padding:0;margin:0"> TikTok／抖音</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plt-dcard" style="width:auto;padding:0;margin:0"> Dcard</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plt-shop" checked style="width:auto;padding:0;margin:0"> 蝦皮／淘寶商品文案</label>
+          </div>
+        </div>
+      </div>
+
+            <button class="gen-btn" id="gen-btn" onclick="generate()">▶ 一鍵產出</button>
       <div class="gen-sub" id="gen-sub">AI搜尋市場→分析趨勢→Claude產腳本→GPT強化</div>
       <div class="side-btns">
         <button class="side-btn dl" onclick="downloadAll()">⬇ 下載 .txt</button>
@@ -434,24 +484,31 @@ function switchMode(mode){
   currentMode=mode;
   document.getElementById('tab-video').classList.toggle('active',mode==='video');
   document.getElementById('tab-image').classList.toggle('active',mode==='image');
+  document.getElementById('tab-post').classList.toggle('active',mode==='post');
   document.getElementById('video-settings').style.display=mode==='video'?'':'none';
   document.getElementById('image-settings').style.display=mode==='image'?'':'none';
-  document.getElementById('strat-label').textContent=mode==='video'?'腳本策略':'視覺風格策略';
-  document.getElementById('gen-sub').textContent=mode==='video'?'AI搜尋市場→分析趨勢→Claude產腳本→GPT強化':'AI分析商品→規劃圖片→產出完整Prompt';
+  document.getElementById('post-settings').style.display=mode==='post'?'':'none';
+  document.getElementById('strat-label').textContent=mode==='video'?'腳本策略':mode==='image'?'視覺風格策略':'文案風格';
+  document.getElementById('gen-sub').textContent=mode==='video'?'AI搜尋市場→分析趨勢→Claude產腳本→GPT強化':mode==='image'?'AI分析商品→規劃圖片→產出完整Prompt':'AI吸收最新趨勢→產出全平台爆文策略';
   // 切換產出數量選項
   var countLabel=document.getElementById('count-label');
   var countSel=document.getElementById('search-count');
+  var countCard=countSel.closest('.search-card');
   if(mode==='image'){
     countLabel.textContent='產出張數';
     var opts='';
     for(var n=8;n<=20;n++) opts+='<option value="'+n+'"'+(n===8?' selected':'')+'>'+n+'張</option>';
     countSel.innerHTML=opts;
+    if(countCard)countCard.style.display='';
+  } else if(mode==='post'){
+    if(countCard)countCard.style.display='none';
   } else {
     countLabel.textContent='產出幾支';
     countSel.innerHTML='<option value="1">1支／套</option><option value="2">2支／套</option><option value="3" selected>3支／套</option>';
+    if(countCard)countCard.style.display='';
   }
-  var emptyIcon=mode==='video'?'🎬':'🖼';
-  var emptyTitle=mode==='video'?'輸入關鍵字開始':'輸入品名與關鍵字開始';
+  var emptyIcon=mode==='video'?'🎬':mode==='image'?'🖼':'🔥';
+  var emptyTitle=mode==='video'?'輸入關鍵字開始':mode==='image'?'輸入品名與關鍵字開始':'輸入品名與關鍵字，AI產出全平台爆文策略';
   document.getElementById('output-col').innerHTML='<div class="empty-state"><div class="empty-icon">'+emptyIcon+'</div><div class="empty-title">'+emptyTitle+'</div></div>';
 }
 function addKeyword(kw){
@@ -478,6 +535,8 @@ async function generate(){
     var seconds=parseInt(document.getElementById('video-seconds').value)||15;
     var searchText='模式：關鍵字搜尋\n平台：'+PLATFORM_LABEL[platform]+'\n影片秒數：'+seconds+'秒\n腳本語言：'+LANG_LABEL[lang]+'\n產出支數：'+count+'支\n策略：'+(strat==='auto'?'AI自動判斷':STRAT_LABEL[strat])+'\n\n搜尋關鍵字：\n'+keyword;
     payload={titles:searchText,seconds:seconds,mode:'search',keyword:keyword,count:count};
+  } else if(currentMode==='post'){
+    await generatePost(col, keyword, lang);
   } else {
     var imgSize=document.getElementById('img-size').value;
     var imgBg=document.getElementById('img-bg').value;
@@ -492,6 +551,12 @@ async function generate(){
     var useAutoScene=(imgStyle==='auto');
     payload={titles:searchText,mode:'image_plan',keyword:keyword,count:count};
     if(useAutoScene){payload.scene_decision_table=JSON.stringify(SCENE_DECISION_TABLE);}
+  }
+
+  if(currentMode==='viral'){
+    await generateViral(col,keyword,lang,count);
+    btn.disabled=false;btn.textContent='▶ 一鍵產出';
+    return;
   }
 
   try{
@@ -520,6 +585,57 @@ async function generate(){
     col.innerHTML='<div style="padding:2rem;color:#A32D2D;font-size:14px;">❌ 生成失敗：'+e.message+'</div>';
   }
   btn.disabled=false;btn.textContent='▶ 一鍵產出';
+}
+
+async function generatePost(col, keyword, lang){
+  var platforms=[];
+  if(document.getElementById('plat-fb').checked)platforms.push('Facebook');
+  if(document.getElementById('plat-ig').checked)platforms.push('Instagram');
+  if(document.getElementById('plat-threads').checked)platforms.push('Threads');
+  if(document.getElementById('plat-xhs').checked)platforms.push('小紅書');
+  if(document.getElementById('plat-tiktok').checked)platforms.push('TikTok/抖音');
+  if(document.getElementById('plat-dcard').checked)platforms.push('Dcard');
+  if(document.getElementById('plat-shopee').checked)platforms.push('蝦皮/淘寶商品文案');
+
+  col.innerHTML='<div class="loading-state"><div class="spinner"></div><div class="loading-txt">AI 吸收最新趨勢中，約需60-120秒...</div></div>';
+
+  var input='語言：'+LANG_LABEL[lang]+'
+發布平台：'+platforms.join('、')+'
+
+品名與關鍵字：
+'+keyword;
+
+  try{
+    var res=await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({titles:input,mode:'post',keyword:keyword,platforms:platforms})});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    var data=await res.json();
+    var content='';
+    if(data.output)content=typeof data.output==='string'?data.output:JSON.stringify(data.output,null,2);
+    else if(data.content)content=data.content;
+    else content=JSON.stringify(data,null,2);
+    renderPost(content,platforms);
+  }catch(e){
+    col.innerHTML='<div style="padding:2rem;color:#A32D2D;font-size:14px;">❌ 生成失敗：'+e.message+'</div>';
+  }
+}
+
+function renderPost(content, platforms){
+  var col=document.getElementById('output-col');
+  var now=new Date();
+  var ds=now.getFullYear()+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+String(now.getDate()).padStart(2,'0');
+  // 把換行轉成 HTML
+  var formatted=escHtml(content).replace(/
+/g,'<br>').replace(/━+/g,'<hr style="border:none;border-top:1px solid var(--border);margin:12px 0">').replace(/👉/g,'<span style="color:var(--accent)">👉</span>');
+  var html='<div class="output-header"><div><div class="output-title">🔥 平台爆文策略</div><div class="output-meta">'+platforms.join(' · ')+' · '+ds+'</div></div><button class="copy-all-btn" onclick="copyPost()">複製全部</button></div>';
+  html+='<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 24px;box-shadow:var(--shadow);font-size:13px;line-height:2;color:var(--text)" id="post-content">'+formatted+'</div>';
+  col.innerHTML=html;
+  window._postRawContent=content;
+}
+
+function copyPost(){
+  if(window._postRawContent){
+    navigator.clipboard.writeText(window._postRawContent).then(function(){showToast('✓ 已複製');});
+  }
 }
 
 function renderVideoScripts(scripts,platform,count,seconds){
@@ -596,6 +712,86 @@ function renderImagePlan(data,count){
   }
 
   col.innerHTML=html;
+}
+
+async function generateViral(col, keyword, lang, count) {
+  var platforms = [];
+  if(document.getElementById('plt-fb').checked) platforms.push('Facebook');
+  if(document.getElementById('plt-ig').checked) platforms.push('Instagram');
+  if(document.getElementById('plt-threads').checked) platforms.push('Threads');
+  if(document.getElementById('plt-xhs').checked) platforms.push('小紅書');
+  if(document.getElementById('plt-tiktok').checked) platforms.push('TikTok／抖音');
+  if(document.getElementById('plt-dcard').checked) platforms.push('Dcard');
+  if(document.getElementById('plt-shop').checked) platforms.push('蝦皮／淘寶商品文案');
+  if(!platforms.length){ showToast('請至少選一個目標平台'); return; }
+
+  col.innerHTML='<div class="loading-state"><div class="spinner"></div><div class="loading-txt">AI 吸收最新趨勢，產出爆文策略中...</div></div>';
+
+  var userInput = '語言：'+LANG_LABEL[lang]+'
+產出套數：'+count+'
+目標平台：'+platforms.join('、')+'
+
+商品關鍵字：
+'+keyword;
+
+  try {
+    var res = await fetch(WEBHOOK, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({titles: userInput, mode: 'viral', keyword: keyword})
+    });
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    var data = await res.json();
+    var content = data.viral_content || data.content || '';
+    if(!content) throw new Error('n8n 未回傳內容，請確認 n8n viral 分支設定');
+    viralData = content;
+    renderViral(content);
+  } catch(e) {
+    col.innerHTML='<div style="padding:2rem;color:#A32D2D;font-size:14px;">❌ 生成失敗：'+e.message+'</div>';
+  }
+}
+
+var viralData = '';
+
+function renderViral(content) {
+  var col = document.getElementById('output-col');
+  var now = new Date();
+  var ds = now.getFullYear()+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+String(now.getDate()).padStart(2,'0');
+
+  var html = '<div class="output-header"><div><div class="output-title">🔥 平台爆文策略</div><div class="output-meta">'+ds+'</div></div><button class="copy-all-btn" onclick="copyViralAll()">複製全部</button></div>';
+
+  // 解析內容，按段落分區塊
+  var sections = content.split(/
+(?=\d+\.|#{1,3} |👉|━+)/);
+  var sectionColors = ['','accent','accent2','blue','purple','gold','teal','','accent','accent2','blue','purple','gold','teal','','accent','accent2'];
+  var icons = ['📋','🎯','👥','💡','💥','📊','🔍','🖼','⭐','🗺','📝','📱','✍️','🤖','🎬','🧪','⚠️'];
+
+  sections.forEach(function(sec, i){
+    if(!sec.trim()) return;
+    var firstLine = sec.split('
+')[0].trim();
+    var rest = sec.split('
+').slice(1).join('
+').trim();
+    var colorClass = sectionColors[i%sectionColors.length];
+    var icon = icons[i] || '📌';
+    html += '<div class="viral-section">'+
+      '<div class="viral-section-head '+ colorClass +'">'+icon+' '+escHtml(firstLine)+
+      '<button class="viral-copy-btn" onclick="copySection('+i+')">複製</button></div>'+
+      '<div class="viral-section-body" id="vsec-'+i+'">'+escHtml(rest)+'</div>'+
+      '</div>';
+  });
+
+  col.innerHTML = html;
+}
+
+function copySection(i){
+  var el = document.getElementById('vsec-'+i);
+  if(el) navigator.clipboard.writeText(el.textContent).then(function(){ showToast('✓ 已複製'); });
+}
+
+function copyViralAll(){
+  navigator.clipboard.writeText(viralData).then(function(){ showToast('✓ 全部爆文策略已複製'); });
 }
 
 function copyImgPrompt(ii){
@@ -716,6 +912,10 @@ function downloadAll(){
       lines.push('拍攝提示：'+document.getElementById('tips-'+i).value,'CTA：'+document.getElementById('cta-'+i).value,'建議標題：'+document.getElementById('titlesug-'+i).value);
       return lines.join('\n');
     }).join('\n\n');
+  } else if(currentMode==='post'&&window._postRawContent){
+    txt=window._postRawContent;
+  } else if(currentMode==='viral'&&viralData){
+    txt=viralData;
   } else if(currentMode==='image'&&imageData){
     var ps=imageData.product_summary||{};
     var lines=['圖片素材規劃','','【商品分析摘要】'];
@@ -753,10 +953,10 @@ function downloadAll(){
 }
 
 function clearAll(){
-  var hasContent=(currentMode==='video'&&scriptsData.length)||(currentMode==='image'&&imageData);
+  var hasContent=(currentMode==='video'&&scriptsData.length)||(currentMode==='image'&&imageData)||(currentMode==='viral'&&viralData);
   if(!hasContent){showToast('目前沒有內容');return;}
   if(confirm('確定要清除所有內容？\n此動作無法復原。')){
-    scriptsData=[];imageData=null;
+    scriptsData=[];imageData=null;viralData='';
     document.getElementById('search-keyword').value='';
     var icon=currentMode==='video'?'🎬':'🖼';
     var title=currentMode==='video'?'輸入關鍵字開始':'輸入品名與關鍵字開始';
