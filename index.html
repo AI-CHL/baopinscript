@@ -265,9 +265,9 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
           </select>
         </div>
         <div class="sidebar-section">
-          <div class="section-label">視覺風格</div>
+          <div class="section-label">視覺策略風格</div>
           <select id="img-style">
-            <option value="auto">AI自動判斷</option>
+            <option value="auto" selected>AI自動判斷</option>
             <option value="日系簡約">日系簡約</option>
             <option value="高質感商業">高質感商業</option>
             <option value="清新生活">清新生活</option>
@@ -277,12 +277,12 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
           </select>
         </div>
         <div class="sidebar-section">
-          <div class="section-label">情境描述（選填）</div>
-          <textarea id="img-scene" rows="2" placeholder="例如：辦公桌上、咖啡廳、戶外陽光下"></textarea>
+          <div class="section-label">情境描述＋季節感＋光影（選填）</div>
+          <textarea id="img-scene" rows="2" placeholder="例如：咖啡廳午後、秋天暖光、柔和側光打亮"></textarea>
         </div>
         <div class="sidebar-section">
-          <div class="section-label">季節感（選填）</div>
-          <input type="text" id="img-season" placeholder="例如：春天、夏日清涼、秋冬溫暖"/>
+          <div class="section-label">人物／情緒（選填）</div>
+          <input type="text" id="img-season" placeholder="例如：年輕女性、職場專業感、輕鬆愉快"/>
         </div>
       </div>
 
@@ -310,7 +310,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
           </div>
         </div>
         <div class="search-card">
-          <div style="font-size:11px;font-weight:500;margin-bottom:6px">產出幾支</div>
+          <div style="font-size:11px;font-weight:500;margin-bottom:6px" id="count-label">產出幾支</div>
           <select id="search-count">
             <option value="1">1支／套</option>
             <option value="2">2支／套</option>
@@ -355,6 +355,46 @@ var PLATFORM_LABEL={taobao:'淘寶逛逛',douyin:'抖音',kuaishou:'快手',xiao
 var STRAT_LABEL={auto:'AI自動',emotion:'情緒共鳴型',function:'功能展示型',impulse:'衝動消費型'};
 var TAG_CLASS={'情緒共鳴型':'tag-feel','功能展示型':'tag-func','衝動消費型':'tag-hot'};
 var LANG_LABEL={'zh-TW':'繁體中文','zh-CN':'簡體中文','en':'English','ja':'日本語'};
+
+var SCENE_DECISION_TABLE = {
+  "scene_selection_logic": {
+    "priority_rules": [
+      {"condition": "商品可視覺化痛點", "priority_scene": "痛點對比 Before / After"},
+      {"condition": "商品功能需要解釋", "priority_scene": "功能證明 / 使用步驟"},
+      {"condition": "商品外觀好看或有收藏價值", "priority_scene": "生活美學 / 曬圖分享"},
+      {"condition": "商品單價高", "priority_scene": "高質感生活 / 奢華信任感"},
+      {"condition": "商品偏衝動購買", "priority_scene": "人物情緒 / 爽感瞬間"},
+      {"condition": "商品與季節或節慶相關", "priority_scene": "季節趨勢 / 節慶情境"},
+      {"condition": "商品容易被懷疑效果", "priority_scene": "實測證明 / 細節特寫"}
+    ]
+  },
+  "category_scene_database": [
+    {"category": "收納類", "keywords": ["收納", "整理", "置物架", "收納盒"], "recommended_scenes": [{"scene": "凌亂痛點 Before/After", "goal": "CTR", "visual": "左側凌亂、右側整齊"}, {"scene": "小宅空間變大", "goal": "CVR"}, {"scene": "真實使用情境", "goal": "CVR"}]},
+    {"category": "文具類", "keywords": ["筆", "筆記本", "手帳", "便條紙", "貼紙", "筆袋"], "recommended_scenes": [{"scene": "開學/辦公效率", "goal": "CTR"}, {"scene": "手帳/桌面美學", "goal": "Social"}, {"scene": "禮物/收藏情境", "goal": "CVR"}]},
+    {"category": "3C配件", "keywords": ["手機殼", "充電器", "耳機", "支架", "鍵盤", "滑鼠"], "recommended_scenes": [{"scene": "通勤/辦公效率", "goal": "CTR"}, {"scene": "功能科技展示", "goal": "CVR"}, {"scene": "娛樂/遊戲沉浸", "goal": "Social"}]},
+    {"category": "清潔用品", "keywords": ["清潔", "刷子", "除垢", "抹布", "洗劑", "除霉"], "recommended_scenes": [{"scene": "髒污痛點放大", "goal": "CTR"}, {"scene": "一刷變乾淨 Before/After", "goal": "CVR"}, {"scene": "家庭/租屋族使用", "goal": "CVR"}]},
+    {"category": "美妝保養", "keywords": ["保養", "彩妝", "面膜", "精華", "口紅", "香氛"], "recommended_scenes": [{"scene": "使用前後效果", "goal": "CTR"}, {"scene": "梳妝台質感情境", "goal": "CVR"}, {"scene": "小紅書種草生活感", "goal": "Social"}]},
+    {"category": "食品飲品", "keywords": ["零食", "飲料", "咖啡", "茶", "餅乾", "甜點"], "recommended_scenes": [{"scene": "開箱即食爽感", "goal": "CTR"}, {"scene": "聚會分享", "goal": "CVR"}, {"scene": "深夜/辦公嘴饞", "goal": "Social"}]},
+    {"category": "寵物用品", "keywords": ["寵物", "貓", "狗", "飼料", "玩具", "貓砂"], "recommended_scenes": [{"scene": "寵物開心使用", "goal": "CTR"}, {"scene": "主人省心", "goal": "CVR"}, {"scene": "居家互動", "goal": "Social"}]},
+    {"category": "服飾配件", "keywords": ["衣服", "外套", "褲子", "帽子", "包包", "圍巾"], "recommended_scenes": [{"scene": "穿搭完成感", "goal": "CTR"}, {"scene": "身形修飾/功能展示", "goal": "CVR"}, {"scene": "場合穿搭", "goal": "Social"}]},
+    {"category": "母嬰用品", "keywords": ["嬰兒", "寶寶", "兒童", "奶瓶", "尿布", "推車"], "recommended_scenes": [{"scene": "爸媽痛點解決", "goal": "CTR"}, {"scene": "安全安心展示", "goal": "CVR"}, {"scene": "親子互動", "goal": "Social"}]},
+    {"category": "家居家飾", "keywords": ["家具", "燈", "地毯", "窗簾", "抱枕", "擺飾"], "recommended_scenes": [{"scene": "空間升級 Before/After", "goal": "CTR"}, {"scene": "理想生活氛圍", "goal": "CVR"}, {"scene": "尺寸比例展示", "goal": "CVR"}]},
+    {"category": "廚房餐具", "keywords": ["餐具", "鍋具", "杯子", "保鮮盒", "刀具", "砧板"], "recommended_scenes": [{"scene": "料理效率提升", "goal": "CTR"}, {"scene": "餐桌美學", "goal": "Social"}, {"scene": "清潔/耐用實測", "goal": "CVR"}]},
+    {"category": "運動健身", "keywords": ["健身", "瑜伽", "運動", "訓練", "跑步", "啞鈴"], "recommended_scenes": [{"scene": "身材目標刺激", "goal": "CTR"}, {"scene": "功能支撐/保護", "goal": "CVR"}, {"scene": "居家運動", "goal": "Social"}]},
+    {"category": "禮品玩具", "keywords": ["玩具", "禮物", "公仔", "模型", "益智", "生日"], "recommended_scenes": [{"scene": "開箱驚喜", "goal": "CTR"}, {"scene": "收藏展示", "goal": "CVR"}, {"scene": "互動遊玩", "goal": "Social"}]},
+    {"category": "戶外旅行", "keywords": ["旅行", "露營", "登山", "戶外", "行李", "保溫瓶"], "recommended_scenes": [{"scene": "旅行收納", "goal": "CTR"}, {"scene": "戶外實用", "goal": "CVR"}, {"scene": "輕量便攜展示", "goal": "CVR"}]}
+  ],
+  "fallback_scene_templates": [
+    {"scene": "痛點對比 Before/After", "use_when": "商品能解決明確問題"},
+    {"scene": "真實使用情境", "use_when": "商品需要讓消費者知道如何使用"},
+    {"scene": "細節/材質特寫", "use_when": "商品品質感、材質或規格是賣點"},
+    {"scene": "人物情緒反應", "use_when": "商品偏衝動購買或效果明顯"},
+    {"scene": "社群種草生活感", "use_when": "商品適合分享、拍照、收藏"},
+    {"scene": "功能實測證明", "use_when": "消費者可能懷疑效果"}
+  ]
+};
+var SCENE_DECISION_TABLE = {"scene_selection_logic":{"description":"根據商品類目、商品屬性、使用痛點、平台特性與轉換目標，自動選出最適合電商商品圖的前三個情境。","default_output_scenes":["high_ctr_scene","high_cvr_scene","trend_social_scene"],"priority_rules":[{"condition":"商品可視覺化痛點","priority_scene":"痛點對比 Before/After"},{"condition":"商品功能需要解釋","priority_scene":"功能證明/使用步驟"},{"condition":"商品外觀好看或有收藏價值","priority_scene":"生活美學/曬圖分享"},{"condition":"商品單價高","priority_scene":"高質感生活/奢華信任感"},{"condition":"商品偏衝動購買","priority_scene":"人物情緒/爽感瞬間"},{"condition":"商品與季節或節慶相關","priority_scene":"季節趨勢/節慶情境"},{"condition":"商品容易被懷疑效果","priority_scene":"實測證明/細節特寫"}]},"category_scene_database":[{"category":"文具類","keywords":["筆","筆記本","手帳","便條紙","貼紙","資料夾","筆袋"],"recommended_scenes":[{"scene":"開學/辦公效率","goal":"CTR","visual":"學生或上班族正在使用商品","emotion":"專注、效率提升"},{"scene":"手帳/桌面美學","goal":"Social","visual":"日系桌面、手帳拼貼、整齊排列","emotion":"療癒、想收藏"},{"scene":"禮物/收藏情境","goal":"CVR","visual":"包裝精美、成套展示、送禮感","emotion":"可愛、值得買整套"}]},{"category":"收納類","keywords":["收納","整理","置物架","收納盒","掛架","抽屜"],"recommended_scenes":[{"scene":"凌亂痛點 Before/After","goal":"CTR","visual":"左側凌亂、右側整齊","emotion":"焦躁變舒爽"},{"scene":"小宅空間變大","goal":"CVR","visual":"小房間被有效利用","emotion":"省空間、安心"},{"scene":"真實使用情境","goal":"CVR","visual":"辦公桌、化妝台實際收納","emotion":"整齊、有掌控感"}]},{"category":"美妝保養","keywords":["保養","彩妝","面膜","精華","口紅","粉底","香氛"],"recommended_scenes":[{"scene":"使用前後效果","goal":"CTR","visual":"肌膚光澤、妝前妝後對比","emotion":"驚喜、變美"},{"scene":"梳妝台質感情境","goal":"CVR","visual":"乾淨梳妝台、柔光、高級感","emotion":"精緻、自我犒賞"},{"scene":"小紅書種草生活感","goal":"Social","visual":"手持產品、自然光、居家自拍感","emotion":"真實、被推薦感"}]},{"category":"食品飲品","keywords":["零食","飲料","咖啡","茶","餅乾","甜點","保健食品"],"recommended_scenes":[{"scene":"開箱即食爽感","goal":"CTR","visual":"食物特寫、撕開包裝","emotion":"想吃、嘴饞"},{"scene":"聚會分享","goal":"CVR","visual":"朋友家庭一起分享","emotion":"熱鬧、好吃"},{"scene":"深夜/辦公嘴饞","goal":"Social","visual":"夜晚、追劇情境","emotion":"療癒、犒賞自己"}]},{"category":"3C配件","keywords":["手機殼","充電器","耳機","支架","保護貼","線材","鍵盤","滑鼠"],"recommended_scenes":[{"scene":"通勤/辦公效率","goal":"CTR","visual":"捷運、辦公桌使用商品","emotion":"方便、省時"},{"scene":"功能科技展示","goal":"CVR","visual":"冷色科技感、功能重點放大","emotion":"可靠、專業"},{"scene":"娛樂/遊戲沉浸","goal":"Social","visual":"電競桌面、影音觀看","emotion":"爽感、沉浸"}]}],"fallback_scene_templates":[{"scene":"痛點對比 Before/After","use_when":"商品能解決明確問題"},{"scene":"真實使用情境","use_when":"商品需要讓消費者知道如何使用"},{"scene":"細節/材質特寫","use_when":"商品品質感是賣點"},{"scene":"人物情緒反應","use_when":"商品偏衝動購買"},{"scene":"社群種草生活感","use_when":"商品適合分享拍照"},{"scene":"功能實測證明","use_when":"消費者可能懷疑效果"}]};
+
 var currentMode='video';
 var scriptsData=[];
 var imageData=null;
@@ -397,7 +437,19 @@ function switchMode(mode){
   document.getElementById('video-settings').style.display=mode==='video'?'':'none';
   document.getElementById('image-settings').style.display=mode==='image'?'':'none';
   document.getElementById('strat-label').textContent=mode==='video'?'腳本策略':'視覺風格策略';
-  document.getElementById('gen-sub').textContent=mode==='video'?'AI搜尋市場→分析趨勢→Claude產腳本→GPT強化':'AI分析商品→規劃8張圖→產出完整Prompt';
+  document.getElementById('gen-sub').textContent=mode==='video'?'AI搜尋市場→分析趨勢→Claude產腳本→GPT強化':'AI分析商品→規劃圖片→產出完整Prompt';
+  // 切換產出數量選項
+  var countLabel=document.getElementById('count-label');
+  var countSel=document.getElementById('search-count');
+  if(mode==='image'){
+    countLabel.textContent='產出張數';
+    var opts='';
+    for(var n=1;n<=20;n++) opts+='<option value="'+n+'"'+(n===8?' selected':'')+'>'+n+'張</option>';
+    countSel.innerHTML=opts;
+  } else {
+    countLabel.textContent='產出幾支';
+    countSel.innerHTML='<option value="1">1支／套</option><option value="2">2支／套</option><option value="3" selected>3支／套</option>';
+  }
   var emptyIcon=mode==='video'?'🎬':'🖼';
   var emptyTitle=mode==='video'?'輸入關鍵字開始':'輸入品名與關鍵字開始';
   document.getElementById('output-col').innerHTML='<div class="empty-state"><div class="empty-icon">'+emptyIcon+'</div><div class="empty-title">'+emptyTitle+'</div></div>';
@@ -433,7 +485,10 @@ async function generate(){
     var imgScene=document.getElementById('img-scene').value.trim();
     var imgSeason=document.getElementById('img-season').value.trim();
     var searchText='模式：圖片素材\n尺寸：'+imgSize+'\n情境：'+imgBg+'\n視覺風格：'+(imgStyle==='auto'?'AI自動判斷':imgStyle)+'\n語言：'+LANG_LABEL[lang]+'\n產出套數：'+count+'套'+(imgScene?'\n情境描述：'+imgScene:'')+(imgSeason?'\n季節感：'+imgSeason:'')+'\n\n品名與關鍵字：\n'+keyword;
+    var sceneDecision = imgStyle==='auto' ? JSON.stringify(SCENE_DECISION_TABLE) : null;
+    var useAutoScene=(imgStyle==='auto');
     payload={titles:searchText,mode:'image_plan',keyword:keyword,count:count};
+    if(useAutoScene){payload.scene_decision_table=JSON.stringify(SCENE_DECISION_TABLE);}
   }
 
   try{
