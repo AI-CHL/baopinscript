@@ -727,11 +727,16 @@ function downloadAll(){
     (imageData.image_plan||[]).forEach(function(img,ii){
       lines.push('','━━━ 圖'+(ii+1)+'：'+img.image_type+' ━━━');
       if(img.goal)lines.push('目標：'+img.goal);
+      if(img.priority)lines.push('優先級：'+img.priority);
+      if(img.recommended_size)lines.push('建議尺寸：'+img.recommended_size);
+      if(img.background_type)lines.push('背景類型：'+img.background_type);
+      if(img.visual_style)lines.push('視覺風格：'+img.visual_style);
       if(img.visual_strategy)lines.push('視覺策略：'+img.visual_strategy);
       if(img.composition)lines.push('構圖：'+img.composition);
-      if(img.overlay_text_zh)lines.push('圖中文字：'+(img.overlay_text_zh||[]).join(' / '));
-      if(img.prompt_en)lines.push('Prompt: '+img.prompt_en);
-      if(img.negative_prompt_en)lines.push('Negative: '+img.negative_prompt_en);
+      if(img.ab_test_angle)lines.push('A/B測試角度：'+img.ab_test_angle);
+      if(img.overlay_text_zh&&img.overlay_text_zh.length)lines.push('圖中文字：'+(img.overlay_text_zh||[]).join(' / '));
+      if(img.prompt_en)lines.push('','Prompt:',img.prompt_en);
+      if(img.negative_prompt_en)lines.push('Negative Prompt:',img.negative_prompt_en);
     });
     txt=lines.join('\n');
   } else {showToast('請先產出內容');return;}
