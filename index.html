@@ -620,8 +620,7 @@ function renderPost(content, platforms){
   var now=new Date();
   var ds=now.getFullYear()+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+String(now.getDate()).padStart(2,'0');
   // 把換行轉成 HTML
-  var formatted=escHtml(content).replace(/
-/g,'<br>').replace(/━+/g,'<hr style="border:none;border-top:1px solid var(--border);margin:12px 0">').replace(/👉/g,'<span style="color:var(--accent)">👉</span>');
+  var formatted=escHtml(content).replace(/\n/g,'<br>').replace(/━+/g,'<hr style="border:none;border-top:1px solid var(--border);margin:12px 0">').replace(/👉/g,'<span style="color:var(--accent)">👉</span>');
   var html='<div class="output-header"><div><div class="output-title">🔥 平台爆文策略</div><div class="output-meta">'+platforms.join(' · ')+' · '+ds+'</div></div><button class="copy-all-btn" onclick="copyPost()">複製全部</button></div>';
   html+='<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 24px;box-shadow:var(--shadow);font-size:13px;line-height:2;color:var(--text)" id="post-content">'+formatted+'</div>';
   col.innerHTML=html;
@@ -759,11 +758,8 @@ function renderViral(content) {
 
   sections.forEach(function(sec, i){
     if(!sec.trim()) return;
-    var firstLine = sec.split('
-')[0].trim();
-    var rest = sec.split('
-').slice(1).join('
-').trim();
+    var firstLine = sec.split('\n')[0].trim();
+    var rest = sec.split('\n').slice(1).join('\n').trim();
     var colorClass = sectionColors[i%sectionColors.length];
     var icon = icons[i] || '📌';
     html += '<div class="viral-section">'+
