@@ -599,11 +599,7 @@ async function generatePost(col, keyword, lang){
 
   col.innerHTML='<div class="loading-state"><div class="spinner"></div><div class="loading-txt">AI 吸收最新趨勢中，約需60-120秒...</div></div>';
 
-  var input='語言：'+LANG_LABEL[lang]+'
-發布平台：'+platforms.join('、')+'
-
-品名與關鍵字：
-'+keyword;
+  var input='語言：'+LANG_LABEL[lang]+'\n發布平台：'+platforms.join('、')+'\n\n品名與關鍵字：\n'+keyword;
 
   try{
     var res=await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({titles:input,mode:'post',keyword:keyword,platforms:platforms})});
