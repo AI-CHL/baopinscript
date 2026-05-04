@@ -261,7 +261,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
           <div class="section-label">情境選擇</div>
           <select id="img-bg">
             <option value="去背圖">去背圖（純白/透明背景）</option>
-            <option value="情境圖">情境圖（生活場景）</option>
+            <option value="情境圖">情境圖（爆品場景）</option>
           </select>
         </div>
         <div class="sidebar-section">
@@ -278,7 +278,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
         </div>
         <div class="sidebar-section">
           <div class="section-label">情境描述＋季節感＋光影（選填）</div>
-          <textarea id="img-scene" rows="2" placeholder="例如：咖啡廳午後、秋天暖光、柔和側光打亮"></textarea>
+          <textarea id="img-scene" rows="2" placeholder="例如：咖啡廳午後、秋天暖光、柔和側光打亮（選去背圖時此設定無效）"></textarea>
         </div>
         <div class="sidebar-section">
           <div class="section-label">人物／情緒（選填）</div>
@@ -444,7 +444,7 @@ function switchMode(mode){
   if(mode==='image'){
     countLabel.textContent='產出張數';
     var opts='';
-    for(var n=1;n<=20;n++) opts+='<option value="'+n+'"'+(n===8?' selected':'')+'>'+n+'張</option>';
+    for(var n=8;n<=20;n++) opts+='<option value="'+n+'"'+(n===8?' selected':'')+'>'+n+'張</option>';
     countSel.innerHTML=opts;
   } else {
     countLabel.textContent='產出幾支';
@@ -484,7 +484,10 @@ async function generate(){
     var imgStyle=document.getElementById('img-style').value;
     var imgScene=document.getElementById('img-scene').value.trim();
     var imgSeason=document.getElementById('img-season').value.trim();
-    var searchText='模式：圖片素材\n尺寸：'+imgSize+'\n情境：'+imgBg+'\n視覺風格：'+(imgStyle==='auto'?'AI自動判斷':imgStyle)+'\n語言：'+LANG_LABEL[lang]+'\n產出套數：'+count+'套'+(imgScene?'\n情境描述：'+imgScene:'')+(imgSeason?'\n季節感：'+imgSeason:'')+'\n\n品名與關鍵字：\n'+keyword;
+    var FIXED_8 = '\\n\\n【前8張固定定位】（情境圖模式）：\\n1. 首圖A：痛點對比版\\n2. 首圖B：高質感情境版\\n3. 首圖C：促銷爆品版\\n4. 賣點圖1：核心功能\\n5. 賣點圖2：材質/細節\\n6. 情境圖：生活使用場景\\n7. 尺寸規格圖\\n8. 信任圖：評價/熱銷/保證感\\n第9張起依視覺風格自由發揮。';
+    var CUTOUT_NOTE = '\\n\\n【去背圖模式】：所有圖片為純白背景去背，不套用前8張定位，改為從各個角度展示商品（正面、側面、背面、細節特寫、整體俯視、包裝等）。';
+    var bgNote = imgBg==='去背圖' ? CUTOUT_NOTE : (parseInt(count)>=8 ? FIXED_8 : '');
+    var searchText='模式：圖片素材\\n尺寸：'+imgSize+'\\n情境：'+imgBg+'\\n視覺風格：'+(imgStyle==='auto'?'AI自動判斷':imgStyle)+'\\n語言：'+LANG_LABEL[lang]+'\\n產出套數：'+count+'套'+(imgBg!=='去背圖'&&imgScene?'\\n情境描述：'+imgScene:'')+(imgBg!=='去背圖'&&imgSeason?'\\n人物情緒：'+imgSeason:'')+bgNote+'\\n\\n品名與關鍵字：\\n'+keyword;
     var sceneDecision = imgStyle==='auto' ? JSON.stringify(SCENE_DECISION_TABLE) : null;
     var useAutoScene=(imgStyle==='auto');
     payload={titles:searchText,mode:'image_plan',keyword:keyword,count:count};
