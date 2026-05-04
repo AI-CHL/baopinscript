@@ -723,12 +723,7 @@ async function generateViral(col, keyword, lang, count) {
 
   col.innerHTML='<div class="loading-state"><div class="spinner"></div><div class="loading-txt">AI 吸收最新趨勢，產出爆文策略中...</div></div>';
 
-  var userInput = '語言：'+LANG_LABEL[lang]+'
-產出套數：'+count+'
-目標平台：'+platforms.join('、')+'
-
-商品關鍵字：
-'+keyword;
+  var userInput = '語言：'+LANG_LABEL[lang]+'\n產出套數：'+count+'\n目標平台：'+platforms.join('、')+'\n\n商品關鍵字：\n'+keyword;
 
   try {
     var res = await fetch(WEBHOOK, {
