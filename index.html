@@ -232,7 +232,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     <div class="mode-switcher">
       <button class="mode-tab active" id="tab-video" onclick="switchMode('video')">🎬 影片腳本</button>
       <button class="mode-tab" id="tab-image" onclick="switchMode('image')">🖼 圖片素材</button>
-      <button class="mode-tab" id="tab-viral" onclick="switchMode('viral')">🔥 平台爆文</button>
+      
       <button class="mode-tab" id="tab-post" onclick="switchMode('post')">🔥 平台爆文</button>
     </div>
     <div class="topbar-right">
@@ -363,20 +363,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
       </div>
 
       <!-- 平台爆文設定 -->
-      <div id="viral-settings" style="display:none">
-        <div class="sidebar-section">
-          <div class="section-label">目標平台（可多選）</div>
-          <div style="display:flex;flex-direction:column;gap:6px;margin-top:2px">
-            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plt-fb" checked style="width:auto;padding:0;margin:0"> Facebook</label>
-            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plt-ig" checked style="width:auto;padding:0;margin:0"> Instagram</label>
-            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plt-threads" style="width:auto;padding:0;margin:0"> Threads</label>
-            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plt-xhs" checked style="width:auto;padding:0;margin:0"> 小紅書</label>
-            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plt-tiktok" style="width:auto;padding:0;margin:0"> TikTok／抖音</label>
-            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plt-dcard" style="width:auto;padding:0;margin:0"> Dcard</label>
-            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plt-shop" checked style="width:auto;padding:0;margin:0"> 蝦皮／淘寶商品文案</label>
-          </div>
-        </div>
-      </div>
+      
 
             <button class="gen-btn" id="gen-btn" onclick="generate()">▶ 一鍵產出</button>
       <div class="gen-sub" id="gen-sub">AI搜尋市場→分析趨勢→Claude產腳本→GPT強化</div>
