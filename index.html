@@ -751,8 +751,12 @@ function renderViral(content) {
   var html = '<div class="output-header"><div><div class="output-title">🔥 平台爆文策略</div><div class="output-meta">'+ds+'</div></div><button class="copy-all-btn" onclick="copyViralAll()">複製全部</button></div>';
 
   // 解析內容，按段落分區塊
-  var sections = content.split(/
-(?=\d+\.|#{1,3} |👉|━+)/);
+  var sections = content.split('\n').reduce(function(acc,line){
+    if(/^(\d+\.|#{1,3} |👉|━)/.test(line)){acc.push(line);}
+    else if(acc.length){acc[acc.length-1]+='\n'+line;}
+    else{acc.push(line);}
+    return acc;
+  },[]).filter(function(s){return s.trim();});
   var sectionColors = ['','accent','accent2','blue','purple','gold','teal','','accent','accent2','blue','purple','gold','teal','','accent','accent2'];
   var icons = ['📋','🎯','👥','💡','💥','📊','🔍','🖼','⭐','🗺','📝','📱','✍️','🤖','🎬','🧪','⚠️'];
 
