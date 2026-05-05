@@ -188,6 +188,9 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .loading-txt{font-size:13px;color:var(--text2)}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text);color:white;padding:9px 18px;border-radius:20px;font-size:12px;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1}
+.chip-label{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 7px;border:1px solid var(--border);border-radius:20px;cursor:pointer;background:var(--surface);color:var(--text2);transition:all 0.15s;white-space:nowrap}
+.chip-label:hover{border-color:var(--accent2);color:var(--accent2)}
+.chip-label input{width:auto;padding:0;margin:0;accent-color:var(--accent2)}
 .viral-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:16px;box-shadow:var(--shadow);overflow:hidden}
 .viral-section-head{padding:10px 16px;background:var(--text);color:white;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px}
 .viral-section-head.accent{background:var(--accent)}
@@ -304,6 +307,112 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
         </div>
       </div>
 
+      <!-- 平台爆文專用設定 -->
+      <div id="post-extra" style="display:none">
+        <div class="sidebar-section">
+          <div class="section-label">主要賣點（可多選）</div>
+          <div style="max-height:150px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius);padding:8px;background:var(--bg);display:flex;flex-wrap:wrap;gap:4px" id="selling-points-wrap">
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="價格便宜"> 價格便宜</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="高CP值"> 高CP值</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="外觀好看"> 外觀好看</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="質感高級"> 質感高級</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="小巧便攜"> 小巧便攜</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="收納方便"> 收納方便</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="省空間"> 省空間</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="省時間"> 省時間</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="省力"> 省力</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="多功能"> 多功能</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="耐用"> 耐用</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="防水"> 防水</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="防髒"> 防髒</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="防塵"> 防塵</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="防摔"> 防摔</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="可重複使用"> 可重複使用</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="環保材質"> 環保材質</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="安全無毒"> 安全無毒</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="兒童適用"> 兒童適用</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="寵物適用"> 寵物適用</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="辦公適用"> 辦公適用</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="學生適用"> 學生適用</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="旅行適用"> 旅行適用</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="居家適用"> 居家適用</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="送禮適合"> 送禮適合</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="療癒可愛"> 療癒可愛</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="日系風格"> 日系風格</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="韓系風格"> 韓系風格</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="聯名IP授權"> 聯名IP授權</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="限量款"> 限量款</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="季節限定"> 季節限定</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="節慶限定"> 節慶限定</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="懶人必備"> 懶人必備</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="解決痛點"> 解決痛點</label>
+            <label class="chip-label"><input type="checkbox" class="sp-check" value="Before/After明顯"> Before/After明顯</label>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <div class="section-label">目標客群（可多選）</div>
+          <div style="max-height:150px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius);padding:8px;background:var(--bg);display:flex;flex-wrap:wrap;gap:4px">
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="學生族"> 學生族</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="上班族"> 上班族</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="辦公室族群"> 辦公室族群</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="媽媽族群"> 媽媽族群</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="親子家庭"> 親子家庭</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="女性消費者"> 女性消費者</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="男性消費者"> 男性消費者</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="年輕女性"> 年輕女性</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="年輕男性"> 年輕男性</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="Z世代"> Z世代</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="小資族"> 小資族</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="租屋族"> 租屋族</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="收納控"> 收納控</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="文具控"> 文具控</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="美妝族"> 美妝族</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="寵物族"> 寵物族</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="露營族"> 露營族</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="旅行族"> 旅行族</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="通勤族"> 通勤族</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="送禮族"> 送禮族</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="居家生活族"> 居家生活族</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="日系風格愛好者"> 日系愛好者</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="韓系風格愛好者"> 韓系愛好者</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="動漫IP粉絲"> 動漫IP粉絲</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="節慶採購族"> 節慶採購族</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="衝動購物族"> 衝動購物族</label>
+            <label class="chip-label"><input type="checkbox" class="tg-check" value="高CP值消費者"> 高CP值消費者</label>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <div class="section-label">希望風格（可多選）</div>
+          <div style="max-height:150px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius);padding:8px;background:var(--bg);display:flex;flex-wrap:wrap;gap:4px">
+            <label class="chip-label"><input type="checkbox" class="st-check" value="爆款感"> 爆款感</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="種草感"> 種草感</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="真實分享感"> 真實分享感</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="網友推薦感"> 網友推薦感</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="生活感"> 生活感</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="痛點直擊"> 痛點直擊</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="療癒可愛"> 療癒可愛</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="高級質感"> 高級質感</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="日系生活風"> 日系生活風</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="韓系簡約風"> 韓系簡約風</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="淘寶爆品風"> 淘寶爆品風</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="蝦皮高轉換風"> 蝦皮高轉換風</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="小紅書筆記風"> 小紅書筆記風</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="Dcard真實心得風"> Dcard心得風</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="Threads吐槽共鳴風"> Threads共鳴風</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="TikTok快節奏鉤子風"> TikTok鉤子風</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="FB生活導購風"> FB導購風</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="IG氛圍美感風"> IG美感風</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="專業導購風"> 專業導購風</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="限時促銷感"> 限時促銷感</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="懶人解法"> 懶人解法</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="Before/After對比風"> Before/After風</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="開箱實測風"> 開箱實測風</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="禮物推薦風"> 禮物推薦風</label>
+            <label class="chip-label"><input type="checkbox" class="st-check" value="節慶行銷風"> 節慶行銷風</label>
+          </div>
+        </div>
+      </div>
+
       <!-- 共用設定 -->
       <div class="sidebar-section">
         <div class="section-label">腳本語言</div>
@@ -349,17 +458,22 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
       <!-- 平台爆文設定 -->
       <div id="post-settings" style="display:none">
         <div class="sidebar-section">
-          <div class="section-label">發布平台（可多選）</div>
-          <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
-            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plat-fb" checked style="width:auto;margin:0"> Facebook</label>
-            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plat-ig" checked style="width:auto;margin:0"> Instagram</label>
-            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plat-threads" style="width:auto;margin:0"> Threads</label>
-            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plat-xhs" checked style="width:auto;margin:0"> 小紅書</label>
-            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plat-tiktok" style="width:auto;margin:0"> TikTok／抖音</label>
-            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plat-dcard" style="width:auto;margin:0"> Dcard</label>
-            <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer"><input type="checkbox" id="plat-shopee" checked style="width:auto;margin:0"> 蝦皮／淘寶商品文案</label>
-          </div>
+          <div class="section-label">銷售平台（可多選）</div>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:4px;margin-top:4px"><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="plat-Facebook" style="width:auto;padding:0;margin:0;flex-shrink:0"> Facebook</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="plat-Instagram" style="width:auto;padding:0;margin:0;flex-shrink:0"> Instagram</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="plat-Threads" style="width:auto;padding:0;margin:0;flex-shrink:0"> Threads</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="plat-小紅書" style="width:auto;padding:0;margin:0;flex-shrink:0"> 小紅書</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="plat-TikTok" style="width:auto;padding:0;margin:0;flex-shrink:0"> TikTok</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="plat-抖音" style="width:auto;padding:0;margin:0;flex-shrink:0"> 抖音</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="plat-Dcard" style="width:auto;padding:0;margin:0;flex-shrink:0"> Dcard</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="plat-蝦皮" style="width:auto;padding:0;margin:0;flex-shrink:0"> 蝦皮</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="plat-淘寶" style="width:auto;padding:0;margin:0;flex-shrink:0"> 淘寶</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="plat-momo" style="width:auto;padding:0;margin:0;flex-shrink:0"> momo</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="plat-PChome" style="width:auto;padding:0;margin:0;flex-shrink:0"> PChome</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="plat-官網" style="width:auto;padding:0;margin:0;flex-shrink:0"> 官網</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="plat-LINE_社群" style="width:auto;padding:0;margin:0;flex-shrink:0"> LINE 社群</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="plat-EDM" style="width:auto;padding:0;margin:0;flex-shrink:0"> EDM</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="plat-Google_廣告" style="width:auto;padding:0;margin:0;flex-shrink:0"> Google 廣告</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="plat-Meta_廣告" style="width:auto;padding:0;margin:0;flex-shrink:0"> Meta 廣告</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="plat-短影音平台" style="width:auto;padding:0;margin:0;flex-shrink:0"> 短影音平台</label></div>
         </div>
+        <div class="sidebar-section">
+          <div class="section-label">主要賣點（可多選）</div>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:4px;margin-top:4px"><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-價格便宜" style="width:auto;padding:0;margin:0;flex-shrink:0"> 價格便宜</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-高CP值" style="width:auto;padding:0;margin:0;flex-shrink:0"> 高CP值</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-外觀好看" style="width:auto;padding:0;margin:0;flex-shrink:0"> 外觀好看</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-質感高級" style="width:auto;padding:0;margin:0;flex-shrink:0"> 質感高級</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-小巧便攜" style="width:auto;padding:0;margin:0;flex-shrink:0"> 小巧便攜</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-收納方便" style="width:auto;padding:0;margin:0;flex-shrink:0"> 收納方便</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-省空間" style="width:auto;padding:0;margin:0;flex-shrink:0"> 省空間</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-省時間" style="width:auto;padding:0;margin:0;flex-shrink:0"> 省時間</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-省力" style="width:auto;padding:0;margin:0;flex-shrink:0"> 省力</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-多功能" style="width:auto;padding:0;margin:0;flex-shrink:0"> 多功能</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-耐用" style="width:auto;padding:0;margin:0;flex-shrink:0"> 耐用</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-防水" style="width:auto;padding:0;margin:0;flex-shrink:0"> 防水</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-防髒" style="width:auto;padding:0;margin:0;flex-shrink:0"> 防髒</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-防塵" style="width:auto;padding:0;margin:0;flex-shrink:0"> 防塵</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-防摔" style="width:auto;padding:0;margin:0;flex-shrink:0"> 防摔</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-可重複使用" style="width:auto;padding:0;margin:0;flex-shrink:0"> 可重複使用</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-環保材質" style="width:auto;padding:0;margin:0;flex-shrink:0"> 環保材質</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-安全無毒" style="width:auto;padding:0;margin:0;flex-shrink:0"> 安全無毒</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-兒童適用" style="width:auto;padding:0;margin:0;flex-shrink:0"> 兒童適用</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-寵物適用" style="width:auto;padding:0;margin:0;flex-shrink:0"> 寵物適用</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-辦公適用" style="width:auto;padding:0;margin:0;flex-shrink:0"> 辦公適用</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-學生適用" style="width:auto;padding:0;margin:0;flex-shrink:0"> 學生適用</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-旅行適用" style="width:auto;padding:0;margin:0;flex-shrink:0"> 旅行適用</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-居家適用" style="width:auto;padding:0;margin:0;flex-shrink:0"> 居家適用</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-送禮適合" style="width:auto;padding:0;margin:0;flex-shrink:0"> 送禮適合</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-療癒可愛" style="width:auto;padding:0;margin:0;flex-shrink:0"> 療癒可愛</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-日系風格" style="width:auto;padding:0;margin:0;flex-shrink:0"> 日系風格</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-韓系風格" style="width:auto;padding:0;margin:0;flex-shrink:0"> 韓系風格</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-聯名_IP授權" style="width:auto;padding:0;margin:0;flex-shrink:0"> 聯名/IP授權</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-限量款" style="width:auto;padding:0;margin:0;flex-shrink:0"> 限量款</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-季節限定" style="width:auto;padding:0;margin:0;flex-shrink:0"> 季節限定</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-節慶限定" style="width:auto;padding:0;margin:0;flex-shrink:0"> 節慶限定</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-懶人必備" style="width:auto;padding:0;margin:0;flex-shrink:0"> 懶人必備</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-解決痛點" style="width:auto;padding:0;margin:0;flex-shrink:0"> 解決痛點</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sp-Before_After明顯" style="width:auto;padding:0;margin:0;flex-shrink:0"> Before/After明顯</label></div>
+        </div>
+        <div class="sidebar-section">
+          <div class="section-label">目標客群（可多選）</div>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:4px;margin-top:4px"><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-學生族" style="width:auto;padding:0;margin:0;flex-shrink:0"> 學生族</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-上班族" style="width:auto;padding:0;margin:0;flex-shrink:0"> 上班族</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-辦公室族群" style="width:auto;padding:0;margin:0;flex-shrink:0"> 辦公室族群</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-媽媽族群" style="width:auto;padding:0;margin:0;flex-shrink:0"> 媽媽族群</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-親子家庭" style="width:auto;padding:0;margin:0;flex-shrink:0"> 親子家庭</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-女性消費者" style="width:auto;padding:0;margin:0;flex-shrink:0"> 女性消費者</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-男性消費者" style="width:auto;padding:0;margin:0;flex-shrink:0"> 男性消費者</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-年輕女性" style="width:auto;padding:0;margin:0;flex-shrink:0"> 年輕女性</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-年輕男性" style="width:auto;padding:0;margin:0;flex-shrink:0"> 年輕男性</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-Z世代" style="width:auto;padding:0;margin:0;flex-shrink:0"> Z世代</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-小資族" style="width:auto;padding:0;margin:0;flex-shrink:0"> 小資族</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-租屋族" style="width:auto;padding:0;margin:0;flex-shrink:0"> 租屋族</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-收納控" style="width:auto;padding:0;margin:0;flex-shrink:0"> 收納控</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-文具控" style="width:auto;padding:0;margin:0;flex-shrink:0"> 文具控</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-美妝族" style="width:auto;padding:0;margin:0;flex-shrink:0"> 美妝族</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-寵物族" style="width:auto;padding:0;margin:0;flex-shrink:0"> 寵物族</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-露營族" style="width:auto;padding:0;margin:0;flex-shrink:0"> 露營族</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-旅行族" style="width:auto;padding:0;margin:0;flex-shrink:0"> 旅行族</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-通勤族" style="width:auto;padding:0;margin:0;flex-shrink:0"> 通勤族</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-送禮族" style="width:auto;padding:0;margin:0;flex-shrink:0"> 送禮族</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-居家生活族" style="width:auto;padding:0;margin:0;flex-shrink:0"> 居家生活族</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-日系風格愛好者" style="width:auto;padding:0;margin:0;flex-shrink:0"> 日系風格愛好者</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-韓系風格愛好者" style="width:auto;padding:0;margin:0;flex-shrink:0"> 韓系風格愛好者</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-動漫_IP粉絲" style="width:auto;padding:0;margin:0;flex-shrink:0"> 動漫/IP粉絲</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-節慶採購族" style="width:auto;padding:0;margin:0;flex-shrink:0"> 節慶採購族</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-衝動購物族" style="width:auto;padding:0;margin:0;flex-shrink:0"> 衝動購物族</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="aud-高CP值消費者" style="width:auto;padding:0;margin:0;flex-shrink:0"> 高CP值消費者</label></div>
+        </div>
+        <div class="sidebar-section">
+          <div class="section-label">希望風格（可多選）</div>
+          <div style="display:grid;grid-template-columns:repeat(1,1fr);gap:4px;margin-top:4px"><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-爆款感" style="width:auto;padding:0;margin:0;flex-shrink:0"> 爆款感</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-種草感" style="width:auto;padding:0;margin:0;flex-shrink:0"> 種草感</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-真實分享感" style="width:auto;padding:0;margin:0;flex-shrink:0"> 真實分享感</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-網友推薦感" style="width:auto;padding:0;margin:0;flex-shrink:0"> 網友推薦感</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-生活感" style="width:auto;padding:0;margin:0;flex-shrink:0"> 生活感</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-痛點直擊" style="width:auto;padding:0;margin:0;flex-shrink:0"> 痛點直擊</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-療癒可愛" style="width:auto;padding:0;margin:0;flex-shrink:0"> 療癒可愛</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-高級質感" style="width:auto;padding:0;margin:0;flex-shrink:0"> 高級質感</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-日系生活風" style="width:auto;padding:0;margin:0;flex-shrink:0"> 日系生活風</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-韓系簡約風" style="width:auto;padding:0;margin:0;flex-shrink:0"> 韓系簡約風</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-淘寶爆品風" style="width:auto;padding:0;margin:0;flex-shrink:0"> 淘寶爆品風</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-蝦皮高轉換風" style="width:auto;padding:0;margin:0;flex-shrink:0"> 蝦皮高轉換風</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-小紅書筆記風" style="width:auto;padding:0;margin:0;flex-shrink:0"> 小紅書筆記風</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-Dcard真實心得風" style="width:auto;padding:0;margin:0;flex-shrink:0"> Dcard真實心得風</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-Threads吐槽共鳴風" style="width:auto;padding:0;margin:0;flex-shrink:0"> Threads吐槽共鳴風</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-TikTok快節奏鉤子風" style="width:auto;padding:0;margin:0;flex-shrink:0"> TikTok快節奏鉤子風</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-FB生活導購風" style="width:auto;padding:0;margin:0;flex-shrink:0"> FB生活導購風</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-IG氛圍美感風" style="width:auto;padding:0;margin:0;flex-shrink:0"> IG氛圍美感風</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-專業導購風" style="width:auto;padding:0;margin:0;flex-shrink:0"> 專業導購風</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-限時促銷感" style="width:auto;padding:0;margin:0;flex-shrink:0"> 限時促銷感</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-懶人解法" style="width:auto;padding:0;margin:0;flex-shrink:0"> 懶人解法</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-Before_After對比風" style="width:auto;padding:0;margin:0;flex-shrink:0"> Before/After對比風</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-開箱實測風" style="width:auto;padding:0;margin:0;flex-shrink:0"> 開箱實測風</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-禮物推薦風" style="width:auto;padding:0;margin:0;flex-shrink:0"> 禮物推薦風</label><label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;line-height:1.3"><input type="checkbox" id="sty-節慶行銷風" style="width:auto;padding:0;margin:0;flex-shrink:0"> 節慶行銷風</label></div>
+        </div>
+      </div>
       </div>
 
       <!-- 平台爆文設定 -->
@@ -474,6 +588,7 @@ function switchMode(mode){
   document.getElementById('tab-post').classList.toggle('active',mode==='post');
   document.getElementById('video-settings').style.display=mode==='video'?'':'none';
   document.getElementById('image-settings').style.display=mode==='image'?'':'none';
+  document.getElementById('post-extra').style.display=mode==='post'?'':'none';
   document.getElementById('post-settings').style.display=mode==='post'?'':'none';
   document.getElementById('strat-label').textContent=mode==='video'?'腳本策略':mode==='image'?'視覺風格策略':'文案風格';
   document.getElementById('gen-sub').textContent=mode==='video'?'AI搜尋市場→分析趨勢→Claude產腳本→GPT強化':mode==='image'?'AI分析商品→規劃圖片→產出完整Prompt':'AI吸收最新趨勢→產出全平台爆文策略';
@@ -576,124 +691,133 @@ async function generate(){
 
 async function generatePost(col, keyword, lang){
   var platforms=[];
-  if(document.getElementById('plat-fb').checked)platforms.push('Facebook');
-  if(document.getElementById('plat-ig').checked)platforms.push('Instagram');
-  if(document.getElementById('plat-threads').checked)platforms.push('Threads');
-  if(document.getElementById('plat-xhs').checked)platforms.push('小紅書');
-  if(document.getElementById('plat-tiktok').checked)platforms.push('TikTok/抖音');
-  if(document.getElementById('plat-dcard').checked)platforms.push('Dcard');
-  if(document.getElementById('plat-shopee').checked)platforms.push('蝦皮/淘寶商品文案');
+  if(document.getElementById('plat-Facebook')&&document.getElementById('plat-Facebook').checked)platforms.push('Facebook');
+  if(document.getElementById('plat-Instagram')&&document.getElementById('plat-Instagram').checked)platforms.push('Instagram');
+  if(document.getElementById('plat-Threads')&&document.getElementById('plat-Threads').checked)platforms.push('Threads');
+  if(document.getElementById('plat-小紅書')&&document.getElementById('plat-小紅書').checked)platforms.push('小紅書');
+  if(document.getElementById('plat-TikTok')&&document.getElementById('plat-TikTok').checked)platforms.push('TikTok');
+  if(document.getElementById('plat-抖音')&&document.getElementById('plat-抖音').checked)platforms.push('抖音');
+  if(document.getElementById('plat-Dcard')&&document.getElementById('plat-Dcard').checked)platforms.push('Dcard');
+  if(document.getElementById('plat-蝦皮')&&document.getElementById('plat-蝦皮').checked)platforms.push('蝦皮');
+  if(document.getElementById('plat-淘寶')&&document.getElementById('plat-淘寶').checked)platforms.push('淘寶');
+  if(document.getElementById('plat-momo')&&document.getElementById('plat-momo').checked)platforms.push('momo');
+  if(document.getElementById('plat-PChome')&&document.getElementById('plat-PChome').checked)platforms.push('PChome');
+  if(document.getElementById('plat-官網')&&document.getElementById('plat-官網').checked)platforms.push('官網');
+  if(document.getElementById('plat-LINE_社群')&&document.getElementById('plat-LINE_社群').checked)platforms.push('LINE 社群');
+  if(document.getElementById('plat-EDM')&&document.getElementById('plat-EDM').checked)platforms.push('EDM');
+  if(document.getElementById('plat-Google_廣告')&&document.getElementById('plat-Google_廣告').checked)platforms.push('Google 廣告');
+  if(document.getElementById('plat-Meta_廣告')&&document.getElementById('plat-Meta_廣告').checked)platforms.push('Meta 廣告');
+  if(document.getElementById('plat-短影音平台')&&document.getElementById('plat-短影音平台').checked)platforms.push('短影音平台');
+  if(!platforms.length){showToast('請至少選一個銷售平台');return;}
+
+  var sellingPoints=[];
+  if(document.getElementById('sp-價格便宜')&&document.getElementById('sp-價格便宜').checked)sellingPoints.push('價格便宜');
+  if(document.getElementById('sp-高CP值')&&document.getElementById('sp-高CP值').checked)sellingPoints.push('高CP值');
+  if(document.getElementById('sp-外觀好看')&&document.getElementById('sp-外觀好看').checked)sellingPoints.push('外觀好看');
+  if(document.getElementById('sp-質感高級')&&document.getElementById('sp-質感高級').checked)sellingPoints.push('質感高級');
+  if(document.getElementById('sp-小巧便攜')&&document.getElementById('sp-小巧便攜').checked)sellingPoints.push('小巧便攜');
+  if(document.getElementById('sp-收納方便')&&document.getElementById('sp-收納方便').checked)sellingPoints.push('收納方便');
+  if(document.getElementById('sp-省空間')&&document.getElementById('sp-省空間').checked)sellingPoints.push('省空間');
+  if(document.getElementById('sp-省時間')&&document.getElementById('sp-省時間').checked)sellingPoints.push('省時間');
+  if(document.getElementById('sp-省力')&&document.getElementById('sp-省力').checked)sellingPoints.push('省力');
+  if(document.getElementById('sp-多功能')&&document.getElementById('sp-多功能').checked)sellingPoints.push('多功能');
+  if(document.getElementById('sp-耐用')&&document.getElementById('sp-耐用').checked)sellingPoints.push('耐用');
+  if(document.getElementById('sp-防水')&&document.getElementById('sp-防水').checked)sellingPoints.push('防水');
+  if(document.getElementById('sp-防髒')&&document.getElementById('sp-防髒').checked)sellingPoints.push('防髒');
+  if(document.getElementById('sp-防塵')&&document.getElementById('sp-防塵').checked)sellingPoints.push('防塵');
+  if(document.getElementById('sp-防摔')&&document.getElementById('sp-防摔').checked)sellingPoints.push('防摔');
+  if(document.getElementById('sp-可重複使用')&&document.getElementById('sp-可重複使用').checked)sellingPoints.push('可重複使用');
+  if(document.getElementById('sp-環保材質')&&document.getElementById('sp-環保材質').checked)sellingPoints.push('環保材質');
+  if(document.getElementById('sp-安全無毒')&&document.getElementById('sp-安全無毒').checked)sellingPoints.push('安全無毒');
+  if(document.getElementById('sp-兒童適用')&&document.getElementById('sp-兒童適用').checked)sellingPoints.push('兒童適用');
+  if(document.getElementById('sp-寵物適用')&&document.getElementById('sp-寵物適用').checked)sellingPoints.push('寵物適用');
+  if(document.getElementById('sp-辦公適用')&&document.getElementById('sp-辦公適用').checked)sellingPoints.push('辦公適用');
+  if(document.getElementById('sp-學生適用')&&document.getElementById('sp-學生適用').checked)sellingPoints.push('學生適用');
+  if(document.getElementById('sp-旅行適用')&&document.getElementById('sp-旅行適用').checked)sellingPoints.push('旅行適用');
+  if(document.getElementById('sp-居家適用')&&document.getElementById('sp-居家適用').checked)sellingPoints.push('居家適用');
+  if(document.getElementById('sp-送禮適合')&&document.getElementById('sp-送禮適合').checked)sellingPoints.push('送禮適合');
+  if(document.getElementById('sp-療癒可愛')&&document.getElementById('sp-療癒可愛').checked)sellingPoints.push('療癒可愛');
+  if(document.getElementById('sp-日系風格')&&document.getElementById('sp-日系風格').checked)sellingPoints.push('日系風格');
+  if(document.getElementById('sp-韓系風格')&&document.getElementById('sp-韓系風格').checked)sellingPoints.push('韓系風格');
+  if(document.getElementById('sp-聯名_IP授權')&&document.getElementById('sp-聯名_IP授權').checked)sellingPoints.push('聯名/IP授權');
+  if(document.getElementById('sp-限量款')&&document.getElementById('sp-限量款').checked)sellingPoints.push('限量款');
+  if(document.getElementById('sp-季節限定')&&document.getElementById('sp-季節限定').checked)sellingPoints.push('季節限定');
+  if(document.getElementById('sp-節慶限定')&&document.getElementById('sp-節慶限定').checked)sellingPoints.push('節慶限定');
+  if(document.getElementById('sp-懶人必備')&&document.getElementById('sp-懶人必備').checked)sellingPoints.push('懶人必備');
+  if(document.getElementById('sp-解決痛點')&&document.getElementById('sp-解決痛點').checked)sellingPoints.push('解決痛點');
+  if(document.getElementById('sp-Before_After明顯')&&document.getElementById('sp-Before_After明顯').checked)sellingPoints.push('Before/After明顯');
+
+  var targetAudience=[];
+  if(document.getElementById('aud-學生族')&&document.getElementById('aud-學生族').checked)targetAudience.push('學生族');
+  if(document.getElementById('aud-上班族')&&document.getElementById('aud-上班族').checked)targetAudience.push('上班族');
+  if(document.getElementById('aud-辦公室族群')&&document.getElementById('aud-辦公室族群').checked)targetAudience.push('辦公室族群');
+  if(document.getElementById('aud-媽媽族群')&&document.getElementById('aud-媽媽族群').checked)targetAudience.push('媽媽族群');
+  if(document.getElementById('aud-親子家庭')&&document.getElementById('aud-親子家庭').checked)targetAudience.push('親子家庭');
+  if(document.getElementById('aud-女性消費者')&&document.getElementById('aud-女性消費者').checked)targetAudience.push('女性消費者');
+  if(document.getElementById('aud-男性消費者')&&document.getElementById('aud-男性消費者').checked)targetAudience.push('男性消費者');
+  if(document.getElementById('aud-年輕女性')&&document.getElementById('aud-年輕女性').checked)targetAudience.push('年輕女性');
+  if(document.getElementById('aud-年輕男性')&&document.getElementById('aud-年輕男性').checked)targetAudience.push('年輕男性');
+  if(document.getElementById('aud-Z世代')&&document.getElementById('aud-Z世代').checked)targetAudience.push('Z世代');
+  if(document.getElementById('aud-小資族')&&document.getElementById('aud-小資族').checked)targetAudience.push('小資族');
+  if(document.getElementById('aud-租屋族')&&document.getElementById('aud-租屋族').checked)targetAudience.push('租屋族');
+  if(document.getElementById('aud-收納控')&&document.getElementById('aud-收納控').checked)targetAudience.push('收納控');
+  if(document.getElementById('aud-文具控')&&document.getElementById('aud-文具控').checked)targetAudience.push('文具控');
+  if(document.getElementById('aud-美妝族')&&document.getElementById('aud-美妝族').checked)targetAudience.push('美妝族');
+  if(document.getElementById('aud-寵物族')&&document.getElementById('aud-寵物族').checked)targetAudience.push('寵物族');
+  if(document.getElementById('aud-露營族')&&document.getElementById('aud-露營族').checked)targetAudience.push('露營族');
+  if(document.getElementById('aud-旅行族')&&document.getElementById('aud-旅行族').checked)targetAudience.push('旅行族');
+  if(document.getElementById('aud-通勤族')&&document.getElementById('aud-通勤族').checked)targetAudience.push('通勤族');
+  if(document.getElementById('aud-送禮族')&&document.getElementById('aud-送禮族').checked)targetAudience.push('送禮族');
+  if(document.getElementById('aud-居家生活族')&&document.getElementById('aud-居家生活族').checked)targetAudience.push('居家生活族');
+  if(document.getElementById('aud-日系風格愛好者')&&document.getElementById('aud-日系風格愛好者').checked)targetAudience.push('日系風格愛好者');
+  if(document.getElementById('aud-韓系風格愛好者')&&document.getElementById('aud-韓系風格愛好者').checked)targetAudience.push('韓系風格愛好者');
+  if(document.getElementById('aud-動漫_IP粉絲')&&document.getElementById('aud-動漫_IP粉絲').checked)targetAudience.push('動漫/IP粉絲');
+  if(document.getElementById('aud-節慶採購族')&&document.getElementById('aud-節慶採購族').checked)targetAudience.push('節慶採購族');
+  if(document.getElementById('aud-衝動購物族')&&document.getElementById('aud-衝動購物族').checked)targetAudience.push('衝動購物族');
+  if(document.getElementById('aud-高CP值消費者')&&document.getElementById('aud-高CP值消費者').checked)targetAudience.push('高CP值消費者');
+
+  var preferredStyles=[];
+  if(document.getElementById('sty-爆款感')&&document.getElementById('sty-爆款感').checked)preferredStyles.push('爆款感');
+  if(document.getElementById('sty-種草感')&&document.getElementById('sty-種草感').checked)preferredStyles.push('種草感');
+  if(document.getElementById('sty-真實分享感')&&document.getElementById('sty-真實分享感').checked)preferredStyles.push('真實分享感');
+  if(document.getElementById('sty-網友推薦感')&&document.getElementById('sty-網友推薦感').checked)preferredStyles.push('網友推薦感');
+  if(document.getElementById('sty-生活感')&&document.getElementById('sty-生活感').checked)preferredStyles.push('生活感');
+  if(document.getElementById('sty-痛點直擊')&&document.getElementById('sty-痛點直擊').checked)preferredStyles.push('痛點直擊');
+  if(document.getElementById('sty-療癒可愛')&&document.getElementById('sty-療癒可愛').checked)preferredStyles.push('療癒可愛');
+  if(document.getElementById('sty-高級質感')&&document.getElementById('sty-高級質感').checked)preferredStyles.push('高級質感');
+  if(document.getElementById('sty-日系生活風')&&document.getElementById('sty-日系生活風').checked)preferredStyles.push('日系生活風');
+  if(document.getElementById('sty-韓系簡約風')&&document.getElementById('sty-韓系簡約風').checked)preferredStyles.push('韓系簡約風');
+  if(document.getElementById('sty-淘寶爆品風')&&document.getElementById('sty-淘寶爆品風').checked)preferredStyles.push('淘寶爆品風');
+  if(document.getElementById('sty-蝦皮高轉換風')&&document.getElementById('sty-蝦皮高轉換風').checked)preferredStyles.push('蝦皮高轉換風');
+  if(document.getElementById('sty-小紅書筆記風')&&document.getElementById('sty-小紅書筆記風').checked)preferredStyles.push('小紅書筆記風');
+  if(document.getElementById('sty-Dcard真實心得風')&&document.getElementById('sty-Dcard真實心得風').checked)preferredStyles.push('Dcard真實心得風');
+  if(document.getElementById('sty-Threads吐槽共鳴風')&&document.getElementById('sty-Threads吐槽共鳴風').checked)preferredStyles.push('Threads吐槽共鳴風');
+  if(document.getElementById('sty-TikTok快節奏鉤子風')&&document.getElementById('sty-TikTok快節奏鉤子風').checked)preferredStyles.push('TikTok快節奏鉤子風');
+  if(document.getElementById('sty-FB生活導購風')&&document.getElementById('sty-FB生活導購風').checked)preferredStyles.push('FB生活導購風');
+  if(document.getElementById('sty-IG氛圍美感風')&&document.getElementById('sty-IG氛圍美感風').checked)preferredStyles.push('IG氛圍美感風');
+  if(document.getElementById('sty-專業導購風')&&document.getElementById('sty-專業導購風').checked)preferredStyles.push('專業導購風');
+  if(document.getElementById('sty-限時促銷感')&&document.getElementById('sty-限時促銷感').checked)preferredStyles.push('限時促銷感');
+  if(document.getElementById('sty-懶人解法')&&document.getElementById('sty-懶人解法').checked)preferredStyles.push('懶人解法');
+  if(document.getElementById('sty-Before_After對比風')&&document.getElementById('sty-Before_After對比風').checked)preferredStyles.push('Before/After對比風');
+  if(document.getElementById('sty-開箱實測風')&&document.getElementById('sty-開箱實測風').checked)preferredStyles.push('開箱實測風');
+  if(document.getElementById('sty-禮物推薦風')&&document.getElementById('sty-禮物推薦風').checked)preferredStyles.push('禮物推薦風');
+  if(document.getElementById('sty-節慶行銷風')&&document.getElementById('sty-節慶行銷風').checked)preferredStyles.push('節慶行銷風');
 
   col.innerHTML='<div class="loading-state"><div class="spinner"></div><div class="loading-txt">AI 吸收最新趨勢中，約需60-120秒...</div></div>';
 
-  var input='語言：'+LANG_LABEL[lang]+'\n發布平台：'+platforms.join('、')+'\n\n品名與關鍵字：\n'+keyword;
+  var input='語言：'+LANG_LABEL[lang]+'\n銷售平台：'+platforms.join('、')+(sellingPoints.length?'\n主要賣點：'+sellingPoints.join('、'):'')+(targetAudience.length?'\n目標客群：'+targetAudience.join('、'):'')+(preferredStyles.length?'\n希望風格：'+preferredStyles.join('、'):'')+'\n\n品名與關鍵字：\n'+keyword;
 
   try{
     var res=await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({titles:input,mode:'post',keyword:keyword,platforms:platforms})});
     if(!res.ok)throw new Error('HTTP '+res.status);
     var data=await res.json();
-    var content='';
-    if(data.output)content=typeof data.output==='string'?data.output:JSON.stringify(data.output,null,2);
-    else if(data.content)content=data.content;
-    else content=JSON.stringify(data,null,2);
-    renderPost(content,platforms);
+    var content=data.viral_content||data.content||'';
+    if(!content)throw new Error('未收到內容');
+    viralData=content;
+    renderViral(content);
   }catch(e){
     col.innerHTML='<div style="padding:2rem;color:#A32D2D;font-size:14px;">❌ 生成失敗：'+e.message+'</div>';
   }
-}
-
-function renderPost(content, platforms){
-  var col=document.getElementById('output-col');
-  var now=new Date();
-  var ds=now.getFullYear()+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+String(now.getDate()).padStart(2,'0');
-  // 把換行轉成 HTML
-  var formatted=escHtml(content).replace(/\n/g,'<br>').replace(/━+/g,'<hr style="border:none;border-top:1px solid var(--border);margin:12px 0">').replace(/👉/g,'<span style="color:var(--accent)">👉</span>');
-  var html='<div class="output-header"><div><div class="output-title">🔥 平台爆文策略</div><div class="output-meta">'+platforms.join(' · ')+' · '+ds+'</div></div><button class="copy-all-btn" onclick="copyPost()">複製全部</button></div>';
-  html+='<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 24px;box-shadow:var(--shadow);font-size:13px;line-height:2;color:var(--text)" id="post-content">'+formatted+'</div>';
-  col.innerHTML=html;
-  window._postRawContent=content;
-}
-
-function copyPost(){
-  if(window._postRawContent){
-    navigator.clipboard.writeText(window._postRawContent).then(function(){showToast('✓ 已複製');});
-  }
-}
-
-function renderVideoScripts(scripts,platform,count,seconds){
-  var col=document.getElementById('output-col');
-  var now=new Date();
-  var ds=now.getFullYear()+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+String(now.getDate()).padStart(2,'0');
-  var html='<div class="output-header"><div><div class="output-title">今日腳本 · '+count+'支 · '+seconds+'秒</div><div class="output-meta">'+PLATFORM_LABEL[platform]+' · '+ds+'</div></div><button class="copy-all-btn" onclick="copyAll()">複製全部</button></div>';
-  scripts.forEach(function(s,si){
-    var tc=TAG_CLASS[s.strategy]||'tag-hot';
-    var kws=(s.keywords||[]).map(function(k){return '<span class="kw-badge">'+escHtml(k)+'</span>';}).join('');
-    var analysisHtml='<div class="analysis-strip">';
-    if(s.category||s.script_type)analysisHtml+='<div class="analysis-item"><div class="analysis-label">品類 / 腳本類型</div><div class="analysis-value">'+(s.category||'-')+' · '+(s.script_type||'-')+'</div></div>';
-    if(s.main_pain_point)analysisHtml+='<div class="analysis-item"><div class="analysis-label">🎯 最大痛點</div><div class="analysis-value">'+escHtml(s.main_pain_point)+'</div></div>';
-    if(s.best_visual_proof)analysisHtml+='<div class="analysis-item full"><div class="analysis-label">📷 最強畫面證據</div><div class="analysis-value">'+escHtml(s.best_visual_proof)+'</div></div>';
-    analysisHtml+='</div>';
-    var marketHtml='';
-    if(s.market_insight){var mi=Array.isArray(s.market_insight)?s.market_insight.join(' '):s.market_insight;marketHtml='<div class="market-box"><div class="market-label">📊 市場洞察</div><div class="market-value">'+escHtml(mi)+'</div></div>';}
-    var tl=s.timeline||s.storyboard||[];
-    var scenesHtml=tl.map(function(t,ti){
-      return '<div class="scene-card"><div class="scene-card-head"><div class="scene-time">'+(t.time||t.time_range||'')+'</div><input class="scene-action-edit" id="action-'+si+'-'+ti+'" value="'+escHtml(t.action||t.visual||'')+'" placeholder="畫面動作"></div><div class="scene-grid"><div><div class="scene-field-label">旁白</div><textarea class="scene-field-edit" id="vo-'+si+'-'+ti+'" rows="2">'+escHtml(t.voiceover||'')+'</textarea></div><div><div class="scene-field-label">字幕</div><textarea class="scene-field-edit" id="sub-'+si+'-'+ti+'" rows="2">'+escHtml(t.script||t.subtitle||'')+'</textarea></div><div class="scene-material"><div class="scene-material-label">素材建議</div><textarea class="scene-material-edit" id="mat-'+si+'-'+ti+'" rows="1">'+escHtml(t.material||t.material_suggestion||'')+'</textarea></div></div></div>';
-    }).join('');
-    html+='<div class="script-card"><div class="sc-head"><div class="sc-num">'+(si+1)+'</div><div class="sc-info"><div class="sc-name">'+escHtml(s.product)+'</div><div class="sc-tags"><span class="tag '+tc+'">'+escHtml(s.strategy)+'</span><span class="tag tag-info">'+seconds+'秒</span><span class="tag tag-search">AI搜尋+強化</span></div></div><div class="sc-actions"><button class="action-btn" onclick="copyOne('+si+')">複製腳本</button></div></div><div class="sc-body">'+analysisHtml+marketHtml+'<div class="kw-row">'+kws+'</div><div class="edit-label">開場鉤子（可編輯）</div><textarea class="edit-box" id="hook-'+si+'" rows="2">'+escHtml(s.hook)+'</textarea><div class="tl-label">分鏡腳本（可直接編輯）</div><div class="scene-list">'+scenesHtml+'</div></div><div class="sc-footer"><div><div class="meta-k">拍攝提示</div><textarea class="meta-edit" id="tips-'+si+'" rows="3">'+escHtml(s.shoot_tips)+'</textarea></div><div><div class="meta-k">結尾 CTA</div><textarea class="meta-edit" id="cta-'+si+'" rows="3">'+escHtml(s.cta)+'</textarea></div><div class="title-box"><div class="meta-k">建議標題</div><input class="title-edit" id="titlesug-'+si+'" value="'+escHtml(s.title_suggestion)+'"></div></div></div>';
-  });
-  col.innerHTML=html;
-}
-
-function renderImagePlan(data,count){
-  var col=document.getElementById('output-col');
-  var now=new Date();
-  var ds=now.getFullYear()+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+String(now.getDate()).padStart(2,'0');
-  var ps=data.product_summary||{};
-  var html='<div class="output-header"><div><div class="output-title">圖片素材規劃 · '+count+'套</div><div class="output-meta">'+ds+'</div></div><button class="copy-all-btn" onclick="copyAllImg()">複製全部</button></div>';
-
-  // 商品分析摘要
-  html+='<div class="summary-card"><div class="summary-head"><div class="summary-head-title">📋 商品分析摘要</div></div><div class="summary-grid">';
-  if(ps.positioning)html+='<div class="summary-item full"><div class="summary-item-label">商品定位</div><div class="summary-item-value">'+escHtml(ps.positioning)+'</div></div>';
-  if(ps.target_audience)html+='<div class="summary-item"><div class="summary-item-label">目標客群</div><div class="summary-item-value">'+escHtml(ps.target_audience)+'</div></div>';
-  if(ps.competitor_visual_style)html+='<div class="summary-item"><div class="summary-item-label">競品視覺風格</div><div class="summary-item-value">'+escHtml(ps.competitor_visual_style)+'</div></div>';
-  if(ps.differentiation)html+='<div class="summary-item full"><div class="summary-item-label">差異化切入點</div><div class="summary-item-value">'+escHtml(ps.differentiation)+'</div></div>';
-  if(ps.pain_points&&ps.pain_points.length)html+='<div class="summary-item"><div class="summary-item-label">購買痛點</div><div class="tag-list">'+ps.pain_points.map(function(t){return '<span class="teal-tag">'+escHtml(t)+'</span>';}).join('')+'</div></div>';
-  if(ps.joy_points&&ps.joy_points.length)html+='<div class="summary-item"><div class="summary-item-label">購買爽點</div><div class="tag-list">'+ps.joy_points.map(function(t){return '<span class="teal-tag">'+escHtml(t)+'</span>';}).join('')+'</div></div>';
-  if(ps.use_scenarios&&ps.use_scenarios.length)html+='<div class="summary-item"><div class="summary-item-label">使用場景</div><div class="tag-list">'+ps.use_scenarios.map(function(t){return '<span class="teal-tag">'+escHtml(t)+'</span>';}).join('')+'</div></div>';
-  if(ps.trend_elements&&ps.trend_elements.length)html+='<div class="summary-item"><div class="summary-item-label">趨勢可用元素</div><div class="tag-list">'+ps.trend_elements.map(function(t){return '<span class="teal-tag">'+escHtml(t)+'</span>';}).join('')+'</div></div>';
-  html+='</div></div>';
-
-  // 8張圖規劃
-  html+='<div style="font-size:13px;font-weight:500;margin-bottom:12px;margin-top:4px">🖼 圖片規劃（共'+(data.image_plan||[]).length+'張）</div>';
-  html+='<div class="img-plan-list">';
-  (data.image_plan||[]).forEach(function(img,ii){
-    var pClass=img.priority==='高'?'priority-high':img.priority==='中'?'priority-mid':'priority-low';
-    html+='<div class="img-card"><div class="img-card-head"><div class="img-no">'+(img.image_no||ii+1)+'</div><div class="img-type">'+escHtml(img.image_type||'')+'</div>';
-    if(img.priority)html+='<span class="img-priority '+pClass+'">'+escHtml(img.priority)+'優先</span>';
-    html+='<button class="action-btn" onclick="copyImgPrompt('+ii+')">複製Prompt</button></div>';
-    html+='<div class="img-card-body">';
-    if(img.goal)html+='<div class="img-field"><div class="img-field-label">目標</div><div class="img-field-value">'+escHtml(img.goal)+'</div></div>';
-    if(img.visual_strategy)html+='<div class="img-field"><div class="img-field-label">視覺策略</div><div class="img-field-value">'+escHtml(img.visual_strategy)+'</div></div>';
-    if(img.composition)html+='<div class="img-field full"><div class="img-field-label">構圖說明</div><div class="img-field-value">'+escHtml(img.composition)+'</div></div>';
-    if(img.recommended_size||img.background_type||img.visual_style)html+='<div class="img-field"><div class="img-field-label">規格</div><div class="img-field-value">'+(img.recommended_size||'')+(img.background_type?' · '+img.background_type:'')+(img.visual_style?' · '+img.visual_style:'')+'</div></div>';
-    if(img.ab_test_angle)html+='<div class="img-field"><div class="img-field-label">A/B測試角度</div><div class="img-field-value">'+escHtml(img.ab_test_angle)+'</div></div>';
-    if(img.overlay_text_zh&&img.overlay_text_zh.length)html+='<div class="img-field full"><div class="img-field-label">圖中疊字</div><div class="overlay-tags">'+img.overlay_text_zh.map(function(t){return '<span class="overlay-tag">'+escHtml(t)+'</span>';}).join('')+'</div></div>';
-    if(img.prompt_en)html+='<div class="img-field full"><div class="img-field-label">AI Prompt（英文）</div><div class="prompt-box"><div class="prompt-text" id="prompt-'+ii+'">'+escHtml(img.prompt_en)+'</div></div></div>';
-    if(img.negative_prompt_en)html+='<div class="img-field full"><div class="img-field-label">Negative Prompt</div><div class="prompt-box"><div class="neg-prompt-text" id="neg-'+ii+'">'+escHtml(img.negative_prompt_en)+'</div></div></div>';
-    html+='</div></div>';
-  });
-  html+='</div>';
-
-  // A/B 測試計劃
-  if(data.ab_test_plan&&data.ab_test_plan.length){
-    html+='<div class="ab-card"><div class="ab-head">🧪 A/B 測試計劃</div><div class="ab-list">';
-    data.ab_test_plan.forEach(function(ab){
-      html+='<div class="ab-item"><div class="ab-name">'+escHtml(ab.test_name||'')+'</div><div class="ab-variant"><div style="font-size:9px;color:var(--text3);margin-bottom:2px">版本A</div>'+escHtml(ab.variant_a||'')+'</div><div class="ab-variant"><div style="font-size:9px;color:var(--text3);margin-bottom:2px">版本B</div>'+escHtml(ab.variant_b||'')+'</div><div class="ab-metric">'+escHtml(ab.metric||'')+'</div></div>';
-    });
-    html+='</div></div>';
-  }
-
-  col.innerHTML=html;
 }
 
 async function generateViral(col, keyword, lang, count) {
