@@ -752,8 +752,27 @@ async function generatePost(col, keyword, lang){
     var res=await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({titles:input,mode:'post',keyword:keyword,platforms:platforms})});
     if(!res.ok)throw new Error('HTTP '+res.status);
     var data=await res.json();
-    var content=data.viral_content||data.content||'';
-    if(!content)throw new Error('未收到內容');
+    var content='';
+    // 1) 優先讀 n8n 自訂欄位
+    if(data.viral_content) content=data.viral_content;
+    else if(data.content) content=data.content;
+    // 2) 直接 OpenAI 回應格式：output 陣列
+    else if(data.output && Array.isArray(data.output)){
+      for(var i=0;i<data.output.length;i++){
+        var blk=data.output[i];
+        if(blk.type==='message' && blk.content && blk.content[0] && blk.content[0].text){
+          content=blk.content[0].text;
+          break;
+        }
+      }
+    }
+    // 3) Chat completion 格式
+    else if(data.choices && data.choices[0] && data.choices[0].message){
+      content=data.choices[0].message.content;
+    }
+    // 4) output_text 直接欄位
+    else if(data.output_text) content=data.output_text;
+    if(!content)throw new Error('未收到內容，回應結構：'+JSON.stringify(data).slice(0,200));
     viralData=content;
     renderViral(content);
   }catch(e){
