@@ -576,6 +576,8 @@ async function generate(){
     payload={titles:searchText,seconds:seconds,mode:'search',keyword:keyword,count:count};
   } else if(currentMode==='post'){
     await generatePost(col, keyword, lang);
+    btn.disabled=false;btn.textContent='▶ 一鍵產出';
+    return;
   } else {
     var imgSize=document.getElementById('img-size').value;
     var imgBg=document.getElementById('img-bg').value;
