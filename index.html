@@ -791,6 +791,7 @@ async function generatePost(col, keyword, lang){
     else if(data.output_text) content=data.output_text;
     if(!content)throw new Error('未收到內容，回應結構：'+JSON.stringify(data).slice(0,200));
     viralData=content;
+    window._postRawContent=content;
     renderViral(content);
   }catch(e){
     col.innerHTML='<div style="padding:2rem;color:#A32D2D;font-size:14px;">❌ 生成失敗：'+e.message+'</div>';
@@ -991,8 +992,8 @@ function downloadAll(){
       lines.push('拍攝提示：'+document.getElementById('tips-'+i).value,'CTA：'+document.getElementById('cta-'+i).value,'建議標題：'+document.getElementById('titlesug-'+i).value);
       return lines.join('\n');
     }).join('\n\n');
-  } else if(currentMode==='post'&&window._postRawContent){
-    txt=window._postRawContent;
+  } else if(currentMode==='post' && (window._postRawContent || viralData)){
+    txt = window._postRawContent || viralData;
   } else if(currentMode==='viral'&&viralData){
     txt=viralData;
   } else if(currentMode==='image'&&imageData){
@@ -1020,7 +1021,8 @@ function downloadAll(){
     txt=lines.join('\n');
   } else {showToast('請先產出內容');return;}
 
-  var kw=document.getElementById('search-keyword').value.trim().replace(/[\s\n]+/g,'_').substring(0,10);
+  var kwElForDl = currentMode==='post' ? document.getElementById('post-keyword') : document.getElementById('search-keyword');
+  var kw=(kwElForDl?kwElForDl.value:'').trim().replace(/[\s\n]+/g,'_').substring(0,10);
   var now2=new Date();
   var ds2=String(now2.getFullYear()).slice(2)+String(now2.getMonth()+1).padStart(2,'0')+String(now2.getDate()).padStart(2,'0');
   var blob=new Blob([txt],{type:'text/plain;charset=utf-8'});
