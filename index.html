@@ -562,6 +562,7 @@ function login(){
     sessionStorage.setItem('bao_auth','1');
     document.getElementById('login-screen').style.display='none';
     document.getElementById('app').classList.add('show');
+    restorePostSelections();
   } else {
     document.getElementById('login-err').textContent='密碼錯誤';
     document.getElementById('pwd-input').value='';
@@ -573,6 +574,28 @@ function logout(){
   document.getElementById('app').classList.remove('show');
   document.getElementById('login-screen').style.display='flex';
   document.getElementById('pwd-input').value='';
+}
+
+// 儲存平台爆文選項到 localStorage
+function savePostSelections(){
+  var data={};
+  document.querySelectorAll('#post-settings input[type=checkbox]').forEach(function(el){
+    data[el.id]=el.checked;
+  });
+  try{ localStorage.setItem('bao_post_selections', JSON.stringify(data)); }catch(e){}
+}
+
+// 還原平台爆文選項
+function restorePostSelections(){
+  try{
+    var saved = localStorage.getItem('bao_post_selections');
+    if(!saved) return;
+    var data = JSON.parse(saved);
+    Object.keys(data).forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) el.checked = data[id];
+    });
+  }catch(e){}
 }
 function showToast(msg){
   var t=document.getElementById('toast');
@@ -588,6 +611,7 @@ function switchMode(mode){
   document.getElementById('image-settings').style.display=mode==='image'?'':'none';
   document.getElementById('post-extra').style.display=mode==='post'?'':'none';
   document.getElementById('post-settings').style.display=mode==='post'?'':'none';
+  if(mode==='post') restorePostSelections();
   document.getElementById('strat-label').textContent=mode==='video'?'腳本策略':mode==='image'?'視覺風格策略':'文案風格';
   document.getElementById('gen-sub').textContent=mode==='video'?'AI搜尋市場→分析趨勢→Claude產腳本→GPT強化':mode==='image'?'AI分析商品→規劃圖片→產出完整Prompt':'AI吸收最新趨勢→產出全平台爆文策略';
   // 切換產出數量選項
@@ -688,6 +712,7 @@ async function generate(){
 }
 
 async function generatePost(col, keyword, lang){
+  savePostSelections();
   var platforms=[];
   if(document.getElementById('plat-Facebook')&&document.getElementById('plat-Facebook').checked)platforms.push('Facebook');
   if(document.getElementById('plat-Instagram')&&document.getElementById('plat-Instagram').checked)platforms.push('Instagram');
