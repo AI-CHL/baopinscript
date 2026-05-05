@@ -486,11 +486,12 @@ function switchMode(mode){
   document.getElementById('post-extra').style.display=mode==='post'?'':'none';
   document.getElementById('post-settings').style.display=mode==='post'?'':'none';
   if(mode==='post') restorePostSelections();
-  document.getElementById('strat-label').textContent=mode==='video'?'腳本策略':mode==='image'?'視覺風格策略':'文案風格';
+  var sl=document.getElementById('strat-label');if(sl)sl.textContent=mode==='video'?'腳本策略':mode==='image'?'視覺風格策略':'文案風格';
   document.getElementById('gen-sub').textContent=mode==='video'?'AI搜尋市場→分析趨勢→Claude產腳本→GPT強化':mode==='image'?'AI分析商品→規劃圖片→產出完整Prompt':'AI吸收最新趨勢→產出全平台爆文策略';
   // 切換產出數量選項
   var countLabel=document.getElementById('count-label');
   var countSel=document.getElementById('search-count');
+  if(!countLabel||!countSel) return;
   var countCard=countSel.closest('.search-card');
   if(mode==='image'){
     countLabel.textContent='產出張數';
@@ -519,9 +520,10 @@ function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt
 async function generate(){
   var btn=document.getElementById('gen-btn');
   var col=document.getElementById('output-col');
-  var keyword=document.getElementById('search-keyword').value.trim();
-  var count=parseInt(document.getElementById('search-count').value)||3;
-  var strat=document.getElementById('search-strat').value;
+  var kwEl = currentMode==='post' ? document.getElementById('post-keyword') : document.getElementById('search-keyword');
+  var keyword = kwEl ? kwEl.value.trim() : '';
+  var countEl=document.getElementById('search-count'); var count=countEl?parseInt(countEl.value)||3:3;
+  var stratEl=document.getElementById('search-strat'); var strat=stratEl?stratEl.value:'auto';
   var lang=document.getElementById('script-lang').value;
   if(!keyword){showToast('請輸入品名與關鍵字');return;}
   btn.disabled=true;btn.textContent='⏳ 生成中...';
