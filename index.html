@@ -557,75 +557,86 @@ function addKeyword(kw){
 function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 async function generate(){
+  if(window.__generating){console.log('已在處理中，跳過');return;}
+  window.__generating=true;
   var btn=document.getElementById('gen-btn');
   var col=document.getElementById('output-col');
+  var lang=document.getElementById('script-lang').value;
+  
+  // 取得對應模式的關鍵字
   var kwEl = currentMode==='post' ? document.getElementById('post-keyword') : document.getElementById('search-keyword');
   var keyword = kwEl ? kwEl.value.trim() : '';
-  var countEl=document.getElementById('search-count'); var count=countEl?parseInt(countEl.value)||3:3;
-  var stratEl=document.getElementById('search-strat'); var strat=stratEl?stratEl.value:'auto';
-  var lang=document.getElementById('script-lang').value;
-  if(!keyword){showToast('請輸入品名與關鍵字');return;}
+  if(!keyword){showToast('請輸入品名與關鍵字');window.__generating=false;return;}
+  
   btn.disabled=true;btn.textContent='⏳ 生成中...';
   col.innerHTML='<div class="loading-state"><div class="spinner"></div><div class="loading-txt">AI 處理中，約需40-90秒...</div></div>';
-
-  var payload;
-  if(currentMode==='video'){
-    var platform=document.getElementById('platform').value;
-    var seconds=parseInt(document.getElementById('video-seconds').value)||15;
-    var searchText='模式：關鍵字搜尋\n平台：'+PLATFORM_LABEL[platform]+'\n影片秒數：'+seconds+'秒\n腳本語言：'+LANG_LABEL[lang]+'\n產出支數：'+count+'支\n策略：'+(strat==='auto'?'AI自動判斷':STRAT_LABEL[strat])+'\n\n搜尋關鍵字：\n'+keyword;
-    payload={titles:searchText,seconds:seconds,mode:'search',keyword:keyword,count:count};
-  } else if(currentMode==='post'){
-    await generatePost(col, keyword, lang);
-    btn.disabled=false;btn.textContent='▶ 一鍵產出';
-    return;
-  } else {
-    var imgSize=document.getElementById('img-size').value;
-    var imgBg=document.getElementById('img-bg').value;
-    var imgStyle=document.getElementById('img-style').value;
-    var imgScene=document.getElementById('img-scene').value.trim();
-    var imgSeason=document.getElementById('img-season').value.trim();
-    var FIXED_8 = '\\n\\n【前8張固定定位】（情境圖模式）：\\n1. 首圖A：痛點對比版\\n2. 首圖B：高質感情境版\\n3. 首圖C：促銷爆品版\\n4. 賣點圖1：核心功能\\n5. 賣點圖2：材質/細節\\n6. 情境圖：生活使用場景\\n7. 尺寸規格圖\\n8. 信任圖：評價/熱銷/保證感\\n第9張起依視覺風格自由發揮。';
-    var CUTOUT_NOTE = '\\n\\n【去背圖模式】：所有圖片為純白背景去背，不套用前8張定位，改為從各個角度展示商品（正面、側面、背面、細節特寫、整體俯視、包裝等）。';
-    var bgNote = imgBg==='去背圖' ? CUTOUT_NOTE : (parseInt(count)>=8 ? FIXED_8 : '');
-    var searchText='模式：圖片素材\\n尺寸：'+imgSize+'\\n情境：'+imgBg+'\\n視覺風格：'+(imgStyle==='auto'?'AI自動判斷':imgStyle)+'\\n語言：'+LANG_LABEL[lang]+'\\n產出套數：'+count+'套'+(imgBg!=='去背圖'&&imgScene?'\\n情境描述：'+imgScene:'')+(imgBg!=='去背圖'&&imgSeason?'\\n人物情緒：'+imgSeason:'')+bgNote+'\\n\\n品名與關鍵字：\\n'+keyword;
-    var sceneDecision = imgStyle==='auto' ? JSON.stringify(SCENE_DECISION_TABLE) : null;
-    var useAutoScene=(imgStyle==='auto');
-    payload={titles:searchText,mode:'image_plan',keyword:keyword,count:count};
-    if(useAutoScene){payload.scene_decision_table=JSON.stringify(SCENE_DECISION_TABLE);}
-  }
-
-  if(currentMode==='viral'){
-    await generateViral(col,keyword,lang,count);
-    btn.disabled=false;btn.textContent='▶ 一鍵產出';
-    return;
-  }
-
+  
   try{
-    var res=await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    var data=await res.json();
-
-    if(currentMode==='video'){
-      var scripts;
-      if(data.scripts)scripts=data.scripts;
-      else if(data.output&&data.output.scripts)scripts=data.output.scripts;
-      else{var raw=typeof data==='string'?data:JSON.stringify(data);try{var parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());scripts=parsed.scripts||parsed;}catch(e){scripts=[];}}
-      if(!scripts||!scripts.length)throw new Error('腳本資料為空，請重試');
-      scriptsData=scripts;
-      renderVideoScripts(scripts,document.getElementById('platform').value,scripts.length,parseInt(document.getElementById('video-seconds').value)||15);
-    } else {
-      var imgResult;
-      if(data.mode==='image_plan')imgResult=data;
-      else if(data.output&&data.output.mode==='image_plan')imgResult=data.output;
-      else{var raw2=typeof data==='string'?data:JSON.stringify(data);try{var parsed2=JSON.parse(raw2.replace(/```json|```/g,'').trim());imgResult=parsed2;}catch(e){imgResult=null;}}
-      if(!imgResult)throw new Error('圖片素材資料為空，請重試');
-      imageData=imgResult;
-      renderImagePlan(imgResult,count);
+    if(currentMode==='post'){
+      // 平台爆文：完全獨立流程
+      await generatePost(col, keyword, lang);
+    } else if(currentMode==='video'){
+      // 影片腳本：獨立流程
+      await runVideoMode(col, keyword, lang);
+    } else if(currentMode==='image'){
+      // 圖片素材：獨立流程
+      await runImageMode(col, keyword, lang);
     }
   }catch(e){
     col.innerHTML='<div style="padding:2rem;color:#A32D2D;font-size:14px;">❌ 生成失敗：'+e.message+'</div>';
   }
+  
   btn.disabled=false;btn.textContent='▶ 一鍵產出';
+  window.__generating=false;
+}
+
+async function runVideoMode(col, keyword, lang){
+  var countEl=document.getElementById('search-count'); var count=countEl?parseInt(countEl.value)||3:3;
+  var stratEl=document.getElementById('search-strat'); var strat=stratEl?stratEl.value:'auto';
+  var platform=document.getElementById('platform').value;
+  var seconds=parseInt(document.getElementById('video-seconds').value)||15;
+  var searchText='模式：關鍵字搜尋\n平台：'+PLATFORM_LABEL[platform]+'\n影片秒數：'+seconds+'秒\n腳本語言：'+LANG_LABEL[lang]+'\n產出支數：'+count+'支\n策略：'+(strat==='auto'?'AI自動判斷':STRAT_LABEL[strat])+'\n\n搜尋關鍵字：\n'+keyword;
+  var payload={titles:searchText,seconds:seconds,mode:'search',keyword:keyword,count:count};
+  
+  var res=await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  if(!res.ok)throw new Error('HTTP '+res.status);
+  var data=await res.json();
+  
+  var scripts;
+  if(data.scripts)scripts=data.scripts;
+  else if(data.output&&data.output.scripts)scripts=data.output.scripts;
+  else{var raw=typeof data==='string'?data:JSON.stringify(data);try{var parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());scripts=parsed.scripts||parsed;}catch(e){scripts=[];}}
+  if(!scripts||!scripts.length)throw new Error('腳本資料為空，請重試');
+  scriptsData=scripts;
+  renderVideoScripts(scripts,platform,scripts.length,seconds);
+}
+
+async function runImageMode(col, keyword, lang){
+  var countEl=document.getElementById('search-count'); var count=countEl?parseInt(countEl.value)||8:8;
+  var imgSize=document.getElementById('img-size').value;
+  var imgBg=document.getElementById('img-bg').value;
+  var imgStyle=document.getElementById('img-style').value;
+  var imgScene=document.getElementById('img-scene').value.trim();
+  var imgSeason=document.getElementById('img-season').value.trim();
+  var FIXED_8 = '\n\n【前8張固定定位】（情境圖模式）：\n1. 首圖A：痛點對比版\n2. 首圖B：高質感情境版\n3. 首圖C：促銷爆品版\n4. 賣點圖1：核心功能\n5. 賣點圖2：材質/細節\n6. 情境圖：生活使用場景\n7. 尺寸規格圖\n8. 信任圖：評價/熱銷/保證感\n第9張起依視覺風格自由發揮。';
+  var CUTOUT_NOTE = '\n\n【去背圖模式】：所有圖片為純白背景去背，不套用前8張定位，改為從各個角度展示商品（正面、側面、背面、細節特寫、整體俯視、包裝等）。';
+  var bgNote = imgBg==='去背圖' ? CUTOUT_NOTE : (parseInt(count)>=8 ? FIXED_8 : '');
+  var searchText='模式：圖片素材\n尺寸：'+imgSize+'\n情境：'+imgBg+'\n視覺風格：'+(imgStyle==='auto'?'AI自動判斷':imgStyle)+'\n語言：'+LANG_LABEL[lang]+'\n產出套數：'+count+'套'+(imgBg!=='去背圖'&&imgScene?'\n情境描述：'+imgScene:'')+(imgBg!=='去背圖'&&imgSeason?'\n人物情緒：'+imgSeason:'')+bgNote+'\n\n品名與關鍵字：\n'+keyword;
+  var useAutoScene=(imgStyle==='auto');
+  var payload={titles:searchText,mode:'image_plan',keyword:keyword,count:count};
+  if(useAutoScene){payload.scene_decision_table=JSON.stringify(SCENE_DECISION_TABLE);}
+  
+  var res=await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  if(!res.ok)throw new Error('HTTP '+res.status);
+  var data=await res.json();
+  
+  var imgResult;
+  if(data.mode==='image_plan')imgResult=data;
+  else if(data.output&&data.output.mode==='image_plan')imgResult=data.output;
+  else{var raw2=typeof data==='string'?data:JSON.stringify(data);try{var parsed2=JSON.parse(raw2.replace(/```json|```/g,'').trim());imgResult=parsed2;}catch(e){imgResult=null;}}
+  if(!imgResult)throw new Error('圖片素材資料為空，請重試');
+  imageData=imgResult;
+  renderImagePlan(imgResult,count);
 }
 
 async function generatePost(col, keyword, lang){
