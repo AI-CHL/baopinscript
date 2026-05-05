@@ -756,13 +756,17 @@ async function generatePost(col, keyword, lang){
     // 1) 優先讀 n8n 自訂欄位
     if(data.viral_content) content=data.viral_content;
     else if(data.content) content=data.content;
-    // 2) 直接 OpenAI 回應格式：output 陣列
+    // 2) 直接 OpenAI 回應格式：output 陣列（取最後一個 message block 的最長 text）
     else if(data.output && Array.isArray(data.output)){
-      for(var i=0;i<data.output.length;i++){
+      for(var i=data.output.length-1;i>=0;i--){
         var blk=data.output[i];
-        if(blk.type==='message' && blk.content && blk.content[0] && blk.content[0].text){
-          content=blk.content[0].text;
-          break;
+        if(blk.type==='message' && blk.content && blk.content.length){
+          for(var j=0;j<blk.content.length;j++){
+            var c=blk.content[j];
+            var txt=c.text||c.output_text||'';
+            if(txt && txt.length>content.length) content=txt;
+          }
+          if(content) break;
         }
       }
     }
