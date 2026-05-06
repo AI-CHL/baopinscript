@@ -632,13 +632,198 @@ async function runImageMode(col, keyword, lang){
   var data=await res.json();
   
   var imgResult;
-  if(data.mode==='image_plan')imgResult=data;
-  else if(data.output&&data.output.mode==='image_plan')imgResult=data.output;
-  else{var raw2=typeof data==='string'?data:JSON.stringify(data);try{var parsed2=JSON.parse(raw2.replace(/```json|```/g,'').trim());imgResult=parsed2;}catch(e){imgResult=null;}}
-  if(!imgResult)throw new Error('圖片素材資料為空，請重試');
+  // 1. n8n 解析後包成 image_plan 結構
+  if(data.mode==='image_plan'){imgResult=data;}
+  // 2. 嵌套在 output 內
+  else if(data.output&&data.output.mode==='image_plan'){imgResult=data.output;}
+  // 3. OpenAI 原生 output 陣列（沒被 n8n 解析）
+  else if(data.output&&Array.isArray(data.output)){
+    var content='';
+    for(var i=data.output.length-1;i>=0;i--){
+      var blk=data.output[i];
+      if(blk.type==='message'&&blk.content&&blk.content.length){
+        for(var j=0;j<blk.content.length;j++){
+          var c=blk.content[j];
+          var txt=c.text||c.output_text||'';
+          if(txt&&txt.length>content.length)content=txt;
+        }
+        if(content)break;
+      }
+    }
+    if(content){
+      try{var p=JSON.parse(content.replace(/```json|```/g,'').trim());imgResult={...p,mode:'image_plan'};}
+      catch(e){imgResult={mode:'image_plan',raw_content:content};}
+    }
+  }
+  // 4. 純字串
+  else{
+    var raw2=typeof data==='string'?data:JSON.stringify(data);
+    try{var parsed2=JSON.parse(raw2.replace(/```json|```/g,'').trim());imgResult=parsed2;}
+    catch(e){imgResult={mode:'image_plan',raw_content:raw2};}
+  }
+  if(!imgResult||(!imgResult.images&&!imgResult.raw_content&&!imgResult.product_summary))throw new Error('圖片素材資料為空，請重試。回應：'+JSON.stringify(data).slice(0,200));
   imageData=imgResult;
   renderImagePlan(imgResult,count);
 }
+
+function renderVideoScripts(scripts, platform, count, seconds){
+  var col=document.getElementById('output-col');
+  var now=new Date();
+  var ds=now.getFullYear()+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+String(now.getDate()).padStart(2,'0');
+  var html='<div class="output-header"><div><div class="output-title">🎬 影片腳本（'+(PLATFORM_LABEL[platform]||platform)+'｜'+seconds+'秒｜共'+count+'支）</div><div class="output-meta">'+ds+'</div></div><button class="copy-all-btn" onclick="copyAllScripts()">複製全部</button></div>';
+  
+  for(var i=0;i<scripts.length;i++){
+    var s=scripts[i];
+    html+='<div class="script-card" style="margin:16px 0;padding:18px;background:#fafaf7;border-radius:10px;border:1px solid #e5e3dc;">';
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:1px solid #e5e3dc;padding-bottom:10px;">';
+    html+='<div style="font-size:16px;font-weight:600;color:#5A4FCF;">腳本 '+(i+1)+(s.title?'：'+escHtml(s.title):'')+'</div>';
+    html+='<button class="copy-section-btn" onclick="copyScript('+i+')" style="font-size:11px;padding:4px 10px;background:#5A4FCF;color:white;border:none;border-radius:20px;cursor:pointer;font-family:inherit">複製此腳本</button>';
+    html+='</div>';
+    
+    var fields=[['品類定位','category'],['核心痛點','pain_point'],['畫面證據','visual_evidence'],['市場洞察','market_insight'],['CTA','cta'],['建議標題','suggested_title']];
+    for(var f=0;f<fields.length;f++){
+      var key=fields[f][1], label=fields[f][0];
+      if(s[key]){html+='<div style="margin:8px 0;"><span style="font-weight:600;color:#5A4FCF;font-size:13px;">'+label+'：</span><span style="font-size:13px;color:#333;">'+escHtml(String(s[key]))+'</span></div>';}
+    }
+    
+    if(s.scenes && s.scenes.length){
+      html+='<div style="margin-top:14px;"><div style="font-weight:600;color:#5A4FCF;font-size:13px;margin-bottom:8px;">分鏡：</div>';
+      for(var j=0;j<s.scenes.length;j++){
+        var sc=s.scenes[j];
+        html+='<div style="margin:10px 0;padding:12px;background:white;border-radius:6px;border-left:3px solid #5A4FCF;">';
+        html+='<div style="font-weight:600;font-size:12px;color:#888;margin-bottom:6px;">分鏡 '+(j+1)+(sc.duration?'｜'+sc.duration:'')+'</div>';
+        if(sc.narration)html+='<div style="margin:4px 0;font-size:13px;"><b>旁白：</b>'+escHtml(sc.narration)+'</div>';
+        if(sc.subtitle)html+='<div style="margin:4px 0;font-size:13px;"><b>字幕：</b>'+escHtml(sc.subtitle)+'</div>';
+        if(sc.material)html+='<div style="margin:4px 0;font-size:13px;color:#666;"><b>素材：</b>'+escHtml(sc.material)+'</div>';
+        html+='</div>';
+      }
+      html+='</div>';
+    }
+    
+    html+='</div>';
+  }
+  col.innerHTML=html;
+}
+
+function copyScript(idx){
+  if(!scriptsData||!scriptsData[idx])return;
+  var s=scriptsData[idx];
+  var txt='【腳本 '+(idx+1)+(s.title?'：'+s.title:'')+'】\n';
+  if(s.category)txt+='品類定位：'+s.category+'\n';
+  if(s.pain_point)txt+='核心痛點：'+s.pain_point+'\n';
+  if(s.visual_evidence)txt+='畫面證據：'+s.visual_evidence+'\n';
+  if(s.market_insight)txt+='市場洞察：'+s.market_insight+'\n';
+  if(s.cta)txt+='CTA：'+s.cta+'\n';
+  if(s.suggested_title)txt+='建議標題：'+s.suggested_title+'\n';
+  if(s.scenes){txt+='\n分鏡：\n';for(var j=0;j<s.scenes.length;j++){var sc=s.scenes[j];txt+='\n分鏡'+(j+1)+(sc.duration?'｜'+sc.duration:'')+'\n';if(sc.narration)txt+='旁白：'+sc.narration+'\n';if(sc.subtitle)txt+='字幕：'+sc.subtitle+'\n';if(sc.material)txt+='素材：'+sc.material+'\n';}}
+  navigator.clipboard.writeText(txt).then(function(){showToast('✓ 已複製腳本 '+(idx+1));});
+}
+
+function copyAllScripts(){
+  if(!scriptsData)return;
+  var all='';
+  for(var i=0;i<scriptsData.length;i++){
+    var s=scriptsData[i];
+    all+='【腳本 '+(i+1)+(s.title?'：'+s.title:'')+'】\n';
+    if(s.category)all+='品類定位：'+s.category+'\n';
+    if(s.pain_point)all+='核心痛點：'+s.pain_point+'\n';
+    if(s.visual_evidence)all+='畫面證據：'+s.visual_evidence+'\n';
+    if(s.market_insight)all+='市場洞察：'+s.market_insight+'\n';
+    if(s.cta)all+='CTA：'+s.cta+'\n';
+    if(s.suggested_title)all+='建議標題：'+s.suggested_title+'\n';
+    if(s.scenes){all+='\n分鏡：\n';for(var j=0;j<s.scenes.length;j++){var sc=s.scenes[j];all+='\n分鏡'+(j+1)+(sc.duration?'｜'+sc.duration:'')+'\n';if(sc.narration)all+='旁白：'+sc.narration+'\n';if(sc.subtitle)all+='字幕：'+sc.subtitle+'\n';if(sc.material)all+='素材：'+sc.material+'\n';}}
+    all+='\n---\n\n';
+  }
+  navigator.clipboard.writeText(all).then(function(){showToast('✓ 已複製全部腳本');});
+}
+
+function renderImagePlan(data, count){
+  var col=document.getElementById('output-col');
+  var now=new Date();
+  var ds=now.getFullYear()+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+String(now.getDate()).padStart(2,'0');
+  
+  // 如果是純文字（raw_content），直接顯示
+  if(data.raw_content && !data.images){
+    var rawHtml='<div class="output-header"><div><div class="output-title">🖼 圖片素材規劃</div><div class="output-meta">'+ds+'</div></div><button class="copy-all-btn" onclick="copyImageAll()">複製全部</button></div>';
+    rawHtml+='<div style="padding:18px;background:#fafaf7;border-radius:10px;border:1px solid #e5e3dc;white-space:pre-wrap;line-height:1.7;font-size:13px;">'+escHtml(data.raw_content)+'</div>';
+    col.innerHTML=rawHtml;
+    return;
+  }
+  
+  var html='<div class="output-header"><div><div class="output-title">🖼 圖片素材規劃（共'+(data.images?data.images.length:count)+'張）</div><div class="output-meta">'+ds+'</div></div><button class="copy-all-btn" onclick="copyImageAll()">複製全部</button></div>';
+  
+  // 商品摘要
+  if(data.product_summary){
+    html+='<div class="section" style="margin:14px 0;padding:14px 16px;background:#fafaf7;border-radius:8px;border-left:3px solid #5A4FCF;">';
+    html+='<div class="section-title" style="font-size:15px;font-weight:600;margin-bottom:8px;">商品分析摘要</div>';
+    html+='<div class="section-content" style="font-size:13px;line-height:1.8;color:#333;white-space:pre-wrap;">'+escHtml(typeof data.product_summary==='string'?data.product_summary:JSON.stringify(data.product_summary,null,2))+'</div></div>';
+  }
+  
+  // 圖片清單
+  if(data.images && data.images.length){
+    for(var i=0;i<data.images.length;i++){
+      var img=data.images[i];
+      html+='<div class="image-card" style="margin:16px 0;padding:18px;background:#fafaf7;border-radius:10px;border:1px solid #e5e3dc;">';
+      html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:1px solid #e5e3dc;padding-bottom:10px;">';
+      html+='<div style="font-size:16px;font-weight:600;color:#5A4FCF;">圖 '+(i+1)+(img.position?'｜'+escHtml(img.position):'')+(img.title?'：'+escHtml(img.title):'')+'</div>';
+      html+='<button class="copy-section-btn" onclick="copyImage('+i+')" style="font-size:11px;padding:4px 10px;background:#5A4FCF;color:white;border:none;border-radius:20px;cursor:pointer;font-family:inherit">複製此圖</button>';
+      html+='</div>';
+      
+      var fields=[['構圖','composition'],['疊字','overlay_text'],['A/B 測試角度','ab_test'],['Prompt（英文）','prompt'],['Negative Prompt','negative_prompt']];
+      for(var f=0;f<fields.length;f++){
+        var key=fields[f][1], label=fields[f][0];
+        if(img[key]){
+          html+='<div style="margin:8px 0;"><div style="font-weight:600;color:#5A4FCF;font-size:13px;margin-bottom:4px;">'+label+'：</div>';
+          html+='<div style="font-size:13px;color:#333;white-space:pre-wrap;line-height:1.7;background:white;padding:10px;border-radius:6px;border-left:3px solid #5A4FCF;">'+escHtml(String(img[key]))+'</div></div>';
+        }
+      }
+      html+='</div>';
+    }
+  }
+  
+  // A/B 測試計劃
+  if(data.ab_test_plan){
+    html+='<div class="section" style="margin:14px 0;padding:14px 16px;background:#fafaf7;border-radius:8px;border-left:3px solid #5A4FCF;">';
+    html+='<div class="section-title" style="font-size:15px;font-weight:600;margin-bottom:8px;">A/B 測試計劃</div>';
+    html+='<div class="section-content" style="font-size:13px;line-height:1.8;color:#333;white-space:pre-wrap;">'+escHtml(typeof data.ab_test_plan==='string'?data.ab_test_plan:JSON.stringify(data.ab_test_plan,null,2))+'</div></div>';
+  }
+  
+  col.innerHTML=html;
+}
+
+function copyImage(idx){
+  if(!imageData||!imageData.images||!imageData.images[idx])return;
+  var img=imageData.images[idx];
+  var txt='【圖 '+(idx+1)+(img.position?'｜'+img.position:'')+(img.title?'：'+img.title:'')+'】\n';
+  if(img.composition)txt+='構圖：'+img.composition+'\n';
+  if(img.overlay_text)txt+='疊字：'+img.overlay_text+'\n';
+  if(img.ab_test)txt+='A/B 測試角度：'+img.ab_test+'\n';
+  if(img.prompt)txt+='\nPrompt：\n'+img.prompt+'\n';
+  if(img.negative_prompt)txt+='\nNegative Prompt：\n'+img.negative_prompt+'\n';
+  navigator.clipboard.writeText(txt).then(function(){showToast('✓ 已複製圖 '+(idx+1));});
+}
+
+function copyImageAll(){
+  if(!imageData)return;
+  var all='';
+  if(imageData.product_summary)all+='【商品分析摘要】\n'+(typeof imageData.product_summary==='string'?imageData.product_summary:JSON.stringify(imageData.product_summary,null,2))+'\n\n---\n\n';
+  if(imageData.raw_content){all+=imageData.raw_content;navigator.clipboard.writeText(all).then(function(){showToast('✓ 已複製全部');});return;}
+  if(imageData.images){
+    for(var i=0;i<imageData.images.length;i++){
+      var img=imageData.images[i];
+      all+='【圖 '+(i+1)+(img.position?'｜'+img.position:'')+(img.title?'：'+img.title:'')+'】\n';
+      if(img.composition)all+='構圖：'+img.composition+'\n';
+      if(img.overlay_text)all+='疊字：'+img.overlay_text+'\n';
+      if(img.ab_test)all+='A/B 測試角度：'+img.ab_test+'\n';
+      if(img.prompt)all+='\nPrompt：\n'+img.prompt+'\n';
+      if(img.negative_prompt)all+='\nNegative Prompt：\n'+img.negative_prompt+'\n';
+      all+='\n---\n\n';
+    }
+  }
+  if(imageData.ab_test_plan)all+='【A/B 測試計劃】\n'+(typeof imageData.ab_test_plan==='string'?imageData.ab_test_plan:JSON.stringify(imageData.ab_test_plan,null,2));
+  navigator.clipboard.writeText(all).then(function(){showToast('✓ 已複製全部');});
+}
+
 
 async function generatePost(col, keyword, lang){
   savePostSelections();
